@@ -1,0 +1,56 @@
+* AD103 Lab 04 - five ways to build "twice as wide", and they do not agree
+*
+* Device A is the reference: one nfet_01v8, W = 5 um, L = 1 um.
+* Everything below claims to be two of it. Same bias for all of them,
+* V_GS = V_DS = 1.8 V.
+*
+*   A   W=5                    the reference
+*   B   W=10                   one device, drawn twice as wide
+*   C   two W=5 in parallel     two separate transistors sharing both nodes
+*   D   W=5 m=2                 ngspice's subcircuit multiplier
+*   E   W=5 mult=2              what the sky130 subckt calls its multiplier
+*   F   W=10 nf=2               one 10 um device folded into two 5 um fingers
+*
+* Two of these six lines do something you did not ask for, and ngspice prints
+* no warning for either. Finding out which is the point of the deck.
+*
+*   ngspice -b spice/double_w.spice
+
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+
+XA  da g 0 0 sky130_fd_pr__nfet_01v8 L=1 W=5
+XB  db g 0 0 sky130_fd_pr__nfet_01v8 L=1 W=10
+XC1 dc g 0 0 sky130_fd_pr__nfet_01v8 L=1 W=5
+XC2 dc g 0 0 sky130_fd_pr__nfet_01v8 L=1 W=5
+XD  dd g 0 0 sky130_fd_pr__nfet_01v8 L=1 W=5 m=2
+XE  de g 0 0 sky130_fd_pr__nfet_01v8 L=1 W=5 mult=2
+XF  df g 0 0 sky130_fd_pr__nfet_01v8 L=1 W=10 nf=2
+
+Vg  g  0 1.8
+Vda da 0 1.8
+Vdb db 0 1.8
+Vdc dc 0 1.8
+Vdd dd 0 1.8
+Vde de 0 1.8
+Vdf df 0 1.8
+
+.control
+op
+echo "--- I_D (A) ---"
+echo "    A W=5 | B W=10 | C two W=5 | D W=5 m=2 | E W=5 mult=2 | F W=10 nf=2"
+let ia = -i(Vda)
+let ib = -i(Vdb)
+let ic = -i(Vdc)
+let id = -i(Vdd)
+let ie = -i(Vde)
+let if_ = -i(Vdf)
+print ia ib ic id ie if_
+echo
+echo "--- and A doubled by hand, for comparison (A) ---"
+let two_a = 2*ia
+print two_a
+echo
+echo "--- threshold voltage vth (V): A (W=5) then B (W=10) ---"
+print @m.xa.msky130_fd_pr__nfet_01v8[vth] @m.xb.msky130_fd_pr__nfet_01v8[vth]
+.endc
+.end

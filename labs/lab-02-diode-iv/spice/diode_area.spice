@@ -1,0 +1,73 @@
+* AD103 Lab 02 - how big is this diode?
+*
+* Part 1 asks what the size parameters buy you. Part 2 shows three ways of
+* getting the size wrong that ngspice accepts without a word of complaint.
+*
+*   ngspice -b spice/diode_area.spice
+*
+* UNITS: area is in SQUARE MICRONS, perim is in MICRONS. area=1 perim=4 is a
+* 1 um x 1 um square junction. Same rule as W and L on a MOSFET: plain micron
+* numbers, no suffix.
+
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+
+* --- Part 1. the same 0.5 V across four junction sizes -----------------------
+* Square junctions 1x1, 2x2, 4x4 and 10x10 microns, so area = 1, 4, 16, 100
+* um^2 and perim = 4, 8, 16, 40 um. 0.5 V keeps every current down at the
+* nanoamp level, where the diode's series resistance changes nothing.
+Va1 a1 0 dc 0.5
+XA1 a1 0 sky130_fd_pr__diode_pw2nd_05v5 area=1   perim=4
+Va2 a2 0 dc 0.5
+XA2 a2 0 sky130_fd_pr__diode_pw2nd_05v5 area=4   perim=8
+Va3 a3 0 dc 0.5
+XA3 a3 0 sky130_fd_pr__diode_pw2nd_05v5 area=16  perim=16
+Va4 a4 0 dc 0.5
+XA4 a4 0 sky130_fd_pr__diode_pw2nd_05v5 area=100 perim=40
+
+* --- Part 1b. the same ladder again at 0.7 V, where series resistance bites --
+Vb1 b1 0 dc 0.7
+XB1 b1 0 sky130_fd_pr__diode_pw2nd_05v5 area=1   perim=4
+Vb4 b4 0 dc 0.7
+XB4 b4 0 sky130_fd_pr__diode_pw2nd_05v5 area=100 perim=40
+
+* --- Part 2. two silently wrong ways to write "1 um^2" ------------------------
+* 2a. "pj" is what the raw model card calls the perimeter. It is NOT the name
+*     the subckt takes. The line is accepted and perim keeps its default of
+*     1e6 - a junction one metre around.
+Vpj pj 0 dc 0.7
+XPJ pj 0 sky130_fd_pr__diode_pw2nd_05v5 area=1 pj=4
+
+* 2b. what you get if you drop the XSchem diode symbol and never touch the
+*     defaults: area=1e12, perim=4e6. A junction one metre square.
+Vdf df 0 dc 0.7
+XDF df 0 sky130_fd_pr__diode_pw2nd_05v5
+
+* 2c. the Lab 01 trap, wearing a different hat: micron numbers carry no unit
+*     suffix. area=1u is a millionth of a square micron. In Lab 01 the same
+*     mistake stopped ngspice dead; here it simulates happily.
+Vsu su 0 dc 0.7
+XSU su 0 sky130_fd_pr__diode_pw2nd_05v5 area=1u perim=4u
+
+.control
+op
+let i_1um   = -i(Va1)
+let i_4um   = -i(Va2)
+let i_16um  = -i(Va3)
+let i_100um = -i(Va4)
+let i_b1um  = -i(Vb1)
+let i_b100  = -i(Vb4)
+let i_pj    = -i(Vpj)
+let i_def   = -i(Vdf)
+let i_su    = -i(Vsu)
+echo "--- Part 1: forward current at 0.500 V vs junction area (amps) ---"
+echo "    area = 1, 4, 16, 100 um^2"
+print i_1um i_4um i_16um i_100um
+echo "--- Part 1b: the 1 um^2 and 100 um^2 diodes again, at 0.700 V (amps) ---"
+print i_b1um i_b100
+echo "--- Part 2: three lines that all mean to say 1 um^2, at 0.700 V (amps) ---"
+echo "    correct, then perim misspelled as pj, then symbol defaults"
+print i_b1um i_pj i_def
+echo "--- and area=1u, which means a millionth of a square micron (amps) ---"
+print i_su
+.endc
+.end

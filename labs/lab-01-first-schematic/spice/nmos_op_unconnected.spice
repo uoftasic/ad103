@@ -1,0 +1,26 @@
+* AD103 Lab 01 - the same circuit with the gate wire one grid step short
+*
+* This is spice/nmos_op.spice with the gate on a net called net1 instead of g,
+* which is exactly what XSchem writes when a wire ends near a pin instead of
+* on it. Nothing else differs.
+*
+* Vgs is still there, still set to 1.8 V, still driving a net called g. That
+* net simply no longer reaches the transistor.
+*
+*   make unconnected
+*
+* ngspice does not stop. Read what it prints instead.
+
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+
+XM1 d net1 0 0 sky130_fd_pr__nfet_01v8 L=0.15 W=1 nf=1 m=1
+
+Vgs g 0 1.8
+Vds d 0 1.8
+
+.control
+op
+print i(Vds)
+print v(net1)
+.endc
+.end

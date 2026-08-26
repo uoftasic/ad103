@@ -1,0 +1,58 @@
+* AD103 Lab 03 - the threshold voltage is a function of the channel length
+*
+* Nine copies of the same W = 5 um transistor, lengths from the process minimum
+* (0.15 um) out to 4 um, all at the same low drain voltage so that the drain is
+* not influencing the answer. Print what the model thinks each one's threshold
+* is. The ordering is the whole point.
+*
+* V_DS is held at 50 mV deliberately: at 1.8 V the drain reaches into the
+* channel and moves vth as well, and this deck is asking about length alone.
+
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+
+XM0 d0 g 0 0 sky130_fd_pr__nfet_01v8 L=0.15 W=5
+XM1 d1 g 0 0 sky130_fd_pr__nfet_01v8 L=0.2  W=5
+XM2 d2 g 0 0 sky130_fd_pr__nfet_01v8 L=0.3  W=5
+XM3 d3 g 0 0 sky130_fd_pr__nfet_01v8 L=0.5  W=5
+XM4 d4 g 0 0 sky130_fd_pr__nfet_01v8 L=0.8  W=5
+XM5 d5 g 0 0 sky130_fd_pr__nfet_01v8 L=1    W=5
+XM6 d6 g 0 0 sky130_fd_pr__nfet_01v8 L=1.5  W=5
+XM7 d7 g 0 0 sky130_fd_pr__nfet_01v8 L=2    W=5
+XM8 d8 g 0 0 sky130_fd_pr__nfet_01v8 L=4    W=5
+
+Vgs g  0 0.9
+Vd0 d0 0 0.05
+Vd1 d1 0 0.05
+Vd2 d2 0 0.05
+Vd3 d3 0 0.05
+Vd4 d4 0 0.05
+Vd5 d5 0 0.05
+Vd6 d6 0 0.05
+Vd7 d7 0 0.05
+Vd8 d8 0 0.05
+
+.control
+op
+echo
+echo "--- vth vs L, W = 5 um, V_GS = 0.9 V, V_DS = 0.05 V ---"
+echo "L = 0.15 um"
+print @m.xm0.msky130_fd_pr__nfet_01v8[vth]
+echo "L = 0.2 um"
+print @m.xm1.msky130_fd_pr__nfet_01v8[vth]
+echo "L = 0.3 um"
+print @m.xm2.msky130_fd_pr__nfet_01v8[vth]
+echo "L = 0.5 um"
+print @m.xm3.msky130_fd_pr__nfet_01v8[vth]
+echo "L = 0.8 um"
+print @m.xm4.msky130_fd_pr__nfet_01v8[vth]
+echo "L = 1 um"
+print @m.xm5.msky130_fd_pr__nfet_01v8[vth]
+echo "L = 1.5 um"
+print @m.xm6.msky130_fd_pr__nfet_01v8[vth]
+echo "L = 2 um"
+print @m.xm7.msky130_fd_pr__nfet_01v8[vth]
+echo "L = 4 um"
+print @m.xm8.msky130_fd_pr__nfet_01v8[vth]
+
+.endc
+.end

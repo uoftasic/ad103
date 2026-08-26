@@ -1,0 +1,42 @@
+* AD103 capstone - the voltage transfer curve of a CMOS inverter
+*
+* One PMOS on top, one NMOS underneath, gates tied together as the input,
+* drains tied together as the output. That is the entire circuit:
+*
+*        vdd
+*         |
+*      [ PMOS ]  <- gate = in
+*         |
+*         +----- out
+*         |
+*      [ NMOS ]  <- gate = in
+*         |
+*        gnd
+*
+* Both W = 1 um, L = 0.15 um. That is the naive sizing - the one you would
+* draw if nobody had told you otherwise - and it is the point of the exercise.
+*
+* Vin sweeps 0 -> 1.8 V in 1 mV steps, 1801 points. At every step ngspice
+* solves for the one output voltage at which the two transistors carry the
+* same current, because they are in series and nothing else is connected.
+*
+*   ngspice -b spice/vtc.spice
+*
+* Columns written: v(in) v(out) i(vdd)
+* i(vdd) is the current the supply delivers - zero at both ends, and very much
+* not zero in the middle.
+
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+
+Vdd vdd 0 1.8
+Vin in  0 0
+
+XN out in 0   0   sky130_fd_pr__nfet_01v8 L=0.15 W=1
+XP out in vdd vdd sky130_fd_pr__pfet_01v8 L=0.15 W=1
+
+.control
+dc Vin 0 1.8 0.001
+let idd = -i(Vdd)
+wrdata results/vtc.txt v(out) idd
+.endc
+.end

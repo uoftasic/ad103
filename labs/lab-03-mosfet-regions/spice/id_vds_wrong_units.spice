@@ -1,0 +1,19 @@
+* AD103 Lab 03 - the same output characteristic with W and L in METRES.
+*
+* Run it with "make wrong-units". It is meant to fail. Two characters differ
+* from id_vds.spice, and nothing in XSchem, in the netlist, or in the first
+* forty lines of ngspice output will tell you which two.
+
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+
+* The only change from id_vds.spice is the "u" on L and W below.
+XM1 d g 0 0 sky130_fd_pr__nfet_01v8 L=1u W=5u
+
+Vgs g 0 1.8
+Vds d 0 0
+
+.control
+dc Vds 0 1.8 0.01
+print i(vds)
+.endc
+.end

@@ -1,0 +1,53 @@
+* AD103 Lab 04 - five transistors with exactly the same W/L
+*
+* Every equation you have been given says the current depends on the RATIO
+* W/L. So here are five devices whose ratio is 5.000 in every case:
+*
+*   0.75 / 0.15     the smallest this process will draw at that ratio
+*   2.5  / 0.5
+*   5    / 1        the reference device from Lab 03
+*   10   / 2
+*   20   / 4        711 times the gate area of the first one
+*
+* Identical bias, V_GS = V_DS = 1.8 V. If W/L were the whole story, all five
+* of these currents would be the same number.
+*
+*   ngspice -b spice/same_ratio.spice
+*
+* cgg is the total gate capacitance - what the circuit driving this gate has
+* to charge. It is the price tag on the area.
+
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+
+XS1 s1 g 0 0 sky130_fd_pr__nfet_01v8 L=0.15 W=0.75
+XS2 s2 g 0 0 sky130_fd_pr__nfet_01v8 L=0.5  W=2.5
+XS3 s3 g 0 0 sky130_fd_pr__nfet_01v8 L=1    W=5
+XS4 s4 g 0 0 sky130_fd_pr__nfet_01v8 L=2    W=10
+XS5 s5 g 0 0 sky130_fd_pr__nfet_01v8 L=4    W=20
+
+Vg  g  0 1.8
+Vs1 s1 0 1.8
+Vs2 s2 0 1.8
+Vs3 s3 0 1.8
+Vs4 s4 0 1.8
+Vs5 s5 0 1.8
+
+.control
+op
+echo "--- I_D (A): 0.75/0.15, 2.5/0.5, 5/1, 10/2, 20/4 - all W/L = 5 ---"
+let k1 = -i(Vs1)
+let k2 = -i(Vs2)
+let k3 = -i(Vs3)
+let k4 = -i(Vs4)
+let k5 = -i(Vs5)
+print k1 k2 k3 k4 k5
+echo
+echo "--- gate capacitance cgg (F), same order ---"
+print @m.xs1.msky130_fd_pr__nfet_01v8[cgg] @m.xs2.msky130_fd_pr__nfet_01v8[cgg] @m.xs3.msky130_fd_pr__nfet_01v8[cgg]
+print @m.xs4.msky130_fd_pr__nfet_01v8[cgg] @m.xs5.msky130_fd_pr__nfet_01v8[cgg]
+echo
+echo "--- output conductance gds (S), same order ---"
+print @m.xs1.msky130_fd_pr__nfet_01v8[gds] @m.xs2.msky130_fd_pr__nfet_01v8[gds] @m.xs3.msky130_fd_pr__nfet_01v8[gds]
+print @m.xs4.msky130_fd_pr__nfet_01v8[gds] @m.xs5.msky130_fd_pr__nfet_01v8[gds]
+.endc
+.end

@@ -1,0 +1,43 @@
+* AD103 Lab 03 - the output characteristic: I_D vs V_DS, one curve per V_GS
+*
+* This is the picture of the channel, drawn by a simulator. Every bend in it
+* is the channel doing something physical:
+*   rising, straight-ish   -> triode: a resistor whose value the gate sets
+*   knee                   -> the drain end of the channel pinches off
+*   flat                   -> saturation: current stops caring about V_DS
+*
+* Device: W = 5 um, L = 1 um. Long, on purpose - see the guide page
+* "Where saturation starts" for why the minimum-length device is a liar.
+*
+* W and L are PLAIN MICRON NUMBERS. W=5 means five micrometres. Never W=5u.
+
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+
+XM1 d g 0 0 sky130_fd_pr__nfet_01v8 L=1 W=5
+
+Vgs g 0 0
+Vds d 0 0
+
+.control
+* Five sweeps of V_DS, one per gate voltage. Each 'dc' makes its own plot,
+* named dc1 ... dc5 in the order they ran, and the vectors stay addressable
+* afterwards as dc1.i(vds), dc2.i(vds), ...
+foreach vg 0.6 0.9 1.2 1.5 1.8
+  alter Vgs = $vg
+  dc Vds 0 1.8 0.01
+end
+
+setplot dc1
+* ngspice reports current INTO the + terminal of a source, so i(vds) is
+* negative while the transistor conducts. Flip the sign once, here.
+let id_vgs06 = -dc1.i(vds)
+let id_vgs09 = -dc2.i(vds)
+let id_vgs12 = -dc3.i(vds)
+let id_vgs15 = -dc4.i(vds)
+let id_vgs18 = -dc5.i(vds)
+
+wrdata ../results/id_vds.txt id_vgs06 id_vgs09 id_vgs12 id_vgs15 id_vgs18
+
+print id_vgs18[180]
+.endc
+.end

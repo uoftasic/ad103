@@ -1,0 +1,27 @@
+* AD103 Lab 03, extension 3 - device D lengthened from 0.15 um to 0.5 um
+*
+* Same four-device deck as spice/wl_sweep.spice, with one number changed.
+* Watch three things move together: vth, vdsat, and the drain current.
+
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+
+XMA da g 0 0 sky130_fd_pr__nfet_01v8 L=1   W=5
+XMB db g 0 0 sky130_fd_pr__nfet_01v8 L=1   W=10
+XMC dc g 0 0 sky130_fd_pr__nfet_01v8 L=2   W=5
+XMD dd g 0 0 sky130_fd_pr__nfet_01v8 L=0.5 W=1
+
+Vgs g  0 1.8
+Vda da 0 1.8
+Vdb db 0 1.8
+Vdc dc 0 1.8
+Vdd dd 0 1.8
+
+.control
+op
+print i(Vdd)
+print @m.xmd.msky130_fd_pr__nfet_01v8[vth]
+print @m.xmd.msky130_fd_pr__nfet_01v8[vdsat]
+print @m.xmd.msky130_fd_pr__nfet_01v8[gm]
+print @m.xmd.msky130_fd_pr__nfet_01v8[gds]
+.endc
+.end

@@ -1,0 +1,48 @@
+* AD103 Lab 04 - the W ladder
+*
+* Six nfet_01v8 devices, all L = 1 um, widths 1 / 2 / 5 / 10 / 20 / 50 um.
+* Identical bias: V_GS = V_DS = 1.8 V, so every one of them is wide open and
+* saturated. The only thing that differs between them is how wide the channel is.
+*
+* The claim under test is the one every textbook makes:  I_D is proportional
+* to W.  Six points is enough to find out whether that is true, and where it
+* stops being true.
+*
+*   ngspice -b spice/w_ladder.spice
+*
+* W and L are PLAIN MICRON NUMBERS. W=5 means five micrometres. Never W=5u.
+
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+
+XW1  w1  g 0 0 sky130_fd_pr__nfet_01v8 L=1 W=1
+XW2  w2  g 0 0 sky130_fd_pr__nfet_01v8 L=1 W=2
+XW5  w5  g 0 0 sky130_fd_pr__nfet_01v8 L=1 W=5
+XW10 w10 g 0 0 sky130_fd_pr__nfet_01v8 L=1 W=10
+XW20 w20 g 0 0 sky130_fd_pr__nfet_01v8 L=1 W=20
+XW50 w50 g 0 0 sky130_fd_pr__nfet_01v8 L=1 W=50
+
+Vg   g   0 1.8
+Vw1  w1  0 1.8
+Vw2  w2  0 1.8
+Vw5  w5  0 1.8
+Vw10 w10 0 1.8
+Vw20 w20 0 1.8
+Vw50 w50 0 1.8
+
+.control
+op
+echo "--- W (um) then I_D (A), for W = 1 2 5 10 20 50 at L = 1 um ---"
+* ngspice reports current INTO the + terminal of a source, so flip the sign.
+let i1  = -i(Vw1)
+let i2  = -i(Vw2)
+let i5  = -i(Vw5)
+let i10 = -i(Vw10)
+let i20 = -i(Vw20)
+let i50 = -i(Vw50)
+print i1 i2 i5 i10 i20 i50
+echo
+echo "--- and the threshold voltage the model used for each of them (V) ---"
+print @m.xw1.msky130_fd_pr__nfet_01v8[vth] @m.xw2.msky130_fd_pr__nfet_01v8[vth] @m.xw5.msky130_fd_pr__nfet_01v8[vth]
+print @m.xw10.msky130_fd_pr__nfet_01v8[vth] @m.xw20.msky130_fd_pr__nfet_01v8[vth] @m.xw50.msky130_fd_pr__nfet_01v8[vth]
+.endc
+.end

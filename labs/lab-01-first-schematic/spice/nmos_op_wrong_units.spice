@@ -1,0 +1,23 @@
+* AD103 Lab 00 - the same deck with W and L in METRES. This one fails.
+*
+* Run it with "make wrong-units". It is meant to fail, and the failure is the
+* lesson: read what ngspice says, then compare this file with nmos_op.spice.
+*
+
+* --- models -----------------------------------------------------------------
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+
+* --- devices ----------------------------------------------------------------
+* The only change from nmos_op.spice is the "u" on L and W below.
+XM1 d g 0 0 sky130_fd_pr__nfet_01v8 L=0.15u W=1u nf=1 m=1
+
+* --- sources ----------------------------------------------------------------
+Vgs g 0 1.8
+Vds d 0 1.8
+
+* --- analysis ---------------------------------------------------------------
+.control
+op
+print i(Vds)
+.endc
+.end

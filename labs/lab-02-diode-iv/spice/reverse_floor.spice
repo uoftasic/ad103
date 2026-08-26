@@ -1,0 +1,40 @@
+* AD103 Lab 02 - what is the flat line on the reverse side?
+*
+* On the log plot the reverse current looks like a floor at about 1 pA that
+* does not care what voltage you apply. That floor is not the diode. Every
+* SPICE puts a conductance called GMIN across every junction so the matrix
+* stays solvable; ngspice's default is 1e-12 S, which is 1 pA per volt.
+*
+* This deck measures the same three points twice, once with the default GMIN
+* and once with GMIN a thousand times smaller.
+*
+*   ngspice -b spice/reverse_floor.spice
+
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+
+Vr1 rev1 0 dc -1.0
+XR1 rev1 0 sky130_fd_pr__diode_pw2nd_05v5 area=1 perim=4
+Vr2 rev2 0 dc -0.5
+XR2 rev2 0 sky130_fd_pr__diode_pw2nd_05v5 area=1 perim=4
+Vf1 fwd1 0 dc 0.1
+XF1 fwd1 0 sky130_fd_pr__diode_pw2nd_05v5 area=1 perim=4
+
+.control
+op
+* same sign convention as the sweep: diode current is -i(source)
+let i_m1v0 = -i(Vr1)
+let i_m0v5 = -i(Vr2)
+let i_p0v1 = -i(Vf1)
+echo "--- default GMIN = 1e-12 S (amps; negative = current flowing backwards) ---"
+echo "    at -1.000 V, at -0.500 V, at +0.100 V"
+print i_m1v0 i_m0v5 i_p0v1
+option gmin=1e-15
+op
+let j_m1v0 = -i(Vr1)
+let j_m0v5 = -i(Vr2)
+let j_p0v1 = -i(Vf1)
+echo "--- GMIN = 1e-15 S: the same diode, a thousand times less simulator ---"
+echo "    at -1.000 V, at -0.500 V, at +0.100 V"
+print j_m1v0 j_m0v5 j_p0v1
+.endc
+.end

@@ -1,0 +1,49 @@
+* AD103 Lab 02 - the additivity test
+*
+* Superposition, stated for a one-port: drive it with input A, note the
+* response. Drive it with input B, note the response. Drive it with A+B.
+* If the part is linear, the third answer is the first two added together.
+*
+* Six one-ports below: a 100 kohm resistor and a 1 um^2 diode, each driven
+* three times at 0.35 V, 0.35 V, and 0.70 V. Nothing is measured with an
+* instrument; every current is Ohm's law or the diode equation, solved by
+* ngspice at one operating point.
+*
+*   ngspice -b spice/straight_line.spice
+
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+
+* --- linear one-port: a 100 kohm resistor ------------------------------------
+Vra ra 0 dc 0.35
+Rra ra 0 100k
+Vrb rb 0 dc 0.35
+Rrb rb 0 100k
+Vrs rs 0 dc 0.70
+Rrs rs 0 100k
+
+* --- nonlinear one-port: a 1 um^2 diode --------------------------------------
+Vda da 0 dc 0.35
+XDa da 0 sky130_fd_pr__diode_pw2nd_05v5 area=1 perim=4
+Vdb db 0 dc 0.35
+XDb db 0 sky130_fd_pr__diode_pw2nd_05v5 area=1 perim=4
+Vds ds 0 dc 0.70
+XDs ds 0 sky130_fd_pr__diode_pw2nd_05v5 area=1 perim=4
+
+.control
+op
+let i_r_a   = -i(Vra)
+let i_r_b   = -i(Vrb)
+let i_r_sum = i_r_a + i_r_b
+let i_r_ab  = -i(Vrs)
+let i_d_a   = -i(Vda)
+let i_d_b   = -i(Vdb)
+let i_d_sum = i_d_a + i_d_b
+let i_d_ab  = -i(Vds)
+echo "--- 100 kohm resistor (amps) ---"
+echo "    A alone, B alone, then A+B predicted by superposition, then measured"
+print i_r_a i_r_b i_r_sum i_r_ab
+echo "--- 1 um^2 diode (amps) ---"
+echo "    A alone, B alone, then A+B predicted by superposition, then measured"
+print i_d_a i_d_b i_d_sum i_d_ab
+.endc
+.end

@@ -1,0 +1,63 @@
+* AD103 capstone - the current mirror
+*
+* Part 1  a 1:1 mirror. Vout is swept, so you can see exactly where the copy
+*         stops being a copy: the output transistor leaves saturation.
+* Part 2  what W buys you. Three output devices, W = 1, 2 and 4 times the
+*         reference, all sharing one gate voltage.
+* Part 3  the error that is nobody's fault: two identical devices at two
+*         different drain voltages carry two different currents, because ro
+*         is finite. This is the whole reason cascodes exist.
+* Part 4  the fix for part 2. One W = 10 device and two W = 5 devices in
+*         parallel are supposed to be the same thing. They are not, and the
+*         parallel pair is the one that keeps its ratio.
+*
+* Reference current is set by an ideal 50 uA source, so the only thing this
+* deck is measuring is the transistors.
+
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+
+* --- part 1 and 3: 1:1 mirror, W = 5 L = 1 both sides -----------------
+Iref  vdd ng             50u
+XMref ng  ng  0 0 sky130_fd_pr__nfet_01v8 L=1 W=5
+XMout o1  ng  0 0 sky130_fd_pr__nfet_01v8 L=1 W=5
+Vdd   vdd 0              1.8
+Vo1   o1  0              1.8
+
+* --- part 2: same gate voltage, three output widths -------------------
+XMw1 o2 ng 0 0 sky130_fd_pr__nfet_01v8 L=1 W=5
+XMw2 o3 ng 0 0 sky130_fd_pr__nfet_01v8 L=1 W=10
+XMw4 o4 ng 0 0 sky130_fd_pr__nfet_01v8 L=1 W=20
+Vo2  o2 0 0.9
+Vo3  o3 0 0.9
+Vo4  o4 0 0.9
+
+* --- part 4: one W = 10, versus two W = 5 in parallel -----------------
+XMu1 o5 ng 0 0 sky130_fd_pr__nfet_01v8 L=1 W=5
+XMu2 o5 ng 0 0 sky130_fd_pr__nfet_01v8 L=1 W=5
+Vo5  o5 0 0.9
+
+.control
+op
+echo
+echo "--- part 1: the reference branch sets a gate voltage ---"
+print v(ng)
+print @m.xmref.msky130_fd_pr__nfet_01v8[vdsat]
+echo
+echo "--- part 2: one gate voltage, three widths, V_out = 0.9 V ---"
+print i(Vo2) i(Vo3) i(Vo4)
+echo "  and why the ratio is not what you drew:"
+print @m.xmw1.msky130_fd_pr__nfet_01v8[vth] @m.xmw2.msky130_fd_pr__nfet_01v8[vth]
+print @m.xmw1.msky130_fd_pr__nfet_01v8[gm]  @m.xmw2.msky130_fd_pr__nfet_01v8[gm]
+echo
+echo "--- part 4: one W=10 device vs two W=5 devices in parallel ---"
+print i(Vo3) i(Vo5)
+echo
+echo "--- part 3: the same 1:1 copy at several output voltages ---"
+foreach vo 0.1 0.2 0.4 0.6 0.9 1.2 1.8
+  alter Vo1 = $vo
+  op
+  echo "V_out = $vo V"
+  print i(Vo1)
+end
+.endc
+.end

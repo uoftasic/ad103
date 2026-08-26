@@ -1,0 +1,51 @@
+* AD103 Lab 03 - gm, ro, and the gain one transistor can give you
+*
+* Four devices, all in saturation at V_GS = V_DS = 1.8 V, differing only in
+* channel length. For each one the model reports:
+*
+*   gm    how much drain current moves per volt of gate  (siemens)
+*   gds   how much drain current moves per volt of drain  (siemens)
+*
+* ro is 1/gds, and gm*ro -- gm/gds -- is the INTRINSIC GAIN: the largest
+* voltage gain this device can produce, before you connect anything to it.
+*
+* The second half steps the gate on the L = 1 um device so you can watch gm
+* and gm/I_D move with bias. gm/I_D is the efficiency number analog designers
+* actually size with.
+
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+
+XMA da g 0 0 sky130_fd_pr__nfet_01v8 L=0.15 W=5
+XMB db g 0 0 sky130_fd_pr__nfet_01v8 L=0.5  W=5
+XMC dc g 0 0 sky130_fd_pr__nfet_01v8 L=1    W=5
+XMD dd g 0 0 sky130_fd_pr__nfet_01v8 L=4    W=5
+
+Vgs g  0 1.8
+Vda da 0 1.8
+Vdb db 0 1.8
+Vdc dc 0 1.8
+Vdd dd 0 1.8
+
+.control
+op
+echo
+echo "--- W = 5 um, V_GS = V_DS = 1.8 V, four channel lengths ---"
+echo "L = 0.15 um"
+print i(Vda) @m.xma.msky130_fd_pr__nfet_01v8[gm] @m.xma.msky130_fd_pr__nfet_01v8[gds]
+echo "L = 0.5 um"
+print i(Vdb) @m.xmb.msky130_fd_pr__nfet_01v8[gm] @m.xmb.msky130_fd_pr__nfet_01v8[gds]
+echo "L = 1 um"
+print i(Vdc) @m.xmc.msky130_fd_pr__nfet_01v8[gm] @m.xmc.msky130_fd_pr__nfet_01v8[gds]
+echo "L = 4 um"
+print i(Vdd) @m.xmd.msky130_fd_pr__nfet_01v8[gm] @m.xmd.msky130_fd_pr__nfet_01v8[gds]
+
+echo
+echo "--- L = 1 um device, gate stepped: I_D, gm, gds ---"
+foreach vg 0.7 0.9 1.1 1.3 1.5 1.8
+  alter Vgs = $vg
+  op
+  echo "V_GS = $vg V"
+  print i(Vdc) @m.xmc.msky130_fd_pr__nfet_01v8[gm] @m.xmc.msky130_fd_pr__nfet_01v8[gds]
+end
+.endc
+.end

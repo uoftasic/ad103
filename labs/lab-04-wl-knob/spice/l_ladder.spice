@@ -1,0 +1,50 @@
+* AD103 Lab 04 - the L ladder
+*
+* Six nfet_01v8 devices, all W = 5 um, lengths 0.15 / 0.25 / 0.5 / 1 / 2 / 4 um.
+* 0.15 um is the shortest channel this process will draw; 4 um is 27 times that.
+* Identical bias: V_GS = V_DS = 1.8 V.
+*
+* The claim under test:  I_D is proportional to 1/L.
+*
+*   ngspice -b spice/l_ladder.spice
+*
+* vdsat is the model's own opinion of where saturation begins for that device.
+* Watch it move down the ladder - it is the receipt for why 1/L fails.
+
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+
+XL015 l015 g 0 0 sky130_fd_pr__nfet_01v8 L=0.15 W=5
+XL025 l025 g 0 0 sky130_fd_pr__nfet_01v8 L=0.25 W=5
+XL05  l05  g 0 0 sky130_fd_pr__nfet_01v8 L=0.5  W=5
+XL1   l1   g 0 0 sky130_fd_pr__nfet_01v8 L=1    W=5
+XL2   l2   g 0 0 sky130_fd_pr__nfet_01v8 L=2    W=5
+XL4   l4   g 0 0 sky130_fd_pr__nfet_01v8 L=4    W=5
+
+Vg    g    0 1.8
+Vl015 l015 0 1.8
+Vl025 l025 0 1.8
+Vl05  l05  0 1.8
+Vl1   l1   0 1.8
+Vl2   l2   0 1.8
+Vl4   l4   0 1.8
+
+.control
+op
+echo "--- I_D (A) for L = 0.15 0.25 0.5 1 2 4 um, all W = 5 um ---"
+let j015 = -i(Vl015)
+let j025 = -i(Vl025)
+let j05  = -i(Vl05)
+let j1   = -i(Vl1)
+let j2   = -i(Vl2)
+let j4   = -i(Vl4)
+print j015 j025 j05 j1 j2 j4
+echo
+echo "--- threshold voltage vth (V), same order ---"
+print @m.xl015.msky130_fd_pr__nfet_01v8[vth] @m.xl025.msky130_fd_pr__nfet_01v8[vth] @m.xl05.msky130_fd_pr__nfet_01v8[vth]
+print @m.xl1.msky130_fd_pr__nfet_01v8[vth] @m.xl2.msky130_fd_pr__nfet_01v8[vth] @m.xl4.msky130_fd_pr__nfet_01v8[vth]
+echo
+echo "--- saturation voltage vdsat (V), same order ---"
+print @m.xl015.msky130_fd_pr__nfet_01v8[vdsat] @m.xl025.msky130_fd_pr__nfet_01v8[vdsat] @m.xl05.msky130_fd_pr__nfet_01v8[vdsat]
+print @m.xl1.msky130_fd_pr__nfet_01v8[vdsat] @m.xl2.msky130_fd_pr__nfet_01v8[vdsat] @m.xl4.msky130_fd_pr__nfet_01v8[vdsat]
+.endc
+.end

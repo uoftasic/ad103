@@ -1,0 +1,32 @@
+* AD103 capstone - the wiring mistake everybody makes once
+*
+* This deck is spice/vtc.spice with ONE node name changed. The PMOS source and
+* body go to ground instead of to vdd:
+*
+*     XP out in vdd vdd ...      <- correct
+*     XP out in 0   0   ...      <- this file
+*
+* Nothing about that is a syntax error. ngspice reads it, solves it, and
+* writes 1801 rows of a perfectly self-consistent circuit that is not an
+* inverter. No warning is printed, because nothing is wrong with the netlist -
+* only with the intent behind it.
+*
+*   make broken
+*
+* Look at the verdict, then look at the curve. The output does something, and
+* what it does is a much better lesson than an error message would have been.
+
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+
+Vdd vdd 0 1.8
+Vin in  0 0
+
+XN out in 0 0 sky130_fd_pr__nfet_01v8 L=0.15 W=1
+XP out in 0 0 sky130_fd_pr__pfet_01v8 L=0.15 W=1
+
+.control
+dc Vin 0 1.8 0.001
+let idd = -i(Vdd)
+wrdata results/vtc_broken.txt v(out) idd
+.endc
+.end
