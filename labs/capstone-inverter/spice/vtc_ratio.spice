@@ -1,0 +1,45 @@
+* AD103 capstone - the same inverter at five pull-up widths
+*
+* Five inverters share one input and one supply. Every NMOS is W = 1 um;
+* the PMOS widths are 1, 2, 2.5, 3.5 and 4 um. L = 0.15 um throughout.
+*
+*   Wp = 1     the naive one from spice/vtc.spice
+*   Wp = 2     a round guess
+*   Wp = 2.5   the width that makes the two SATURATION CURRENTS equal
+*   Wp = 3.5   the width that actually centres the switching threshold
+*   Wp = 4     one past it, so you can see the trend continue
+*
+* Wp = 2.5 comes out of spice/drive.spice: the NMOS carries 2.4959 times the
+* PMOS at the same width, so 2.5 um of PMOS should match 1 um of NMOS. Whether
+* matching the saturation currents is the same thing as centring the switching
+* threshold is the question this deck answers, and the answer is no.
+*
+*   ngspice -b spice/vtc_ratio.spice
+*
+* Columns: v(in) v(o1) v(o2) v(o25) v(o35) v(o4)
+
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+
+Vdd vdd 0 1.8
+Vin in  0 0
+
+XN1  o1  in 0   0   sky130_fd_pr__nfet_01v8 L=0.15 W=1
+XP1  o1  in vdd vdd sky130_fd_pr__pfet_01v8 L=0.15 W=1
+
+XN2  o2  in 0   0   sky130_fd_pr__nfet_01v8 L=0.15 W=1
+XP2  o2  in vdd vdd sky130_fd_pr__pfet_01v8 L=0.15 W=2
+
+XN25 o25 in 0   0   sky130_fd_pr__nfet_01v8 L=0.15 W=1
+XP25 o25 in vdd vdd sky130_fd_pr__pfet_01v8 L=0.15 W=2.5
+
+XN35 o35 in 0   0   sky130_fd_pr__nfet_01v8 L=0.15 W=1
+XP35 o35 in vdd vdd sky130_fd_pr__pfet_01v8 L=0.15 W=3.5
+
+XN4  o4  in 0   0   sky130_fd_pr__nfet_01v8 L=0.15 W=1
+XP4  o4  in vdd vdd sky130_fd_pr__pfet_01v8 L=0.15 W=4
+
+.control
+dc Vin 0 1.8 0.001
+wrdata results/vtc_ratio.txt v(o1) v(o2) v(o25) v(o35) v(o4)
+.endc
+.end

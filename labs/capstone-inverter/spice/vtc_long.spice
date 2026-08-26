@@ -1,0 +1,27 @@
+* AD103 capstone - the same inverter, drawn with a long channel
+*
+* Identical to spice/vtc.spice in every respect except L: both devices are
+* 0.5 um long instead of 0.15 um. Nothing else changes - same widths, same
+* supply, same sweep.
+*
+* Run it, then compare the gain at the switching threshold with the
+* minimum-length inverter's. The two numbers are not close, and the reason is
+* the r_o you measured in Lab 04.
+*
+*   ngspice -b spice/vtc_long.spice
+*
+* Columns: v(in) v(out)
+
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+
+Vdd vdd 0 1.8
+Vin in  0 0
+
+XN out in 0   0   sky130_fd_pr__nfet_01v8 L=0.5 W=1
+XP out in vdd vdd sky130_fd_pr__pfet_01v8 L=0.5 W=1
+
+.control
+dc Vin 0 1.8 0.001
+wrdata results/vtc_long.txt v(out)
+.endc
+.end

@@ -1,0 +1,25 @@
+# AD103 Lab 04 - your predictions
+#
+# Fill in the six blanks below, THEN run:   make predict
+#
+# You have one measured anchor to work from. It is the device Lab 03 swept,
+# and you can re-measure it yourself in five seconds if you want to:
+#
+#     W = 5 um, L = 1 um, V_GS = V_DS = 1.8 V   ->   I_D = 696.2755 uA
+#
+# The rule you were taught is that drain current is proportional to W/L. Use
+# it. Write the number that rule gives you, in MICROAMPS, to one decimal
+# place. Do not run anything first, do not hedge, and do not go back and edit
+# a prediction once you have seen the answer - a prediction you revised is
+# not a prediction, and the point of this file is to have a record of what
+# you actually believed.
+#
+# Four of these six are wrong by more than 5 %, and the four are wrong in a
+# pattern. Finding the pattern is the lab.
+
+P1  W=10   L=1      =
+P2  W=50   L=1      =
+P3  W=5    L=2      =
+P4  W=5    L=0.15   =
+P5  W=0.75 L=0.15   =
+P6  W=20   L=4      =

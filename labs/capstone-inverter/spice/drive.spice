@@ -1,0 +1,44 @@
+* AD103 capstone - how hard can each transistor pull?
+*
+* Before you build an inverter you should know what the two halves of it can
+* actually do. Both devices here are W = 1 um, L = 0.15 um - the minimum
+* length this process draws, which is what a digital gate uses.
+*
+* The NMOS is fully on with its source at ground:   V_GS = V_DS = 1.8 V.
+* The PMOS is fully on with its source at vdd:      V_SG = V_SD = 1.8 V,
+* which means its gate is at 0 V and its drain is at 0 V.
+*
+*   ngspice -b spice/drive.spice
+*
+* This is the same device you met in Lab 01 at exactly the same bias, so one
+* of the two numbers below should already be familiar.
+
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+
+Vdd vdd 0 1.8
+
+* --- the pull-down: NMOS, gate high, source at ground ------------------------
+XN dn gn 0 0 sky130_fd_pr__nfet_01v8 L=0.15 W=1
+Vgn gn 0 1.8
+Vdn dn 0 1.8
+
+* --- the pull-up: PMOS, gate low, source at vdd ------------------------------
+XP dp gp vdd vdd sky130_fd_pr__pfet_01v8 L=0.15 W=1
+Vgp gp 0 0
+Vdp dp 0 0
+
+.control
+op
+echo "--- saturation current of one W=1 L=0.15 device of each type (A) ---"
+let i_n = -i(Vdn)
+let i_p =  i(Vdp)
+let ratio = i_n / i_p
+print i_n i_p
+echo
+echo "--- how many times stronger the NMOS is ---"
+print ratio
+echo
+echo "--- the two thresholds the model used (V) ---"
+print @m.xn.msky130_fd_pr__nfet_01v8[vth] @m.xp.msky130_fd_pr__pfet_01v8[vth]
+.endc
+.end

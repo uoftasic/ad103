@@ -1,0 +1,35 @@
+* AD103 Lab 02 - the I-V curve of one SKY130 diode
+*
+* One diode, one voltage source, one sweep. The device is
+* sky130_fd_pr__diode_pw2nd_05v5: an n+ diffusion sitting in the p-well,
+* which is the plainest pn junction SkyWater will sell you.
+*
+* Runs inside hpretl/iic-osic-tools:2026.04:   ngspice -b spice/diode_iv.spice
+*
+* UNITS, and this is the whole ballgame:
+*   area  is in SQUARE MICRONS.  area=1  is a 1 um x 1 um junction.
+*   perim is in MICRONS.         perim=4 is the 4 um of edge around it.
+* The parameter is spelled "perim". If you write "pj=4" instead, ngspice
+* accepts the line without a word of complaint and you inherit the default
+* perimeter of 1e6 um - a diode one metre around. See spice/diode_area.spice,
+* which runs that exact line next to the correct one and prints both currents.
+
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+
+* --- the device under test ---------------------------------------------------
+* First port is the ANODE, second port is the CATHODE.
+Vd anode 0 dc 0
+XD1 anode 0 sky130_fd_pr__diode_pw2nd_05v5 area=1 perim=4
+
+* --- the sweep ---------------------------------------------------------------
+* -1 V (hard reverse) to +0.9 V (hard forward) in 1 mV steps: 1901 points.
+.dc Vd -1 0.9 0.001
+
+.control
+run
+* current out of the source's + terminal is -i(Vd); that is the forward
+* current through the diode.
+let id = -i(Vd)
+wrdata results/diode_iv.txt id
+.endc
+.end

@@ -1,0 +1,28 @@
+* AD103 Lab 03, extension 2 - the same measurement on a pfet_01v8
+*
+* A PMOS conducts when its gate is BELOW its source, and its source is the most
+* positive terminal, so it is wired to the supply rather than to ground. Every
+* voltage in this deck is measured relative to that supply, which is why the
+* two sources carry -1.8 V.
+*
+* The body goes to the supply too. On an NMOS the body goes to the lowest
+* voltage in the circuit; on a PMOS it goes to the highest. Get this backwards
+* and you forward-bias a junction that is meant to stay off.
+
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+
+XM1 d g vdd vdd sky130_fd_pr__pfet_01v8 L=1 W=5
+
+Vdd vdd 0   1.8
+Vgs g   vdd -1.8
+Vds d   vdd -1.8
+
+.control
+op
+print i(Vds)
+print @m.xm1.msky130_fd_pr__pfet_01v8[vth]
+print @m.xm1.msky130_fd_pr__pfet_01v8[vdsat]
+print @m.xm1.msky130_fd_pr__pfet_01v8[gm]
+print @m.xm1.msky130_fd_pr__pfet_01v8[gds]
+.endc
+.end

@@ -1,0 +1,16 @@
+* AD103 survival card, analysis 2b -- a second, outer sweep in one dc command
+* Printed on docs/reference/ngspice-errors.md, section "2. .dc"
+* The point is the ROW COUNT: 905 = 5 x 181, five curves laid end to end in
+* ONE vector. Index 180 is the last point of curve 1; index 181 is the first
+* point of curve 2, back at V_DS = 0.
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+XM1 d g 0 0 sky130_fd_pr__nfet_01v8 L=1 W=5
+Vgs g 0 0
+Vds d 0 0
+.control
+dc Vds 0 1.8 0.01 Vgs 0.6 1.8 0.3
+let id = -i(Vds)
+print id[180]
+print id[181]
+.endc
+.end

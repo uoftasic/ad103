@@ -1,0 +1,17 @@
+* AD103 survival card -- the R and the C of the other two decks, on their own
+* Printed on docs/reference/ngspice-errors.md, section
+* "The two analyses have to agree -- check that they do"
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+Ir 0 a dc 1u
+XR1 a 0 sky130_fd_pr__res_generic_po W=1 L=200
+Vc c 0 dc 0 ac 1
+XC1 c 0 sky130_fd_pr__cap_mim_m3_1 W=10 L=10 MF=1 m=1
+.control
+op
+let r = v(a)/1u
+print r
+ac lin 1 1meg 1meg
+let cmim = abs(i(Vc))/(2*pi*1e6)
+print cmim
+.endc
+.end

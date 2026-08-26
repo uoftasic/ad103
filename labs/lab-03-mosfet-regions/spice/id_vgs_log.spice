@@ -1,0 +1,20 @@
+* AD103 Lab 03 - the region the textbook calls "off"
+*
+* Same device, same V_DS = 1.8 V saturation sweep, but stepped finely from
+* 0 V and read on a log scale. Below threshold the drain current does not go
+* to zero - it goes to zero EXPONENTIALLY, and how fast is a number every
+* chip designer knows: the subthreshold slope, in millivolts per decade.
+
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+
+XM1 d g 0 0 sky130_fd_pr__nfet_01v8 L=1 W=5
+
+Vgs g 0 0
+Vds d 0 1.8
+
+.control
+dc Vgs 0 1.8 0.005
+let id = -i(vds)
+wrdata ../results/id_vgs_log.txt id
+.endc
+.end

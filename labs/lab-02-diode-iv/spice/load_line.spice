@@ -1,0 +1,40 @@
+* AD103 Lab 02 - one resistor, one diode, one supply. What is the current?
+*
+* This is the first circuit in this course that you cannot solve the way
+* ECE110 taught you. Two elements in series across 1.8 V:
+*
+*     1.8 V ---[ R ]--- node ---|>|--- 0
+*
+* Kirchhoff gives you  (1.8 - v_node)/R = I_diode(v_node), and the right-hand
+* side is an exponential. There is no rearrangement of that equation that ends
+* with v_node on one side by itself. ngspice does not rearrange it either - it
+* guesses and corrects until both sides agree.
+*
+*   ngspice -b spice/load_line.spice
+
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+
+Vdd vdd 0 dc 1.8
+
+* --- three loads, three operating points -------------------------------------
+R1 vdd n1 10k
+XD1 n1 0 sky130_fd_pr__diode_pw2nd_05v5 area=1 perim=4
+
+R2 vdd n2 100k
+XD2 n2 0 sky130_fd_pr__diode_pw2nd_05v5 area=1 perim=4
+
+R3 vdd n3 1meg
+XD3 n3 0 sky130_fd_pr__diode_pw2nd_05v5 area=1 perim=4
+
+.control
+op
+let i_10k  = (1.8 - v(n1))/10e3
+let i_100k = (1.8 - v(n2))/100e3
+let i_1meg = (1.8 - v(n3))/1e6
+echo "--- diode voltage at the operating point (volts) ---"
+echo "    R = 10 kohm, 100 kohm, 1 Mohm"
+print v(n1) v(n2) v(n3)
+echo "--- and the current through it (amps) ---"
+print i_10k i_100k i_1meg
+.endc
+.end

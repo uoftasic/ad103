@@ -1,0 +1,32 @@
+* AD103 Lab 03 - the transfer characteristic: I_D vs V_GS
+*
+* Two sweeps of the same device:
+*   V_DS = 0.05 V  -> the channel is a resistor. This is the sweep you extract
+*                     a threshold voltage from, because I_D is nearly a straight
+*                     line in V_GS once the channel exists.
+*   V_DS = 1.8 V   -> saturation. This is the sweep an amplifier lives on, and
+*                     the one whose slope is g_m.
+*
+* Device: W = 5 um, L = 1 um, same transistor as id_vds.spice.
+
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+
+XM1 d g 0 0 sky130_fd_pr__nfet_01v8 L=1 W=5
+
+Vgs g 0 0
+Vds d 0 0
+
+.control
+alter Vds = 0.05
+dc Vgs 0 1.8 0.005
+
+alter Vds = 1.8
+dc Vgs 0 1.8 0.005
+
+setplot dc1
+let id_lin = -dc1.i(vds)
+let id_sat = -dc2.i(vds)
+
+wrdata ../results/id_vgs.txt id_lin id_sat
+.endc
+.end

@@ -1,0 +1,43 @@
+* AD103 Lab 03 - the threshold voltage is a function of the source-to-bulk voltage
+*
+* One transistor, W = 5 um, L = 1 um -- the same device the rest of this lab
+* uses. The only thing that changes is how far the SOURCE sits above the BULK.
+*
+* Note the node order on the device line: d g s b. Everywhere else in this lab
+* the source and the bulk are both node 0, so V_SB is zero and the body effect
+* is invisible. Here the source is lifted onto its own node and Vsb pushes it
+* up, one step at a time, while V_GS and V_DS stay fixed RELATIVE TO THE SOURCE
+* -- which is what Vgs g s and Vds d s do.
+*
+* V_DS is held at 50 mV so the drain is not moving vth as well. This deck is
+* asking about the bulk alone.
+
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+
+XM1 d g s 0 sky130_fd_pr__nfet_01v8 L=1 W=5
+
+Vsb s 0 0
+Vgs g s 1.8
+Vds d s 0.05
+
+.control
+echo
+echo "--- vth and I_D vs V_SB, W = 5 um, L = 1 um, V_GS = 1.8 V, V_DS = 0.05 V ---"
+foreach vsb 0 0.3 0.6 0.9 1.2
+  alter Vsb = $vsb
+  op
+  echo "V_SB = $vsb V"
+  print @m.xm1.msky130_fd_pr__nfet_01v8[vth] i(Vds)
+end
+
+alter Vsb = 0
+echo
+echo "--- and the same device, V_SB = 0, at three temperatures ---"
+foreach t -40 27 125
+  set temp = $t
+  op
+  echo "T = $t C"
+  print @m.xm1.msky130_fd_pr__nfet_01v8[vth] i(Vds)
+end
+.endc
+.end

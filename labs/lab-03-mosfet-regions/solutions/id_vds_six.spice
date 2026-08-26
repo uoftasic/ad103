@@ -1,0 +1,30 @@
+* AD103 Lab 03, extension 1 - a sixth curve at V_GS = 1.05 V
+*
+* Four edits from spice/id_vds.spice: add 1.05 to the foreach list, add one
+* more "let", add one more name to the wrdata line, and remember that the plot
+* numbering shifts - the new sweep runs second, so it is dc2 and everything
+* after it moves down by one. That last part is the whole exercise.
+
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+
+XM1 d g 0 0 sky130_fd_pr__nfet_01v8 L=1 W=5
+
+Vgs g 0 0
+Vds d 0 0
+
+.control
+foreach vg 0.6 1.05 0.9 1.2 1.5 1.8
+  alter Vgs = $vg
+  dc Vds 0 1.8 0.01
+end
+setplot dc1
+let id_vgs06  = -dc1.i(vds)
+let id_vgs105 = -dc2.i(vds)
+let id_vgs09  = -dc3.i(vds)
+let id_vgs12  = -dc4.i(vds)
+let id_vgs15  = -dc5.i(vds)
+let id_vgs18  = -dc6.i(vds)
+wrdata ../results/id_vds_six.txt id_vgs06 id_vgs09 id_vgs105 id_vgs12 id_vgs15 id_vgs18
+print id_vgs105[180]
+.endc
+.end

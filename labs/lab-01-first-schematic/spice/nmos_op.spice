@@ -1,0 +1,23 @@
+* AD103 Lab 00 - one NMOS at one operating point
+*
+* The same circuit as xschem/nmos_probe.sch, written by hand as a plain SPICE
+* deck so it runs with no GUI and no schematic. Every testbench in this course
+* has these same parts: models, devices, sources, an analysis, an end.
+
+* --- models -----------------------------------------------------------------
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+
+* --- devices ----------------------------------------------------------------
+* W and L are PLAIN MICRON NUMBERS. W=1 means one micrometre. Never W=1u.
+XM1 d g 0 0 sky130_fd_pr__nfet_01v8 L=0.15 W=1 nf=1 m=1
+
+* --- sources ----------------------------------------------------------------
+Vgs g 0 1.8
+Vds d 0 1.8
+
+* --- analysis ---------------------------------------------------------------
+.control
+op
+print i(Vds)
+.endc
+.end

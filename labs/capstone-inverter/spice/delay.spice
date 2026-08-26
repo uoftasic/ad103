@@ -1,0 +1,52 @@
+* AD103 capstone - how long does the switch take?
+*
+* The DC sweep tells you where the inverter switches. It says nothing about
+* how fast, because a DC sweep has no time in it. This deck adds the two
+* things that make time matter: a real input edge, and a capacitor to drive.
+*
+* Three inverters, all with Wn = 1 um and a 10 fF load. The pull-up widths are
+* the three candidates from the rest of this lab:
+*
+*   Wp = 1     naive
+*   Wp = 2.5   matches the two SATURATION CURRENTS   (spice/drive.spice)
+*   Wp = 3.5   centres the SWITCHING THRESHOLD       (spice/vtc_ratio.spice)
+*
+* .meas measures propagation delay the way a datasheet defines it: from the
+* input crossing half the supply to the output crossing half the supply.
+*   tphl = high-to-low at the OUTPUT (the NMOS pulling down)
+*   tplh = low-to-high at the OUTPUT (the PMOS pulling up)
+*
+* Before you run it: which of the three do you think has the most equal pair?
+*
+*   ngspice -b spice/delay.spice
+
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+
+Vdd vdd 0 1.8
+* 20 ps edges, 2 ns high, 4 ns period - fast enough that the edge is not the
+* thing being measured, slow enough that the output settles between them.
+Vin in 0 PULSE(0 1.8 1n 20p 20p 2n 4n)
+
+XN1 o1 in 0   0   sky130_fd_pr__nfet_01v8 L=0.15 W=1
+XP1 o1 in vdd vdd sky130_fd_pr__pfet_01v8 L=0.15 W=1
+C1  o1 0 10f
+
+XN2 o2 in 0   0   sky130_fd_pr__nfet_01v8 L=0.15 W=1
+XP2 o2 in vdd vdd sky130_fd_pr__pfet_01v8 L=0.15 W=2.5
+C2  o2 0 10f
+
+XN3 o3 in 0   0   sky130_fd_pr__nfet_01v8 L=0.15 W=1
+XP3 o3 in vdd vdd sky130_fd_pr__pfet_01v8 L=0.15 W=3.5
+C3  o3 0 10f
+
+.control
+tran 1p 6n
+meas tran tphl1 trig v(in) val=0.9 rise=1 targ v(o1) val=0.9 fall=1
+meas tran tplh1 trig v(in) val=0.9 fall=1 targ v(o1) val=0.9 rise=1
+meas tran tphl2 trig v(in) val=0.9 rise=1 targ v(o2) val=0.9 fall=1
+meas tran tplh2 trig v(in) val=0.9 fall=1 targ v(o2) val=0.9 rise=1
+meas tran tphl3 trig v(in) val=0.9 rise=1 targ v(o3) val=0.9 fall=1
+meas tran tplh3 trig v(in) val=0.9 fall=1 targ v(o3) val=0.9 rise=1
+wrdata results/delay.txt v(in) v(o1) v(o2) v(o3)
+.endc
+.end
