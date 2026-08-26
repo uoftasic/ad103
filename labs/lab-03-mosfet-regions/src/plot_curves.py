@@ -17,15 +17,24 @@ matplotlib.use("Agg")          # no X server, no display, no surprises
 import matplotlib.pyplot as plt
 import numpy as np
 
-from mosfit import (RESULTS, knee_voltage, read_wrdata, subthreshold_slope,
-                    vth_linear_extrapolation, vth_sqrt_extrapolation, derivative)
+from mosfit import (RESULTS, SPICE, deck_geometries, knee_voltage,
+                    labelled_columns, read_wrdata,
+                    subthreshold_slope, vth_linear_extrapolation,
+                    vth_sqrt_extrapolation, derivative)
 
-VGS_STEPS = [0.6, 0.9, 1.2, 1.5, 1.8]
-# Model vdsat for W=5 L=1 at V_DS = 1.8 V, printed by spice/op_params.spice.
-VDSAT_MODEL = [0.06482127, 0.2557139, 0.4424141, 0.6124524, 0.7794634]
+# Model vdsat for W=5 L=1 at V_DS = 1.8 V, printed by spice/op_params.spice,
+# keyed by the V_GS it was measured at. Add a curve to spice/id_vds.spice and
+# it simply has no entry here - it gets drawn, and left off the knee locus,
+# rather than borrowing the neighbouring gate's vdsat.
+VDSAT_MODEL = {0.6: 0.06482127, 0.9: 0.2557139, 1.2: 0.4424141,
+               1.5: 0.6124524, 1.8: 0.7794634}
 VTH_MODEL = 0.5894596
 
-C = ["#1b3a6b", "#1f77b4", "#2ca089", "#d97706", "#b3243b"]
+# The first five are the palette every published AD103 figure uses; the last
+# three only ever appear if you add curves to a deck, so the colour cycle
+# does not wrap round and give two curves the same colour.
+C = ["#1b3a6b", "#1f77b4", "#2ca089", "#d97706", "#b3243b",
+     "#7c3aed", "#0f766e", "#a16207"]
 TRIODE_FILL = "#dbeafe"
 SAT_FILL = "#fef3c7"
 
@@ -38,28 +47,34 @@ plt.rcParams.update({
 
 
 def fig_id_vds(out):
-    vds, ids = read_wrdata(RESULTS / "id_vds.txt")
+    # Curve labels come from the deck, not from a list in this file. Add a
+    # sixth sweep to spice/id_vds.spice and every legend below stays true.
+    vds, curves = labelled_columns(SPICE / "id_vds.spice", RESULTS / "id_vds.txt")
+    curves.sort(key=lambda gc: gc[0])
     fig, ax = plt.subplots(figsize=(7.8, 5.2))
 
     # The knee locus: for each curve, the point where the model says the
     # channel pinched off (V_DS = vdsat). Left of it is triode, right of it
     # is saturation - so shade horizontally, level of current by level.
-    kx = np.array(VDSAT_MODEL)
-    ky = np.array([np.interp(vd, vds, cur) for vd, cur in zip(VDSAT_MODEL, ids)]) * 1e6
+    knee = [(VDSAT_MODEL[vg], cur) for vg, cur in curves if vg in VDSAT_MODEL]
+    kx = np.array([vd for vd, _ in knee])
+    ky = np.array([np.interp(vd, vds, cur) for vd, cur in knee]) * 1e6
     igrid = np.linspace(0, 760, 400)
     xsplit = np.interp(igrid, ky, kx, left=0.0, right=kx[-1] + 0.001)
     ax.fill_betweenx(igrid, 0, xsplit, color=TRIODE_FILL, zorder=0)
     ax.fill_betweenx(igrid, xsplit, 1.8, color=SAT_FILL, zorder=0)
 
-    for vg, cur, c in zip(VGS_STEPS, ids, C):
+    for n, (vg, cur) in enumerate(curves):
+        c = C[n % len(C)]
         ax.plot(vds, cur * 1e6, color=c, lw=2.1)
-        ax.text(1.84, cur[-1] * 1e6, f"$V_{{GS}}$ = {vg:.1f} V",
+        ax.text(1.84, cur[-1] * 1e6, f"$V_{{GS}}$ = {vg:g} V",
                 color=c, fontsize=9.5, va="center", ha="left")
 
     ax.plot(kx, ky, "k--", lw=1.4, zorder=5)
     ax.plot(kx, ky, "ko", ms=5.5, zorder=6)
     ax.annotate("$V_{DS} = V_{DSAT}$ — the drain end\nof the channel pinches off",
-                xy=(kx[3], ky[3]), xytext=(0.84, 520),
+                xy=(kx[min(3, len(kx)-1)], ky[min(3, len(ky)-1)]),
+                xytext=(0.84, 520),
                 fontsize=9.5, ha="left",
                 arrowprops=dict(arrowstyle="->", color="k", lw=1.1), zorder=7)
 
@@ -208,16 +223,16 @@ def fig_gm(out):
 
 def fig_wl(out):
     vds, geo = read_wrdata(RESULTS / "wl_sweep.txt")
-    names = ["A  W=5 µm, L=1 µm   (W/L = 5)",
-             "B  W=10 µm, L=1 µm  (W/L = 10)",
-             "C  W=5 µm, L=2 µm   (W/L = 2.5)",
-             "D  W=1 µm, L=0.15 µm (W/L = 6.67)"]
+    shapes = deck_geometries(SPICE / "wl_sweep.spice")   # labels from the deck
+    names = [f"{'ABCDEFGH'[n]}  {f'W={w:g} µm, L={l:g} µm':<16} (W/L = {w/l:.3g})"
+             for n, (w, l) in enumerate(shapes)]
     cols = [C[1], C[2], C[0], C[4]]
     fig, ax = plt.subplots(figsize=(7.6, 5.0))
-    for n, cur, c in zip(names, geo, cols):
-        ax.plot(vds, cur * 1e6, color=c, lw=2, label=n)
-    ax.plot(vds, geo[0] * 1e6 * (6.6667 / 5.0), color=C[4], lw=1.4, ls="--",
-            label="what W/L alone predicts for D")
+    for n, (cur, name) in enumerate(zip(geo, names)):
+        ax.plot(vds, cur * 1e6, color=cols[n % len(cols)], lw=2, label=name)
+    wl_ratio = (shapes[-1][0] / shapes[-1][1]) / (shapes[0][0] / shapes[0][1])
+    ax.plot(vds, geo[0] * 1e6 * wl_ratio, color=C[4], lw=1.4, ls="--",
+            label=f"what W/L alone predicts for {'ABCDEFGH'[len(shapes)-1]}")
     ax.set_xlim(0, 1.8)
     ax.set_ylim(0, 1500)
     ax.set_xlabel("$V_{DS}$  (V)")

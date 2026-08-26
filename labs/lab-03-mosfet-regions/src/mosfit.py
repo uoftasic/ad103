@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 """Shared helpers for AD103 Lab 03.
 
-Two jobs: read ngspice's `wrdata` files, and do the three extractions this lab
-is about (threshold, transconductance, subthreshold slope). Nothing here is
-clever - it is arithmetic on two columns of numbers, which is the point.
+Three jobs: read ngspice's `wrdata` files, work out which bias each column of
+one was swept at by reading the deck that wrote it, and do the three
+extractions this lab is about (threshold, transconductance, subthreshold
+slope). Nothing here is clever - it is arithmetic on two columns of numbers,
+which is the point.
 """
+import re
 from pathlib import Path
 
 import numpy as np
 
 LAB = Path(__file__).resolve().parent.parent
 RESULTS = LAB / "results"
+SPICE   = LAB / "spice"
 
 
 def read_wrdata(path):
@@ -29,6 +33,122 @@ def read_wrdata(path):
     x = raw[:, 0]
     ys = [raw[:, 2 * i + 1] for i in range(raw.shape[1] // 2)]
     return x, ys
+
+
+def deck_gate_voltages(deck):
+    """The V_GS behind each COLUMN of the wrdata file this deck writes.
+
+    You cannot get this from the `foreach` line alone, and assuming you can is
+    the single most expensive mistake in this lab. Three separate lines have to
+    be read together:
+
+        foreach vg 0.6 1.05 0.9 ...    run order. dc1 is 0.6, dc2 is 1.05
+        let id_vgs105 = -dc2.i(vds)    ties a vector name to a RUN
+        wrdata <file> id_vgs06 ...     column order, by NAME
+
+    `dcN` is a run counter, not a bias label, and `wrdata` writes columns in
+    whatever order you name them - which need not be either the run order or
+    ascending gate voltage. Insert a sixth curve in its natural place in the
+    foreach list and all three orders come apart.
+
+    Returns the gate voltage of each column, in column order.
+    """
+    text = Path(deck).read_text()
+
+    m = re.search(r"^\s*foreach\s+vg\s+(.+)$", text, re.M)
+    if not m:
+        raise ValueError(f"{deck}: no 'foreach vg ...' line to read gate voltages from")
+    run_gate = [float(t) for t in m.group(1).split()]
+
+    run_of = {}
+    for name, n in re.findall(r"^\s*let\s+(\w+)\s*=\s*-?\s*dc(\d+)\.i\(",
+                              text, re.M):
+        run_of[name] = int(n)
+
+    w = re.search(r"^\s*wrdata\s+\S+\s+(.+)$", text, re.M)
+    if not w:
+        raise ValueError(f"{deck}: no 'wrdata' line to read the column order from")
+
+    gates = []
+    for name in w.group(1).split():
+        if name not in run_of:
+            raise ValueError(
+                f"{deck}: wrdata writes '{name}', but no 'let {name} = -dcN.i(vds)' "
+                f"line says which sweep that is")
+        n = run_of[name]
+        if not 1 <= n <= len(run_gate):
+            raise ValueError(
+                f"{deck}: '{name}' reads dc{n}, but the foreach line only runs "
+                f"{len(run_gate)} sweeps (dc1..dc{len(run_gate)})")
+        gates.append(run_gate[n - 1])
+    return gates
+
+
+def deck_geometries(deck):
+    """The (W, L) behind each COLUMN of a one-device-per-drain-source deck.
+
+    spice/wl_sweep.spice gives every transistor its own drain source so each
+    can be swept alone, which means a column is three hops away from a
+    geometry:
+
+        wrdata <file> id_a id_b ...     column order, by name
+        let id_a = -dc1.i(vda)          name -> the source it measures
+        Vda da 0 0                      source -> the node it drives
+        XMA da g 0 0 ... L=1 W=5        node   -> the device, and its shape
+
+    Edit any one of those four lines - extension 3 asks you to edit the last -
+    and the labels have to follow. Reading them is four regexes; assuming them
+    is a wrong label on a right number.
+
+    Returns [(W, L), ...] in column order.
+    """
+    text = Path(deck).read_text()
+
+    src_of = {n: s.lower() for n, s in
+              re.findall(r"^\s*let\s+(\w+)\s*=\s*-?\s*dc\d+\.i\((\w+)\)",
+                         text, re.M)}
+    node_of = {f"v{n}".lower(): d for n, d in
+               re.findall(r"^\s*V(\w+)\s+(\w+)\s+\w+", text, re.M)}
+    shape_of = {}
+    for node, params in re.findall(r"^\s*X\w+\s+(\w+)\s+.*?nfet_01v8\s+(.*)$",
+                                   text, re.M):
+        w = re.search(r"\bW\s*=\s*([\d.]+)", params)
+        l = re.search(r"\bL\s*=\s*([\d.]+)", params)
+        if w and l:
+            shape_of[node] = (float(w.group(1)), float(l.group(1)))
+
+    w = re.search(r"^\s*wrdata\s+\S+\s+(.+)$", text, re.M)
+    if not w:
+        raise ValueError(f"{deck}: no 'wrdata' line to read the column order from")
+
+    out = []
+    for name in w.group(1).split():
+        try:
+            out.append(shape_of[node_of[src_of[name]]])
+        except KeyError as exc:
+            raise ValueError(
+                f"{deck}: cannot trace column '{name}' back to a device "
+                f"(stuck at {exc}). Check its 'let', its V source and its "
+                f"XM line all still name the same node.") from None
+    return out
+
+
+def labelled_columns(deck, path):
+    """read_wrdata(path), with each column's V_GS read out of the deck.
+
+    Returns (x, [(v_gs, column), ...]). Refuses to guess: if the deck and the
+    data file disagree about how many curves there are, that is a stale results
+    file, and pairing them off anyway would print one curve's current under
+    another curve's label.
+    """
+    x, ys = read_wrdata(path)
+    gates = deck_gate_voltages(deck)
+    if len(gates) != len(ys):
+        raise ValueError(
+            f"{Path(deck).name} writes {len(gates)} curves but "
+            f"{Path(path).name} holds {len(ys)} - the results file is stale. "
+            f"Run 'make clean && make'.")
+    return x, list(zip(gates, ys))
 
 
 def derivative(y, x):

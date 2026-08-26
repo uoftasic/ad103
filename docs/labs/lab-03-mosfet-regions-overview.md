@@ -146,10 +146,11 @@ could not find a valid modelname
 
 ## Expected results
 
-`make` prints all eight and a verdict:
+`make` prints all nine and a verdict:
 
 ```
   YOUR NUMBERS
+  ok  I_D  from id_vds.txt, V_GS=1.8 V     696.2755 uA      (reference 696.2750)
   ok  I_D  W=5 L=1, V_GS=V_DS=1.8 V        696.2755 uA      (reference 696.2750)
   ok  I_D  W=10 L=1, same bias            1395.3199 uA      (reference 1395.3200)
   ok  I_D  W=5 L=2, same bias              380.7284 uA      (reference 380.7280)
@@ -159,10 +160,10 @@ could not find a valid modelname
   ok  g_m at V_GS = 1.8 V                  914.6500 uS      (reference 914.6500)
   ok  subthreshold slope                    85.5629 mV/dec  (reference 85.6000)
 
-PASS  all eight extracted parameters match the reference run
+PASS  all nine extracted parameters match the reference run
 ```
 
-If any line says `XX`, `check.py` tells you which and lists the three things that
+If any line says `XX`, `check.py` tells you which and lists the four things that
 actually cause it, in order of frequency.
 
 ## Draw it, if you want to
