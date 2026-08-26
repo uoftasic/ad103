@@ -173,9 +173,10 @@ $$\Delta I \approx g_m \Delta V_{TH} = 718.7672\ \mu\text{S} \times 12.835\ \tex
 
 on a branch that should have carried $2 \times 50.0878 = 100.1756$ µA. Measured excess:
 **12.14 µA**. Same size, same sign; the straight-line estimate under-reads because at
-$g_m/I_D = 6.67$ /V this device is in moderate inversion, where current rises faster than
-linearly with gate voltage. **The mechanism is confirmed even though the linearisation is
-loose** — and knowing which of those two statements you have proved is the whole skill.
+$g_m/I_D$ = 6.40 /V (718.7672 µS on 112.313 µA) this device is in moderate inversion, where
+current rises faster than linearly with gate voltage. **The mechanism is confirmed even
+though the linearisation is loose** — and knowing which of those two statements you have
+proved is the whole skill.
 
 ## The fix is the habit AD102 already gave you
 
@@ -241,7 +242,7 @@ would recognise and an amplifier this course would. When you finish it you will 
 `xschem/my_inverter.sch`: a schematic you drew, sized against a criterion you chose, verified
 against a simulation to six digits.
 
-**[AD104 — Layout](https://uoftasic.com/ad104/) takes that exact file and asks you to build
+**AD104 — Layout takes that exact file and asks you to build
 it.** Every transistor becomes a rectangle of diffusion under a stripe of poly. Every net
 becomes metal with a width and a spacing. Then Magic runs **DRC** to check that a fab could
 make what you drew, and netgen runs **LVS** to prove that what you drew is the same circuit as

@@ -279,7 +279,10 @@ PDK=ihp-sg13g2
 
 Set it *inside* the command — `export PDK=sky130A`, or on the command itself
 (`PDK=sky130A xschem -n -q -x nmos_probe.sch`), or let the lab `Makefile` do it, which is
-what every AD103 lab already does with `export PDK := sky130A` on line 14 of its `Makefile`.
+what every AD103 lab that drives XSchem already does: `export PDK := sky130A` near the top
+of `lab-01-first-schematic`, `lab-03-mosfet-regions`, `lab-04-wl-knob` and
+`capstone-inverter`. (`lab-02-diode-iv` and `survival-card` never launch XSchem, so they
+pin only `PDK_ROOT`, which is all their `.lib` lines need.)
 
 **Reflex check:** `grep -c 'IS MISSING' xschem/simulation/*.spice` must print `0`.
 

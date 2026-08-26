@@ -102,7 +102,7 @@ make mine
   YOUR TRANSISTOR
     W = 2 um, L = 0.15 um, V_GS = V_DS = 1.8 V
     drain current    1030.4200 uA
-    reference        1030.4224 uA
+    reference        1030.4200 uA
 ```
 
   Twice 500.941 — the reference current *as the XSchem netlist produces it* — is 1001.882.
