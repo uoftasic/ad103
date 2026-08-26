@@ -121,31 +121,59 @@ Copyright (C) 1998-2024 Stefan Schippers
 layout have changed between releases; if you see a different version, screenshots on this page
 may not match your window.
 
-## 5. Open XSchem
+## 5. Open XSchem — on a schematic in your own directory
 
 ```bash
 cd /foss/designs/modules/ad103/labs/lab-01-first-schematic/xschem
-xschem &
+xschem nmos_probe.sch &
 ```
 
-Two rules that will save you an hour each:
+Three rules that will save you an hour each:
 
-- **Launch it from a terminal, never from a desktop icon.** XSchem prints its errors to the
-  terminal it was started from. Started from a menu, those messages go to a terminal that does
-  not exist, and you get a program that silently does nothing.
+- **Launch it from a terminal, never from a desktop icon.** Some of XSchem's messages go to the
+  terminal it was started from. Started from a menu, those go to a terminal that does not
+  exist, and you get a program that silently does nothing.
 - **Launch it from the directory your schematics are in.** XSchem reads `./xschemrc` from
   wherever it starts. `lab-01-first-schematic/xschem/` has one, and it is what makes the SKY130
   symbols resolve and puts your netlists somewhere you can find them.
+- **Name the file you want to open.** With no filename XSchem opens whatever its config calls
+  the *start page* — and that is where the first hour of this course goes to die. Read on.
 
-With `PDK=sky130A`, XSchem opens on the SKY130 start page:
+### ⚠ Do not draw on the start page
 
-![The SKY130 start page XSchem opens on](../assets/img/xschem-start-page.png)
+Bare `xschem &` opens the start page. Every AD103 lab directory sets that to a blank
+`untitled.sch` **in the lab directory**, so inside a lab folder a bare `xschem &` is harmless.
+Anywhere else — a scratch folder of your own, with no `xschemrc` — the SKY130 PDK's own start
+page comes up instead:
+
+![The SKY130 start page XSchem opens on when no filename is given](../assets/img/xschem-start-page.png)
 
 *Menu bar reads **SKY130**. The canvas is a live schematic — those NFET, PFET, RES, MIM and
-VARACTOR rows are real symbols you can copy. Messages appear at the bottom of the window and
-in the terminal.*
+VARACTOR rows are real symbols. It looks exactly like a page you could work on. It is not.*
 
-Spend a minute here before you draw anything. Pan and zoom until it stops feeling random.
+That page is a real file, and it lives at
+`/foss/pdks/sky130A/libs.tech/xschem/sky130_tests/top.sch` — **inside the PDK, which is
+read-only.** Two things follow, and neither of them announces itself:
+
+- `Ctrl-S` cannot write it. XSchem asks `save file?`, you say **Yes**, and it answers with a
+  box reading **`file opening for write failed!`** — after which the tab still carries its `*`
+  and the file on disk is untouched. Nothing appears in the terminal.
+- Clicking **Netlist** — §10 — writes the netlist *next to the schematic*, so it tries to
+  create a `simulation/` folder inside the PDK and stops with a modal box:
+
+![XSchem's error box: can't create directory "/foss/pdks/sky130A/libs.tech/xschem/sky130_tests/simulation": permission denied](../assets/img/xschem-netlist-permission-denied.png)
+
+```
+can't create directory
+"/foss/pdks/sky130A/libs.tech/xschem/sky130_tests/simulation": permission denied
+```
+
+Nothing is wrong with your install, your PDK or your drawing. You are simply standing in a
+read-only folder. **Open a schematic that lives in your own directory and the error is gone** —
+which is what the command at the top of this section does.
+
+Spend a minute on `nmos_probe.sch` before you change anything. Pan and zoom until it stops
+feeling random. It is the circuit §9 and §10 are about.
 
 ## 6. The keys you actually need
 
@@ -196,21 +224,22 @@ it all course: `vsource.sym` (a voltage source), `gnd.sym` (ground), `lab_pin.sy
 label), and `capa.sym` (a capacitor).
 
 The transistors live elsewhere. Click the `sky130A` line on the left, open **`sky130_fd_pr`**,
-and replace the **Search** text with `nfet_01v8*.sym` to cut forty-odd files down to a handful.
-It is a glob, not a substring search, so `nfet` on its own matches nothing. What you want is:
+and replace the **Search** text with `nfet_01v8*.sym` to cut the library's 77 symbols down to
+five. It is a glob, not a substring search, so `nfet` on its own matches nothing. What you want
+is:
 
 - **`nfet_01v8.sym`** — the 1.8 V n-channel MOSFET, the workhorse of this process
 - **`pfet_01v8.sym`** — its p-channel twin
 - **`diode.sym`** — Lab 02's subject
 
-![The symbol chooser in sky130_fd_pr with the Search box reading nfet_01v8*.sym and six files listed](../assets/img/xschem-symbol-sky130.png)
+![The symbol chooser in sky130_fd_pr with the Search box reading nfet_01v8*.sym and five files listed](../assets/img/xschem-symbol-sky130.png)
 
 *The same chooser after clicking the `sky130A` line on the left and typing `nfet_01v8*.sym` into
-**Search**: the whole `sky130_fd_pr` library cut down to six files. The preview underneath shows
+**Search**: the whole `sky130_fd_pr` library cut down to five files. The preview underneath shows
 the symbol with its attributes still as placeholders — `@name`, `@model`, `@mult x @W / @L` —
 because they are filled in per instance, which is what §8 is about.*
 
-Why those names, and what the other forty devices are for:
+Why those names, and what the other seventy-odd devices are for:
 [Which SKY130 device is which](reference/sky130-device-guide.md).
 
 > **The chooser opens somewhere unhelpful.** Click **Home** to jump back to the top of the
@@ -310,12 +339,25 @@ drives the drain through `d`. Source and body both go to ground — that is the 
 a real junction. The status bar reads `SNAP: 10  GRID: 20  MODE: spice`: snap is why your wires
 land exactly on pins instead of near them.*
 
+> **Cannot see that status bar?** On the default 1280×800 desktop XSchem opens 764 px tall at
+> 29 px down, which puts its last 24 px — the status bar — behind the Xfce taskbar. Drag the
+> window's bottom edge up a little, or start the desktop bigger
+> (`VNC_RESOLUTION=1920x1080 ./scripts/start_vnc.sh`). The bar is worth having: it is where
+> XSchem tells you what mode you are in.
+
 Note what the symbol tells you before you simulate anything: `nfet_01v8`, `nf=1`, and
 `1 x 1 / 0.15` — that is `mult × W / L`. XSchem annotates the size on every device, so you can
 audit a page of transistors at a glance.
 
 `Ctrl-S` saves. Save often; XSchem has no autosave, and the tab title carries a `*` while you
 have unsaved changes.
+
+`nmos_probe.sch` is the lab's **reference** — `make` in §11 checks against it, so it is the one
+file in the course you want to keep exactly as shipped. Practise on it freely (`u` undoes any
+number of steps) but do not save over it. If you already did,
+`git checkout -- xschem/nmos_probe.sch` inside the module puts it back. When you want to build
+one of your own from a blank start, Lab 01 hands you `xschem/my_probe.sch` — the same circuit
+with the transistor left out — and `make edit` opens it.
 
 ## 10. Netlist it — and find where it went
 
@@ -430,6 +472,9 @@ difference is time. Measured on this image, same deck, same machine:
 | `sky130.lib.spice tt` | **74 s** |
 | `sky130.lib.spice.tt.red tt` | **2.4 s** |
 
+Those two numbers are one machine's; on a faster laptop the same pair measures 48 s against
+2.0 s. The ratio is the part that travels.
+
 The `.red` file is the typical corner pre-flattened; the plain one re-reads and re-parses the
 whole corner tree, every run. A deck with **no** models at all runs in 0.013 s, so essentially
 100 % of that 74 seconds is the model file.
@@ -447,6 +492,8 @@ afternoon. The other corners have their own files: `.ss.red`, `.ff.red`, `.sf.re
 | `*  M1 -  nfet_01v8  IS MISSING !!!!` in the netlist | XSchem could not find the symbol. Nearly always the wrong `PDK`: check the menu bar says SKY130, then `echo $PDK`, then relaunch XSchem. |
 | `net1`, `net2`, … in your netlist | Unconnected pins. See §10. |
 | Netlist file nowhere to be found | It went to `~/.xschem/simulations/`. See §10. |
+| `can't create directory "/foss/pdks/sky130A/libs.tech/xschem/sky130_tests/simulation": permission denied` | You pressed **Netlist** while XSchem was showing the SKY130 PDK's own start page, which lives inside the read-only PDK. Netlists are written next to the schematic, so there is nowhere to put one. Nothing is broken — open a schematic in your own directory (`xschem nmos_probe.sch &` from `labs/lab-01-first-schematic/xschem/`) and netlist that. See §5. |
+| `file opening for write failed!` when you save | Same cause, other end: the schematic you are editing is in a read-only directory — almost always the PDK start page. Your drawing is still in the window; **File → Save as** into your own folder rescues it. |
 | `Error: incomplete or empty netlist` | ngspice hit an earlier error and gave up. Scroll **up**: the first `Error` line is the real one. |
 | A blank rectangle with a name instead of a circuit | An unexpanded subcell. Descend into it with `e`, come back with `Ctrl-E`. |
 | XSchem opens the wrong start page, or symbols vanish after it worked yesterday | You started it from a different directory, so it read a different `./xschemrc`. |
@@ -481,9 +528,10 @@ This course is self-paced, which is not the same as alone.
 - **Ask in the [team Discord](https://discord.gg/hrJnP5UsGz).**
   There is no such thing as a question too basic. Most of what looks like a mistake in an EDA
   tool is the tool being unhelpful, not you — XSchem in particular fails quietly by design.
-- **Quote the exact error, and say which terminal it came from.** XSchem's real messages are in
-  the terminal, not the window. Paste that, the command you ran, and what `xschem --version`
-  says.
+- **Quote the exact error, and say where it appeared.** Some of XSchem's messages go to the
+  terminal it was launched from and some — including every one on this page — appear only as a
+  modal box in the window, with the terminal completely silent. Paste the text either way,
+  along with the command you ran and what `xschem --version` says.
 - **Post a screenshot of the schematic.** Wiring problems are visible in one glance and
   invisible in a paragraph of description.
 - **If a command on these pages does not do what the page says it does, that is a bug in the

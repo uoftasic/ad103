@@ -294,6 +294,8 @@ pin only `PDK_ROOT`, which is all their `.lib` lines need.)
 | netlist looks right, ngspice says `could not find a valid modelname` | a `u` suffix on `W` or `L`. See [Reading a SKY130 device model](reference/sky130-device-guide.md). |
 | a net you were sure you drew is missing from the netlist | a wire endpoint one snap step from the pin. Zoom in and look for a hollow square. |
 | ports wired to the wrong nets in a hierarchical cell | the `.sym` pin order does not match the order the `ipin`/`opin`/`iopin` symbols appear in the schematic. |
+| `can't create directory ".../sky130_tests/simulation": permission denied` on **Netlist** | the open schematic is the PDK's own start page, `sky130_tests/top.sch`, which lives inside the read-only PDK. With `local_netlist_dir 1` the netlist goes next to the schematic, and there is nowhere to put it. Open a schematic in your own directory. The AD103 lab `xschemrc` files also set `XSCHEM_START_WINDOW {}` so a bare `xschem &` never lands there. |
+| `file opening for write failed!` on save | same cause: you are editing a file in a read-only directory. **File → Save as** into your own folder. |
 
 ## Where files land
 
@@ -301,7 +303,8 @@ pin only `PDK_ROOT`, which is all their `.lib` lines need.)
 |---|---|
 | Netlists, with `set local_netlist_dir 1` | `simulation/` beside the schematic |
 | Netlists, without it | `~/.xschem/simulations/` — inside the container, gone when it is removed. Documented on line 62 of the PDK's own `xschemrc`. |
-| XSchem's own config | `~/.xschem/xschemrc`; a project `./xschemrc` is read from the directory you launch in |
+| XSchem's own config | first match of `--rcfile FILE`, then `./xschemrc` in the launch directory, then `~/.xschem/xschemrc`. Only the first is read — a project `./xschemrc` replaces the home one rather than adding to it |
+| The window XSchem opens with no filename | `XSCHEM_START_WINDOW`, set by the PDK's `xschemrc` to `sky130_tests/top.sch` (read-only). Set it to `{}` and you get a blank `untitled.sch` in the launch directory |
 | SKY130 symbols | `/foss/pdks/sky130A/libs.tech/xschem/sky130_fd_pr/` |
 | Generic symbols (`gnd`, `vsource`, `lab_pin`, `ipin`) | `/foss/tools/xschem/share/xschem/xschem_library/devices/` |
 
