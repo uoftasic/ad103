@@ -151,7 +151,7 @@ make predict
 
   **F is not in $W/L$ at all.** `nf=2` folds one 10 µm channel into two 5 µm fingers that share
   a drain diffusion. Same $W$, same $L$, same bias, **+4.50 %**. That is a fact about the
-  layout, and AD104 is where you draw it.
+  layout, and [AD104](https://uoftasic.com/ad104/) is where you draw it.
 
 > **A dead end, so you do not find it at midnight.** Do not push `nf` higher to see how far the
 > effect goes. `W=10 nf=5` aborts the entire run with

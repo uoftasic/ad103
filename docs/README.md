@@ -98,5 +98,5 @@ one of you was wrong.**
 
 ## Next courses
 
-- **AD104** — Layout: draw those transistors as geometry in Magic, DRC and LVS clean
+- **[AD104](https://uoftasic.com/ad104/)** — Layout: draw those transistors as geometry in Magic, DRC and LVS clean
 - **AD201** — Analog Signal Processing · **AD202** — Mixed Signal
