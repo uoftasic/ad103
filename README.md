@@ -2,21 +2,22 @@
 
 The diode and the MOSFET in XSchem: regions of operation, and what the parameters mean.
 
-Docsify course / lab template for the **UofT ASIC Team** (`uoftasic`). Published docs live under `./docs`; runnable labs, scripts, notebooks, and data stay in the repo root. Zero build for GitHub Pages — Markdown, MathJax, and images work out of the box.
+The third course in the UofT ASIC Team **analog track**. Published docs live under `./docs` and are served by GitHub Pages; the runnable XSchem/ngspice packages live in `labs/`.
 
 Org: [github.com/uoftasic](https://github.com/uoftasic)
 
 ## Live docs
 
-**This template:** https://uoftasic.com/course-template/
+**This course:** https://uoftasic.com/ad103/
 
 **Education hub:** https://edu.uoftasic.com/
 
-After Pages is enabled on a course repo created from this template:
+**Prerequisites:** [IC101](https://uoftasic.com/ic101/) → [AD101](https://uoftasic.com/ad101/) → [AD102](https://uoftasic.com/ad102/), in that order.
 
-**https://uoftasic.com/ad103/**
+## Template provenance
 
-## Use this template
+AD103 was created from [uoftasic/course-template](https://github.com/uoftasic/course-template). The rest of this
+section is the template's own bootstrap documentation, kept for maintainers.
 
 1. On [uoftasic/course-template](https://github.com/uoftasic/course-template), click **Use this template** → create a repo named after the course id (e.g. `dd103`, `serdes-lab`).
 2. Clone and bootstrap:
@@ -34,19 +35,21 @@ See [TEMPLATE.md](TEMPLATE.md) for the checklist. Org is always `uoftasic` — o
 
 ## Quick start
 
+Every package under `labs/` runs with `make` alone, in a bare container, with no environment setup — each package pins its own PDK and model paths and ends in `PASS` or `FAIL` with a reason.
+
 ```bash
 git clone https://github.com/uoftasic/ad103.git
 cd ad103
 
-# Docs (requires Node.js)
-npx docsify-cli serve docs
-# → http://localhost:3000
+docker run --rm --user "$(id -u):$(id -g)" -v "$PWD:/work" -w /work \
+  hpretl/iic-osic-tools:2026.04 --skip \
+  bash -c 'cd /work/labs/lab-01-first-schematic && make'
+```
 
-# Sample script
-python3 scripts/hello.py
+Docs preview (requires Node.js):
 
-# Sample lab
-python3 labs/lab-01/src/main.py
+```bash
+npx docsify-cli serve docs      # -> http://localhost:3000
 ```
 
 Tool-heavy courses that need IIC-OSIC-TOOLS / SKY130 should document the team workbench setup in-course rather than bundling Docker in every repo.

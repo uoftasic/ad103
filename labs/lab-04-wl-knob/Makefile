@@ -63,5 +63,5 @@ broken: $(LOGS)
 	@echo "number moved and by how much, then run 'make' again."
 
 clean:
-	@rm -rf results bsim4v5.out
+	@rm -rf results bsim4v5.out spice/bsim4v5.out
 	@echo "cleaned"

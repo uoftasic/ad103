@@ -271,8 +271,14 @@ instead of `vdd`.
 
     V_in       V_out          supply current
     0.000 V     0.000000000 V      -0.000000 uA
+    0.300 V     0.000000000 V      -0.000000 uA
+    0.600 V     0.000000000 V      -0.000000 uA
     0.900 V     0.000000000 V      -0.000000 uA
+    1.200 V     0.000000000 V      -0.000000 uA
+    1.500 V     0.000000000 V      -0.000000 uA
     1.800 V     0.000000000 V      -0.000000 uA
+
+  this curve never gets steeper than -1. Its steepest slope is -4.794e-15, which means the output barely responds to the input at all. A circuit with no gain above 1 cannot restore a logic level, so it is not a usable inverter whatever else it is.
 
 FAIL  this circuit is not an inverter
 ```

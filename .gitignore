@@ -5,3 +5,11 @@ __pycache__/
 *.pyc
 *.raw
 *.log
+
+# ngspice's BSIM4 parameter-check dump. Written into whatever directory ngspice
+# was started in (lab-04 documents it under 'Scary but normal'); regenerated on
+# every run and removed by 'make clean', so it must not be tracked.
+bsim4v5.out
+
+# XSchem writes netlists here when a lab's xschemrc sets local_netlist_dir.
+**/xschem/simulation/

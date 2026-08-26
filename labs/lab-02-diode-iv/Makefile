@@ -43,7 +43,12 @@ $(R)/straight_line.log: spice/straight_line.spice
 	@$(NGSPICE) -b spice/straight_line.spice </dev/null > $(R)/straight_line.log 2>&1 || true
 	@sed -n '/--- 100 kohm/,/Note:/p' $(R)/straight_line.log | grep -v '^Note:'
 
-line: $(R)/straight_line.log
+# 'make line' is the entry point the guide page 'The straight line runs out' names,
+# so it has to print the block EVERY time - not only on the run that happens to
+# build the log. Without the rm, a second 'make line' says 'Nothing to be done'.
+line:
+	@rm -f $(R)/straight_line.log
+	@$(MAKE) --no-print-directory $(R)/straight_line.log
 
 plots: $(R)/diode_iv.txt
 	@echo "== plots"

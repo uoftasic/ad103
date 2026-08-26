@@ -165,7 +165,7 @@ i(vda) = -2.64419e-03
 | 1 µm | 696.275 µA | 915.312 µS | 64.130 kΩ | **58.70** | 35.4 dB |
 | 4 µm | 197.974 µA | 274.342 µS | 386.764 kΩ | **106.11** | 40.5 dB |
 
-Read the two ends against each other. The minimum-length device has **2.7× the
+Read the two ends against each other. The minimum-length device has **9.0× the
 transconductance** of the 4 µm one and still gives **one twelfth the gain**, because its output
 resistance is 108 times worse. Channel-length modulation eats it alive: a short channel that
 gets slightly shorter is a *large* fractional change, so $g_{ds}$ is large.
