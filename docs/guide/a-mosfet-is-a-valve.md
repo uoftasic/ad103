@@ -114,6 +114,7 @@ The first block it prints is the whole page:
 
 ```
 == I_D vs V_DS   (W=5, L=1)
+   gate voltages read from spice/id_vds.spice: 0.6 0.9 1.2 1.5 1.8
      V_GS  I_D at V_DS=1.8   knee V_DS   channel R at V_DS=10 mV
      0.60         2.005 uA       0.09 V              26648.3 ohm
      0.90        63.876 uA       0.29 V               2529.2 ohm

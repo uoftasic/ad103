@@ -147,7 +147,7 @@ the hand calculation for *direction* — "wider means more current" — and the 
 ## Saturation is not flat either
 
 One more comfortable lie to retire. Look hard at the right-hand end of the $V_{GS} = 1.8$ V
-curve. It is not horizontal. It rises from **682.502 µA** at $V_{DS} = 1.2$ V to **696.276 µA**
+curve. It is not horizontal. It rises from **682.502 µA** at $V_{DS} = 1.2$ V to **696.275 µA**
 at 1.8 V — 2.0 % more current for 0.6 V more drain.
 
 The reason is in panel 4 of the [channel cross-section](guide/a-mosfet-is-a-valve.md): as

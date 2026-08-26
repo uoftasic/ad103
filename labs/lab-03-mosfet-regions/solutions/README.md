@@ -22,6 +22,12 @@ ngspice -b solutions/pfet_op.spice
 63.876 µA of the 0.9 V curve and the 217.505 µA of the 1.2 V curve, roughly where
 a squared law puts it.
 
+This deck writes `results/id_vds_six.txt` so it cannot clobber your own run. If
+instead you made the four edits in `spice/id_vds.spice` itself — which is what
+the exercise asks — then `make extract` picks the sixth curve up on its own and
+slots the 1.05 V row into the table in gate-voltage order, because it reads the
+gate list out of the deck rather than assuming five. `make check` follows too.
+
 **The thing to argue about is not the current.** Look at what happened to the
 plot names. In the shipped deck, `foreach vg 0.6 0.9 1.2 1.5 1.8` produces plots
 `dc1`…`dc5` **in the order the sweeps ran**, and the `let` lines below assume

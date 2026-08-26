@@ -32,6 +32,7 @@ Expected, in **13–22 seconds** (five timed runs on the reference machine):
    wrote results/op_params.log
 == checking
   YOUR NUMBERS
+  ok  I_D  from id_vds.txt, V_GS=1.8 V     696.2755 uA      (reference 696.2750)
   ok  I_D  W=5 L=1, V_GS=V_DS=1.8 V        696.2755 uA      (reference 696.2750)
   ok  I_D  W=10 L=1, same bias            1395.3199 uA      (reference 1395.3200)
   ok  I_D  W=5 L=2, same bias              380.7284 uA      (reference 380.7280)
@@ -41,7 +42,7 @@ Expected, in **13–22 seconds** (five timed runs on the reference machine):
   ok  g_m at V_GS = 1.8 V                  914.6500 uS      (reference 914.6500)
   ok  subthreshold slope                    85.5629 mV/dec  (reference 85.6000)
 
-PASS  all eight extracted parameters match the reference run
+PASS  all nine extracted parameters match the reference run
 ```
 
 ## Targets
@@ -112,7 +113,10 @@ doing, in rising order of interest — see
 [`solutions/`](solutions/README.md) once you have tried them.
 
 1. Add a $V_{GS} = 1.05$ V curve to `id_vds.spice`. Four edits, and it tells you
-   whether you understood how the five columns get written.
+   whether you understood how the five columns get written. Nothing in `src/`
+   hard-codes "five curves": `extract.py` reads the gate list back out of the
+   deck, so a correct edit grows the first table a sixth row — **131.053 µA at
+   $V_{GS}$ = 1.05 V** — in its right place, and `make` still says `PASS`.
 2. Do the whole thing for `pfet_01v8` and find out how much of this page is
    about *n*-channel devices specifically.
 3. Set device D in `wl_sweep.spice` to `L=0.5` and watch `vth`, `vdsat` and
@@ -122,3 +126,13 @@ doing, in rising order of interest — see
 
 **696.275 µA** — a SKY130 `nfet_01v8`, W = 5 µm, L = 1 µm, with $V_{GS} = V_{DS}
 = 1.8$ V. Every prediction on the AD103 MOSFET pages is checked against it.
+
+**And the number next door.** The same device, same corner, same $V_{DS}$, with
+the gate at **1.5 V** instead of 1.8 V draws **436.080 µA**. That is the row
+directly above 696.275 in `make extract`'s first table, and the two are not in
+tension — they are two points on one curve, 300 mV apart. If you ever see
+436.080 µA printed under a **1.80 V** label, the *label* is wrong and the
+current is fine: some tool has paired a hard-coded list of gate voltages against
+a column count that changed. Nothing here does that any more — the first line of
+`make check` reads `results/id_vds.txt`, and `extract.py` gets its labels from
+`spice/id_vds.spice` rather than assuming.
