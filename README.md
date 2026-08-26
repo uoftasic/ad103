@@ -14,25 +14,6 @@ Org: [github.com/uoftasic](https://github.com/uoftasic)
 
 **Prerequisites:** [IC101](https://uoftasic.com/ic101/) → [AD101](https://uoftasic.com/ad101/) → [AD102](https://uoftasic.com/ad102/), in that order.
 
-## Template provenance
-
-AD103 was created from [uoftasic/course-template](https://github.com/uoftasic/course-template). The rest of this
-section is the template's own bootstrap documentation, kept for maintainers.
-
-1. On [uoftasic/course-template](https://github.com/uoftasic/course-template), click **Use this template** → create a repo named after the course id (e.g. `dd103`, `serdes-lab`).
-2. Clone and bootstrap:
-
-```bash
-python3 scripts/init-template.py \
-  --id ad103 \
-  --title "AD103 — Nonlinear Circuits" \
-  --description "The diode and the MOSFET in XSchem: regions of operation, and what the parameters mean."
-```
-
-3. Enable **Settings → Pages → Deploy from a branch → `main` / `/docs`**.
-
-See [TEMPLATE.md](TEMPLATE.md) for the checklist. Org is always `uoftasic` — only course id / title / description are filled in.
-
 ## Quick start
 
 Every package under `labs/` runs with `make` alone, in a bare container, with no environment setup — each package pins its own PDK and model paths and ends in `PASS` or `FAIL` with a reason.
