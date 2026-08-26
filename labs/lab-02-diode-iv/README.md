@@ -15,7 +15,10 @@ make
 
 About six seconds, and it ends in `PASS` or `FAIL`. **No environment setup is required** — not
 `.designinit`, not `mod`, not `PDK`. The decks find the models through `PDK_ROOT`, which the
-image already sets to `/foss/pdks`, and the `Makefile` pins it anyway.
+image already sets to `/foss/pdks`, and the `Makefile` pins it anyway. The XSchem bench in
+`xschem/` resolves its symbols through `PDK`, so `xschem/xschemrc` pins that to `sky130A`
+itself; on the image's default IHP process the same bench would netlist to
+`D1 - diode IS MISSING !!!!` and simulate a column of zeros without complaining.
 
 | Target | What it does |
 |---|---|

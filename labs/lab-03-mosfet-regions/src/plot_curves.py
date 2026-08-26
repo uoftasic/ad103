@@ -74,7 +74,10 @@ def fig_id_vds(out):
     ax.plot(kx, ky, "ko", ms=5.5, zorder=6)
     ax.annotate("$V_{DS} = V_{DSAT}$ — the drain end\nof the channel pinches off",
                 xy=(kx[min(3, len(kx)-1)], ky[min(3, len(ky)-1)]),
-                xytext=(0.84, 520),
+                # Keep clear of the SATURATION sub-caption at y=568: at y=520
+                # the first line ran straight through "a current source the
+                # gate sets" and both strings became unreadable.
+                xytext=(0.95, 320),
                 fontsize=9.5, ha="left",
                 arrowprops=dict(arrowstyle="->", color="k", lw=1.1), zorder=7)
 
@@ -211,7 +214,9 @@ def fig_gm(out):
     mg = [39.4793, 376.930, 634.0277, 809.7057, 915.3117]
     ax.plot(mv, mg, "ko", ms=7, mfc="none", mew=1.8,
             label="ngspice's own $g_m$ (spice/op_params.spice)")
-    ax.set_xlim(0, 1.8)
+    # A little past 1.8 so the V_GS = 1.8 V marker - the one number Step 4 asks
+    # you to read off this plot - is a whole circle, not one the spine cuts in half.
+    ax.set_xlim(0, 1.86)
     ax.set_ylim(0, 1000)
     ax.set_xlabel("$V_{GS}$  (V)")
     ax.set_ylabel("$g_m$  ($\\mu$S)")

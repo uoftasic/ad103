@@ -179,7 +179,14 @@ cd xschem
 PDK=sky130A xschem nmos_curves.sch &
 ```
 
-Press **Netlist & Simulate**, then `python3 src/check.py` from the lab folder. It
+**Netlist & Simulate** is a green launcher arrow on the canvas, not a toolbar button, and a
+plain left-click on it only selects it — no netlist, no simulation, no message. **Click the
+arrow once to select it, then press `Ctrl-H`** to fire it. (Ctrl-click on the arrow also works,
+but it misses if your hand drifts between press and release. The
+[XSchem cheat sheet](../reference/xschem-cheatsheet.md) has the same note.) Run `make` at least
+once before taking this route, so that `results/` exists for the schematic to write into.
+
+Then `python3 src/check.py` from the lab folder. It
 still says `PASS` — the schematic writes the same `results/id_vds.txt`. The drawn
 device does draw **696.226 µA** rather than 696.275 µA, because the XSchem symbol
 adds the diffusion resistances `nrd`/`nrs` that the hand deck omits. Fifty

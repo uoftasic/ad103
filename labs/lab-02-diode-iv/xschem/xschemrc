@@ -2,9 +2,16 @@
 # XSchem reads ./xschemrc from the directory it is started in, so keep this
 # file next to your schematics and launch xschem from here.
 
-# Pull in the SKY130 device libraries. $env(PDK) must be sky130A; if it is not,
-# this line loads the IHP SG13G2 libraries instead and every sky130 symbol goes
-# missing. See docs/guide/getting-started.md.
+# Pull in the SKY130 device libraries.
+#
+# This lab promises that it needs no environment setup at all, so it cannot
+# assume $env(PDK) is right - the workbench image's own default is ihp-sg13g2,
+# and loading the IHP libraries here makes every sky130 symbol go missing. The
+# netlist then says "D1 - diode IS MISSING !!!!", ngspice runs happily and
+# writes a column of zeros, and nothing warns you. So pin it here rather than
+# trusting the environment. See docs/guide/getting-started.md.
+if {![info exists env(PDK_ROOT)]} { set env(PDK_ROOT) /foss/pdks }
+set env(PDK) sky130A
 source $env(PDK_ROOT)/$env(PDK)/libs.tech/xschem/xschemrc
 
 # Write netlists to ./simulation/ next to the schematic instead of the
@@ -22,3 +29,13 @@ set local_netlist_dir 1
 # Blanking the start window makes a bare `xschem &` open an empty untitled.sch
 # in THIS directory instead, which is writable. See docs/guide/getting-started.md §5.
 set XSCHEM_START_WINDOW {}
+
+# Keep the symbol chooser on screen.
+#
+# XSchem places "Choose symbol" relative to the main window, and the main window
+# is nearly as wide as the screen. On the 1280x800 noVNC desktop the chooser
+# therefore lands at about x=1079 at 734x373 - roughly a quarter of it visible,
+# with the library pane, the file list and OK all off the right edge. Pinning a
+# geometry here puts it fully on screen instead. Measured before: 201 of 734 px
+# visible; after: the whole window at (41,85).
+set file_dialog_default_geometry 900x640+40+40

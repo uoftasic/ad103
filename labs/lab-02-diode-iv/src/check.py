@@ -95,7 +95,12 @@ for cur, ref in REF_V_AT.items():
                         f"{ref:.6f} V")
 
 # --- 5. the slope, and the parameter hiding in it ---------------------------
-mvdec, n, i0, npts = fit_exponential(v, i)
+try:
+    mvdec, n, i0, npts = fit_exponential(v, i)
+except ValueError as exc:
+    print("FAIL")
+    print(f"  - {exc}")
+    sys.exit(1)
 notes.append(f"slope       = {mvdec:.4f} mV/decade over {npts} points "
              f"(reference {REF_MV_DECADE:.4f})")
 notes.append(f"ideality n  = {n:.5f}          (reference {REF_N:.5f}; "

@@ -35,6 +35,11 @@ def read_log(name: str) -> dict[str, float]:
             out[key] = float(val.strip().split()[0])
         except (ValueError, IndexError):
             continue
+    if not out:
+        raise SystemExit(
+            f"{path} has no 'key = number' lines in it. ngspice produced no\n"
+            f"measurements - the usual cause is that it never ran. First line of\n"
+            f"the log: {path.read_text().splitlines()[0] if path.read_text().strip() else '(empty)'}")
     return out
 
 

@@ -144,9 +144,10 @@ make predict
   `/foss/pdks/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red`, where the `.subckt` line
   lists `mult = 1` and the device line inside carries no `m = {mult}`. So `mult=2` in a
   hand-written deck is accepted, ignored, and never mentioned. `m=2` is the one that works.
-  XSchem's symbol writes **both** — look at any netlist from Lab 01 and you will find
-  `mult=1 m=1` on the device line — which is why the schematic route gets this right and
-  copying a device line by hand does not.
+  XSchem's symbol writes `m=` for you whenever `mult` is not 1 — set `mult=2` in the property
+  editor and the device line comes out `... sd=0 mult=2 m=2`, and the current doubles. (At
+  `mult=1` the line ends `... sd=0 mult=1` with no `m=`, because there is nothing to multiply.)
+  That is why the schematic route gets this right and copying a device line by hand does not.
 
   **F is not in $W/L$ at all.** `nf=2` folds one 10 µm channel into two 5 µm fingers that share
   a drain diffusion. Same $W$, same $L$, same bias, **+4.50 %**. That is a fact about the

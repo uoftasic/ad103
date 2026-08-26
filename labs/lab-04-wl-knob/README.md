@@ -115,10 +115,12 @@ runs from **396.63** at $L$ = 0.15 µm to **791.90** at $L$ = 4 µm. It doubles.
 **2. `mult=2` does nothing, silently.** The sky130 subcircuit declares a
 parameter called `mult` and then never uses it, so a hand-written line reading
 `W=5 mult=2` simulates as a single 5 µm device and ngspice says nothing at all.
-`m=2` is the one that works. XSchem's symbol writes **both** onto every device
-line — look at any netlist from Lab 01 and you will see `mult=1 m=1` — which is
-why the schematic path gets this right and the copy-the-device-line path does
-not.
+`m=2` is the one that works. XSchem's symbol writes `m=` for you as soon as `mult`
+is anything other than 1: set `mult=2` on a device in the property editor and the
+line comes out `... sd=0 mult=2 m=2` and the current doubles. (At `mult=1` there is
+nothing to multiply, so the line ends `... sd=0 mult=1` with no `m=` — do not go
+looking for one in a Lab 01 netlist.) That is why the schematic path gets this
+right and the copy-the-device-line path does not.
 
 **3. `nf` is not in $W/L$ and it changes the answer by 4.5 %.** `W=10 nf=2`
 carries 1458.136 µA against `W=10 nf=1`'s 1395.320 µA. Same width, same length,

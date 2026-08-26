@@ -27,8 +27,9 @@ RIGHT edge of the symbol: drain, body, source, top to bottom.
     gate -> g      drain -> d
     source -> ground      body -> ground
 
-Shift-W snaps a wire to the nearest pin.  Space while drawing
-straightens a diagonal one.
+Shift-W snaps the START of a wire to the nearest pin.  Hold
+Shift for the closing click too, or the far end just lands on
+the grid.  Space while drawing straightens a diagonal one.
 
 Ctrl-S, then in the lab folder:      make mine} -900 -190 0 0 0.28 0.28 {}
 T {put the NMOS here} 50 -145 0 0 0.3 0.3 {layer=5}
