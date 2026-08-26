@@ -67,7 +67,7 @@ schematic can be wrong in five ways that all look identical in the window:
   YOUR TRANSISTOR
     W = 2 um, L = 0.15 um, V_GS = V_DS = 1.8 V
     drain current    1030.4200 uA
-    reference        1030.4224 uA
+    reference        1030.4200 uA
 
 PASS  you drew a transistor, XSchem turned it into SPICE, and ngspice
       answered 1030.4200 uA. That is the whole chain, and it is the

@@ -73,6 +73,15 @@ def fit_exponential(v, i, lo=FIT_LO, hi=FIT_HI):
     """
     xs = [(vv, math.log(ii)) for vv, ii in zip(v, i) if lo <= ii <= hi]
     n_pts = len(xs)
+    if n_pts < 2:
+        # Nothing to fit. A sweep that never gets between lo and hi amps is
+        # almost always a sweep with no diode in it: the netlist said
+        # "IS MISSING", ngspice solved it anyway, and every current is zero.
+        raise ValueError(
+            f"the curve has no points between {lo:.0e} A and {hi:.0e} A, so "
+            f"there is no exponential to fit. A sweep that is flat at zero "
+            f"means the model never loaded - check that the netlist has no "
+            f"'IS MISSING' line and that PDK is sky130A")
     mx = sum(p[0] for p in xs) / n_pts
     my = sum(p[1] for p in xs) / n_pts
     sxy = sum((p[0] - mx) * (p[1] - my) for p in xs)

@@ -186,8 +186,8 @@ own list — **Help → Keys**, or press `/` for a full-screen poster of them.
 | Zoom in / out | mouse wheel, or `Shift-Z` / `Ctrl-Z` |
 | Pan | hold `Space` and drag, or drag with the middle button |
 | Insert a symbol | `Shift-I` (or `Ins`) |
-| Draw a wire | `w` — click the two ends |
-| Draw a wire that snaps onto the nearest pin | `Shift-W` |
+| Draw a wire | `w` — press it at one end, then click the other |
+| Draw a wire whose **ends** snap onto the nearest pin | `Shift-W`, and hold `Shift` for the closing click too |
 | Place a net label | `Alt-L` |
 | Edit the selected thing's properties | `q` |
 | Duplicate / move / delete selection | `c` / `m` / `Delete` |
@@ -242,8 +242,14 @@ because they are filled in per instance, which is what §8 is about.*
 Why those names, and what the other seventy-odd devices are for:
 [Which SKY130 device is which](reference/sky130-device-guide.md).
 
-> **The chooser opens somewhere unhelpful.** Click **Home** to jump back to the top of the
-> tree. It remembers where you were last, which is a feature right up until it isn't.
+> **The chooser opens somewhere unhelpful — in two different senses.** It remembers the
+> directory you were last in, which is a feature right up until it isn't; click **Home** to
+> jump back to the top of the tree. It also opens *positioned* relative to the main XSchem
+> window, and because that window is nearly as wide as the screen, on a 1280-wide desktop the
+> chooser lands mostly off the right edge — the library pane this page tells you to click, the
+> file list, the Search box and **OK** can all be past it. Drag it back by the sliver of title
+> bar that is on screen (or alt-drag anywhere in it) before you try to use it. It stays where
+> you put it for the rest of the session. `q`'s **Edit Properties** window does the same thing.
 
 ## 8. ⚠ `W=1`, never `W=1u`
 
@@ -303,7 +309,10 @@ after it, you are about to spend twenty minutes on this.
 
 ## 9. Wire it up
 
-Press `w`, then click the two ends of the wire. That places **one straight segment** — for an
+Put the pointer on the first end, press `w`, move to the second end, and click. The key is
+what anchors the start — `w` grabs wherever the pointer already is, so pressing `w` and *then*
+clicking two places draws a wire from wherever you were parked to the first click, and nothing
+at all between the two places you clicked. That places **one straight segment** — for an
 L-shape, draw two.
 
 Two things about wires that cost everyone their first half hour:
@@ -316,7 +325,13 @@ Two things about wires that cost everyone their first half hour:
   merely cross do not connect. XSchem draws a small solid dot at a real junction — there is one
   in `nmos_probe.sch` further down this page, where the body and source wires meet — and draws
   nothing where two wires simply pass over each other. If you are not sure a wire will land on a
-  pin, use **`Shift-W`** instead of `w`: it snaps the endpoint to the nearest pin or net endpoint.
+  pin, use **`Shift-W`** instead of `w` — but hold `Shift` down for the closing click as well.
+  `Shift-W` snaps the end you *start* from onto the nearest pin or net endpoint however far away
+  it is; the click that finishes the wire is an ordinary click, and an ordinary click lands on
+  the snap grid. It will pull onto a pin that is already within about one snap step, which is
+  why the mistake is intermittent rather than obvious. Measured on a pin 28 units away: plain
+  closing click landed on the grid 28 units short; `Shift` held for the closing click landed
+  exactly on the pin.
 
 ![Two pairs of XSchem wires side by side: on the left they cross with nothing drawn at the crossing, on the right they meet at a small solid dot](../assets/img/xschem-wire-junction.png)
 
@@ -349,8 +364,14 @@ Note what the symbol tells you before you simulate anything: `nfet_01v8`, `nf=1`
 `1 x 1 / 0.15` — that is `mult × W / L`. XSchem annotates the size on every device, so you can
 audit a page of transistors at a glance.
 
-`Ctrl-S` saves. Save often; XSchem has no autosave, and the tab title carries a `*` while you
-have unsaved changes.
+`Ctrl-S` saves — but it does not save straight away. Every time, on a perfectly writable file,
+it raises a small modal window titled **Ask Save** reading `save file?` with **Yes / Cancel /
+No**, placed wherever the pointer happens to be. Nothing reaches disk until you press **Yes**
+(or `Return`), and the tab keeps its `*` until you do. Press `Ctrl-S`, look away, and run
+`make mine`, and you will be checking the *last* version you saved — usually the one with no
+transistor in it, which produces a confident `FAIL - the netlist has no nfet_01v8` and sends
+you hunting for a placement bug that is not there. Save often; XSchem has no autosave, and the
+tab title carries a `*` while you have unsaved changes.
 
 `nmos_probe.sch` is the lab's **reference** — `make` in §11 checks against it, so it is the one
 file in the course you want to keep exactly as shipped. Practise on it freely (`u` undoes any

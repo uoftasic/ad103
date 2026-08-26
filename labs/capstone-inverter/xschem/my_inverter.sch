@@ -29,17 +29,18 @@ PLAIN MICRONS - never W=1u.  Then wire them:
 
 Every pin except the gate is on the RIGHT edge of the
 symbol.  The body is the middle one of those three, and it
-is the pin everybody forgets.  Use Shift-W rather than w
-for a wire that has to land on a pin - it snaps.
+is the pin everybody forgets.  Use Shift-W rather than w for
+a wire that has to land on a pin, and keep Shift held down for
+the click that ENDS the wire - Shift-W snaps the start only.
 
 Ctrl-S to save.  Then, in the lab folder:    make mine} -900 -258 0 0 0.28 0.28 {}
 T {put the PMOS here} 60 -175 0 0 0.3 0.3 {layer=5}
 T {put the NMOS here} 60 85 0 0 0.3 0.3 {layer=5}
 T {the two drains
 meet on this net} 115 -55 0 0 0.28 0.28 {layer=5}
-N 20 -230 20 -195 { lab=vdd}
+N 20 -230 20 -190 { lab=vdd}
 N 20 -30 100 -30 { lab=out}
-N 20 135 20 170 { lab=0}
+N 20 130 20 170 { lab=0}
 N -80 -30 -150 -30 { lab=in}
 C {devices/lab_pin.sym} 20 -230 0 0 {name=l_vdd lab=vdd}
 C {devices/lab_pin.sym} 20 170 0 0 {name=l_gnd lab=0}

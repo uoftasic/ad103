@@ -56,7 +56,7 @@ Three parts of that window earn their keep:
 | Rotate the selection | <kbd>Shift</kbd>+<kbd>R</kbd> |
 | Get out of whatever mode you are in | <kbd>Escape</kbd> |
 | Undo | <kbd>u</kbd> |
-| Save | <kbd>Ctrl</kbd>+<kbd>S</kbd> |
+| Save | <kbd>Ctrl</kbd>+<kbd>S</kbd>, then **Yes** in the `save file?` box it always raises |
 | Write the SPICE netlist | <kbd>n</kbd> |
 
 Learn those and you can draw AD103's schematics. Everything below is detail.
@@ -82,7 +82,8 @@ Learn those and you can draw AD103's schematics. Everything below is detail.
 | Insert symbol | <kbd>Shift</kbd>+<kbd>I</kbd>, or <kbd>Insert</kbd>, or **Tools → Insert symbol** |
 | Insert symbol, browser stays open | <kbd>Ctrl</kbd>+<kbd>I</kbd> (also <kbd>Shift</kbd>+<kbd>Insert</kbd>) |
 | Wire | <kbd>w</kbd> |
-| Wire that snaps to the nearest pin | <kbd>Shift</kbd>+<kbd>W</kbd> |
+| Wire whose **start** snaps to the nearest pin | <kbd>Shift</kbd>+<kbd>W</kbd> |
+| Wire whose **far end** snaps too | <kbd>Shift</kbd>+<kbd>W</kbd>, then hold <kbd>Shift</kbd> for the closing click |
 | Text label (a comment, not a net name) | <kbd>t</kbd> |
 | Line / rectangle / polygon (drawing, not circuitry) | <kbd>l</kbd> / <kbd>r</kbd> / <kbd>p</kbd> |
 | Net label — name a wire | <kbd>Alt</kbd>+<kbd>l</kbd> places `lab_pin.sym` |
@@ -183,7 +184,7 @@ however far apart they are drawn. AD103's testbenches use this for supplies and 
 |---|---|
 | Write the SPICE netlist for this schematic and everything under it | <kbd>n</kbd>, or the **Netlist** button |
 | Netlist only this level, no hierarchy | <kbd>Shift</kbd>+<kbd>N</kbd> |
-| Run the simulator | <kbd>s</kbd>, or the **Simulate** button (it asks first) |
+| Run the simulator | <kbd>s</kbd> (it asks `Run circuit simulation?` first), or the **Simulate** button (it does not ask — it just runs) |
 | Look at results | the **Waves** menu — `Op`, `Dc`, `Ac`, `Tran` |
 | Annotate DC operating point onto the schematic | **Waves → Op Annotate** |
 | Fire a launcher (one of the green arrows on a testbench) | click it once, then <kbd>Ctrl</kbd>+<kbd>H</kbd> |
@@ -279,10 +280,13 @@ PDK=ihp-sg13g2
 
 Set it *inside* the command — `export PDK=sky130A`, or on the command itself
 (`PDK=sky130A xschem -n -q -x nmos_probe.sch`), or let the lab `Makefile` do it, which is
-what every AD103 lab that drives XSchem already does: `export PDK := sky130A` near the top
-of `lab-01-first-schematic`, `lab-03-mosfet-regions`, `lab-04-wl-knob` and
-`capstone-inverter`. (`lab-02-diode-iv` and `survival-card` never launch XSchem, so they
-pin only `PDK_ROOT`, which is all their `.lib` lines need.)
+what every AD103 lab that ships a schematic already does: `export PDK := sky130A` near the top
+of `lab-01-first-schematic`, `lab-02-diode-iv`, `lab-03-mosfet-regions` and
+`capstone-inverter`. `lab-02-diode-iv` goes further and pins `PDK` inside its own
+`xschem/xschemrc`, because that lab promises to run with no environment set up at all and its
+bench has to keep that promise when you open it by hand. (`lab-04-wl-knob` and `survival-card`
+ship no schematic and never launch XSchem; `survival-card` pins only `PDK_ROOT`, which is all
+its `.lib` lines need.)
 
 **Reflex check:** `grep -c 'IS MISSING' xschem/simulation/*.spice` must print `0`.
 

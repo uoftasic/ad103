@@ -35,6 +35,7 @@ C {devices/code_shown.sym} -180 195 0 0 {name=CONTROL only_toplevel=true value="
 dc Vd -1 0.9 0.001
 let id = -i(Vd)
 wrdata ../../results/diode_iv.txt id
+write diode_tb.raw
 .endc
 "}
 C {devices/launcher.sym} -180 55 0 0 {name=h1 descr="Netlist & Simulate"

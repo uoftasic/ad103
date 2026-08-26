@@ -58,8 +58,9 @@ if invented:
     problems.append(f"the netlist contains invented net names "
                     f"({', '.join(invented[:4])}). XSchem makes one of those up "
                     f"for every pin that is not connected to anything. Find the "
-                    f"wire that does not quite land on its pin - Shift-W snaps "
-                    f"to the nearest one")
+                    f"wire that does not quite land on its pin. Shift-W snaps the "
+                    f"START of a wire onto the nearest pin; the click that ENDS it "
+                    f"only snaps if you keep Shift held down for that click too")
 
 # --- 4. the four nodes on each device line ----------------------------------
 # Order on a sky130 device line is: drain gate source body.

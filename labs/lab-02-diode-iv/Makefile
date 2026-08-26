@@ -17,6 +17,10 @@
 # Every deck loads sky130.lib.spice.tt.red, the pre-flattened typical corner:
 # same numbers as sky130.lib.spice, about 30x faster to read. See getting-started section 12.
 
+# The decks below find their models through PDK_ROOT alone, but the XSchem bench
+# in xschem/ resolves its symbol libraries through PDK, and the image default is
+# the IHP process. Pin it, as every other AD103 lab that ships a schematic does.
+export PDK      := sky130A
 export PDK_ROOT ?= /foss/pdks
 
 NGSPICE ?= ngspice

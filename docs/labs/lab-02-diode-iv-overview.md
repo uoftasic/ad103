@@ -20,8 +20,12 @@ the shape of your own graph.
 
 Nothing else. This lab runs in a bare container with **no environment setup at all** — no
 `.designinit`, no `mod`, no `PDK` variable. The decks find the models through `PDK_ROOT`, which
-the image already sets to `/foss/pdks`, and the `Makefile` pins it anyway. If your
-Getting-started environment is half-broken, this lab still works, and that is deliberate.
+the image already sets to `/foss/pdks`, and the `Makefile` pins it anyway. The XSchem bench in
+`xschem/` needs `PDK=sky130A` to find its symbol libraries, so `xschem/xschemrc` sets that for
+itself rather than trusting the environment — the image's own default is the IHP process, and
+on it this bench netlists to `D1 - diode IS MISSING !!!!`, simulates without a single error,
+and writes a column of zeros. If your Getting-started environment is half-broken, this lab
+still works, and that is deliberate.
 
 ## Objectives
 

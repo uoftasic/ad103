@@ -100,4 +100,5 @@ wrong-units: | results
 
 clean:
 	@rm -rf results xschem/simulation
+	@mkdir -p results && touch results/.gitkeep
 	@echo "cleaned"

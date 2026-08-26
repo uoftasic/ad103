@@ -30,11 +30,21 @@ results:
 
 results/%.log: spice/%.spice | results
 	@echo "== $<"
+	@command -v $(NGSPICE) >/dev/null 2>&1 || { \
+	  echo "   FAILED - $(NGSPICE) is not on your PATH."; \
+	  echo "   You are running on the host. Open a terminal inside the workbench"; \
+	  echo "   container and try again."; \
+	  exit 1; }
 	@$(NGSPICE) -b $< </dev/null > $@ 2>&1 || true
 	@grep -q 'could not find a valid modelname' $@ && { \
 	  echo "   FAILED - 'could not find a valid modelname'."; \
 	  echo "   That is a unit suffix on W or L. They are plain microns: W=5, not W=5u."; \
 	  exit 1; } || true
+	@grep -qE '^[^ ]+ *= *[-0-9.]' $@ || { \
+	  echo "   FAILED - $@ contains no measurements. ngspice ran but printed"; \
+	  echo "   nothing this lab can read. The last few lines of the log were:"; \
+	  tail -5 $@ | sed 's/^/     /'; \
+	  exit 1; }
 	@echo "   wrote $@"
 
 sweeps: $(LOGS)

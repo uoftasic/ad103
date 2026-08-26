@@ -75,9 +75,11 @@ if invented:
     problems.append(
         f"the netlist contains {', '.join(invented)}. XSchem invents a name "
         f"like that for every pin connected to nothing, and it does it silently. "
-        f"Find the wire that ends near a pin instead of on it - Shift-W snaps to "
-        f"the nearest pin. Run 'make unconnected' to see what a floating gate "
-        f"does to the answer")
+        f"Find the wire that ends near a pin instead of on it. Shift-W snaps "
+        f"the START of a wire onto the nearest pin - for the far end you have to "
+        f"keep Shift held down for the click that finishes the wire, or draw the "
+        f"wire the other way round. Run 'make unconnected' to see what a floating "
+        f"gate does to the answer")
 
 # --- 4. the four node names ------------------------------------------------
 if len(nfets) == 1:

@@ -87,9 +87,10 @@ cd xschem
 PDK=sky130A xschem nmos_curves.sch &
 ```
 
-Press **Netlist & Simulate**, then run `python3 src/check.py` from the lab
-folder. It should still say `PASS`: the schematic writes into the same
-`results/id_vds.txt` the deck does.
+**Netlist & Simulate** is a green launcher arrow drawn on the canvas, not a toolbar
+button. A plain left-click only selects it and nothing happens. **Click it once, then
+press `Ctrl-H`.** Then run `python3 src/check.py` from the lab folder. It should still
+say `PASS`: the schematic writes into the same `results/id_vds.txt` the deck does.
 
 **One honest discrepancy.** The schematic's device line comes out as
 
