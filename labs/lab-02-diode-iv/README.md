@@ -6,7 +6,7 @@ published at <https://uoftasic.com/ad103/#/labs/lab-02-diode-iv-overview>.
 
 ## Run it
 
-Inside the workbench container (`hpretl/iic-osic-tools:2026.04`):
+Inside the workbench container (`hpretl/iic-osic-tools:2026.08`):
 
 ```bash
 cd labs/lab-02-diode-iv
@@ -45,7 +45,7 @@ src/check.py                the verdict
 src/bend_it.py              makes the deliberately wrong sweep for `make broken`
 ```
 
-Every deck loads `sky130.lib.spice.tt.red`, the pre-flattened typical corner. It gives a
+Every deck loads `sky130.lib.spice`, the pre-flattened typical corner. It gives a
 **byte-identical** sweep to the unflattened `sky130.lib.spice` and reads about 30× faster —
 2.4 s instead of 74 s, per deck, per run.
 

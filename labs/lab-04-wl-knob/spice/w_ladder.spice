@@ -12,7 +12,7 @@
 *
 * W and L are PLAIN MICRON NUMBERS. W=5 means five micrometres. Never W=5u.
 
-.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice tt
 
 XW1  w1  g 0 0 sky130_fd_pr__nfet_01v8 L=1 W=1
 XW2  w2  g 0 0 sky130_fd_pr__nfet_01v8 L=1 W=2

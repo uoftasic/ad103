@@ -3,7 +3,7 @@
 * Same four-device deck as spice/wl_sweep.spice, with one number changed.
 * Watch three things move together: vth, vdsat, and the drain current.
 
-.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice tt
 
 XMA da g 0 0 sky130_fd_pr__nfet_01v8 L=1   W=5
 XMB db g 0 0 sky130_fd_pr__nfet_01v8 L=1   W=10

@@ -2,7 +2,7 @@
 """AD103 Lab 03 verdict.
 
 Recomputes the nine numbers this lab is built on and compares each with the
-reference run recorded on hpretl/iic-osic-tools:2026.04. Prints them whether it
+reference run recorded on hpretl/iic-osic-tools:2026.08. Prints them whether it
 passes or fails, because the numbers are the point and a bare PASS teaches
 nothing.
 
@@ -123,7 +123,7 @@ def main():
         print("     never W=5u. Run 'make wrong-units' to see what that looks like.")
         print("   * a deck edited but not re-run: 'make clean && make'")
         print("   * a different model corner: the decks load "
-              "sky130.lib.spice.tt.red tt")
+              "sky130.lib.spice tt")
         print("   * if only the first line failed, you edited spice/id_vds.spice:")
         print("     check that each 'let ... = -dcN.i(vds)' names the run that")
         print("     actually swept that gate. dcN is a run counter, not a bias.")

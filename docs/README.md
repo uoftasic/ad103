@@ -13,12 +13,12 @@ Labs run inside the shared **workspace** you set up in [IC101](https://uoftasic.
 | **Track** | Analog |
 | **Prerequisites** | [IC101](https://uoftasic.com/ic101/) → [AD101](https://uoftasic.com/ad101/) → [AD102](https://uoftasic.com/ad102/), in that order |
 | **Main tool** | **XSchem** — the schematic editor. You have not used it before; [Getting started](guide/getting-started.md) assumes that. |
-| **Also** | ngspice 46, and the SKY130 device models, both already in the workbench |
+| **Also** | ngspice 47, and the SKY130 device models, both already in the workbench |
 | **Math level** | Algebra, exponentials, logarithms. One square root. No calculus required. |
 | **Time** | 14–18 hours, self-paced |
 
-> **This course is pinned to the workbench image `hpretl/iic-osic-tools:2026.04`**, which ships
-> **XSchem 3.4.8RC** and **ngspice-46**. Check yours with `xschem --version`.
+> **This course is pinned to the workbench image `hpretl/iic-osic-tools:2026.08`**, which ships
+> **XSchem 3.4.8RC** and **ngspice-47**. Check yours with `xschem --version`.
 >
 > The image's default PDK is **not** SKY130. Launch XSchem without fixing that and you get a
 > German 130 nm process instead, with none of the symbols this course names — and no error

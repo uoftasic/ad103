@@ -26,7 +26,7 @@
 * i(vdd) is the current the supply delivers - zero at both ends, and very much
 * not zero in the middle.
 
-.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice tt
 
 Vdd vdd 0 1.8
 Vin in  0 0

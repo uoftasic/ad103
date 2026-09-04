@@ -176,7 +176,7 @@ Now open SKY130's own model card and look at what SkyWater wrote:
 
 ```bash
 grep -m1 -A20 'model sky130_fd_pr__diode_pw2nd_05v5 d' \
-  /foss/pdks/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red \
+  /foss/pdks/sky130A/libs.tech/ngspice/sky130.lib.spice \
   | grep -E '^\+ (js|jsw|n|rs) '
 ```
 

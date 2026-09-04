@@ -16,7 +16,7 @@
 * Look at the verdict, then look at the curve. The output does something, and
 * what it does is a much better lesson than an error message would have been.
 
-.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice tt
 
 Vdd vdd 0 1.8
 Vin in  0 0

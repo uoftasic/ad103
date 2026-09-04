@@ -1,6 +1,6 @@
 * AD103 survival card, analysis 2 -- .dc, sweep a source
 * Printed on docs/reference/ngspice-errors.md, section "2. .dc"
-.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice tt
 XM1 d g 0 0 sky130_fd_pr__nfet_01v8 L=1 W=5
 Vgs g 0 0
 Vds d 0 1.8

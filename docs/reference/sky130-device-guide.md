@@ -21,7 +21,7 @@ ls /foss/pdks/sky130A/libs.ref/sky130_fd_pr/spice/ | wc -l
 | Path | What is in it | You use it |
 |---|---|---|
 | `libs.tech/ngspice/sky130.lib.spice` | 16 541 bytes — a table of contents. 51 `.lib` sections, one per corner, each pulling in a tree of `.include`s | when you need a corner that has no `.red` file |
-| `libs.tech/ngspice/sky130.lib.spice.tt.red` | 12 176 942 bytes — that whole tree, pre-flattened, for one corner. `tt`, `ff`, `ss`, `sf`, `fs` only | **always**, in AD103. 1.95 s to load instead of 47 s |
+| `libs.tech/ngspice/sky130.lib.spice` | 12 176 942 bytes — that whole tree, pre-flattened, for one corner. `tt`, `ff`, `ss`, `sf`, `fs` only | **always**, in AD103. 1.95 s to load instead of 47 s |
 | `libs.ref/sky130_fd_pr/spice/` | 675 files, one device family each, human-sized. `sky130_fd_pr__nfet_01v8.pm3.spice`, `sky130_fd_pr__res_high_po.model.spice`, … | when you want to *read* a device rather than simulate it |
 | `libs.tech/combined/` | the **continuous** models — the same devices recharacterised so their parameters vary smoothly with size | not directly; this is what XSchem's own `xschemrc` points `SKYWATER_MODELS` at |
 
@@ -49,7 +49,7 @@ XM1 d g 0 0 sky130_fd_pr__nfet_01v8 L=0.15 W=1
 
 ```bash
 grep -m1 -n -A3 '^\.subckt  sky130_fd_pr__nfet_01v8 ' \
-  /foss/pdks/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red
+  /foss/pdks/sky130A/libs.tech/ngspice/sky130.lib.spice
 ```
 
 ```
@@ -81,7 +81,7 @@ There is no single `nfet_01v8` model. There are **180** of them in the tt corner
 to a rectangle of the $(W, L)$ plane:
 
 ```bash
-L=/foss/pdks/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red
+L=/foss/pdks/sky130A/libs.tech/ngspice/sky130.lib.spice
 sed -n '/^\.lib tt$/,/^\.endl tt$/p' $L | grep -c '^\.model sky130_fd_pr__nfet_01v8__model\.'
 ```
 
@@ -89,7 +89,7 @@ sed -n '/^\.lib tt$/,/^\.endl tt$/p' $L | grep -c '^\.model sky130_fd_pr__nfet_0
 180
 ```
 
-The `sed` is not decoration. `sky130.lib.spice.tt.red` holds **two** `.lib` sections — `tt`
+The `sed` is not decoration. `sky130.lib.spice` holds **two** `.lib` sections — `tt`
 and `tt_mm`, the mismatch-enabled twin — so a plain `grep -c` over the whole file answers
 `360` and every count you take from it is doubled. Slice the section first. (`-m1` on the
 `.subckt` grep above is there for the same reason.)

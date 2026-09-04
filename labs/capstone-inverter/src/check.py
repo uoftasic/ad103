@@ -2,7 +2,7 @@
 """AD103 capstone verdict.
 
 Recomputes nine numbers from the sweeps this lab just ran and compares each
-with a reference measured on hpretl/iic-osic-tools:2026.04. Every reference
+with a reference measured on hpretl/iic-osic-tools:2026.08. Every reference
 came out of a real run of these exact decks.
 
     python3 src/check.py

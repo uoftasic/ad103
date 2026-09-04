@@ -11,7 +11,7 @@
 *
 * Each device has its own drain source so each can be swept on its own.
 
-.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice tt
 
 XMA da g 0 0 sky130_fd_pr__nfet_01v8 L=1    W=5
 XMB db g 0 0 sky130_fd_pr__nfet_01v8 L=1    W=10

@@ -13,7 +13,7 @@ LAB = Path(__file__).resolve().parent.parent
 NETLIST = LAB / "xschem" / "simulation" / "nmos_probe.spice"
 LOG = LAB / "results" / "nmos_op.log"
 
-REF_ID_UA = 501.046      # microamps, measured on iic-osic-tools:2026.04
+REF_ID_UA = 501.046      # microamps, measured on iic-osic-tools:2026.08
 TOL_UA = 0.5
 
 problems = []

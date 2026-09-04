@@ -9,7 +9,7 @@
 * 1 um x 1 um square junction. Same rule as W and L on a MOSFET: plain micron
 * numbers, no suffix.
 
-.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice tt
 
 * --- Part 1. the same 0.5 V across four junction sizes -----------------------
 * Square junctions 1x1, 2x2, 4x4 and 10x10 microns, so area = 1, 4, 16, 100

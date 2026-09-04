@@ -18,7 +18,7 @@
 *
 * Columns: v(in) v(o1) v(o2) v(o25) v(o35) v(o4)
 
-.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice tt
 
 Vdd vdd 0 1.8
 Vin in  0 0

@@ -329,7 +329,7 @@ j_p0v1 = 6.735706e-14
 | `Warning: … IKR too small - model effect disabled!` | Normal. Every run. See above. |
 | A current about 66× larger than the reference | `pj=` instead of `perim=`. |
 | A current about **a million times** smaller than the reference (picoamps where you expected microamps) | a `u` on `area` or `perim`. |
-| `make: ngspice: No such file or directory` | You are running on the host, not in the workbench container. This lab needs `hpretl/iic-osic-tools:2026.04`. |
+| `make: ngspice: No such file or directory` | You are running on the host, not in the workbench container. This lab needs `hpretl/iic-osic-tools:2026.08`. |
 | The checker says `no sweep data at …` | `make sweep` has not run, or `make clean` removed it. Just run `make`. |
 
 More, with the full text of each: [When ngspice complains](reference/ngspice-errors.md).

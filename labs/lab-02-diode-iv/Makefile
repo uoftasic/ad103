@@ -1,6 +1,6 @@
 # AD103 Lab 02 - the diode's I-V curve
 #
-# Runs in a bare hpretl/iic-osic-tools:2026.04 container with no environment
+# Runs in a bare hpretl/iic-osic-tools:2026.08 container with no environment
 # setup. PDK_ROOT is already /foss/pdks inside the image, and this file pins it
 # anyway, so nothing here depends on PDK, .designinit, or which directory you
 # started in.
@@ -14,7 +14,7 @@
 #   make broken     feed the checker a deliberately wrong sweep
 #   make clean      delete everything under results/
 #
-# Every deck loads sky130.lib.spice.tt.red, the pre-flattened typical corner:
+# Every deck loads sky130.lib.spice, the pre-flattened typical corner:
 # same numbers as sky130.lib.spice, about 30x faster to read. See getting-started section 12.
 
 # The decks below find their models through PDK_ROOT alone, but the XSchem bench

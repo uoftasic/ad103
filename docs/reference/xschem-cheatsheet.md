@@ -14,7 +14,7 @@ while debugging. Every key below comes from two files **inside our own image**, 
 here only when both agree:
 
 ```bash
-docker run --rm --user "$(id -u):$(id -g)" hpretl/iic-osic-tools:2026.04 --skip \
+docker run --rm --user "$(id -u):$(id -g)" hpretl/iic-osic-tools:2026.08 --skip \
   bash -c 'xschem --version; cat /foss/tools/xschem/share/xschem/keys.help'
 ```
 
@@ -242,7 +242,7 @@ XSchem's exit status is not a success signal. Check the netlist, not `$?`.
 ### The wrong PDK is silent
 
 ```bash
-docker run --rm ... hpretl/iic-osic-tools:2026.04 --skip bash -c 'echo "PDK=$PDK"'
+docker run --rm ... hpretl/iic-osic-tools:2026.08 --skip bash -c 'echo "PDK=$PDK"'
 ```
 
 ```

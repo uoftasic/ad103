@@ -14,7 +14,7 @@
 * Reference current is set by an ideal 50 uA source, so the only thing this
 * deck is measuring is the transistors.
 
-.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice tt
 
 * --- part 1 and 3: 1:1 mirror, W = 5 L = 1 both sides -----------------
 Iref  vdd ng             50u

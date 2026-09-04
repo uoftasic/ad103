@@ -3,7 +3,7 @@
 # that page comes out of this directory, so the page cannot drift away from
 # what ngspice actually does.
 #
-# Runs in a bare hpretl/iic-osic-tools:2026.04 container with no environment
+# Runs in a bare hpretl/iic-osic-tools:2026.08 container with no environment
 # setup: PDK_ROOT is already /foss/pdks inside the image and this file pins it
 # anyway. About 14 seconds for all five.
 #

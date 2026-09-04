@@ -141,7 +141,7 @@ make predict
 
   **E is a silent lie.** The sky130 subcircuit declares a parameter called `mult` and then
   never uses it — you can read that in
-  `/foss/pdks/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red`, where the `.subckt` line
+  `/foss/pdks/sky130A/libs.tech/ngspice/sky130.lib.spice`, where the `.subckt` line
   lists `mult = 1` and the device line inside carries no `m = {mult}`. So `mult=2` in a
   hand-written deck is accepted, ignored, and never mentioned. `m=2` is the one that works.
   XSchem's symbol writes `m=` for you whenever `mult` is not 1 — set `mult=2` in the property

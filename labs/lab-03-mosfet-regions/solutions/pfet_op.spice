@@ -9,7 +9,7 @@
 * voltage in the circuit; on a PMOS it goes to the highest. Get this backwards
 * and you forward-bias a junction that is meant to stay off.
 
-.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice tt
 
 XM1 d g vdd vdd sky130_fd_pr__pfet_01v8 L=1 W=5
 

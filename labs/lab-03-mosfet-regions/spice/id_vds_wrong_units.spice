@@ -4,7 +4,7 @@
 * from id_vds.spice, and nothing in XSchem, in the netlist, or in the first
 * forty lines of ngspice output will tell you which two.
 
-.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice tt
 
 * The only change from id_vds.spice is the "u" on L and W below.
 XM1 d g 0 0 sky130_fd_pr__nfet_01v8 L=1u W=5u

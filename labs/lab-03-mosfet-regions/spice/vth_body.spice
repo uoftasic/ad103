@@ -12,7 +12,7 @@
 * V_DS is held at 50 mV so the drain is not moving vth as well. This deck is
 * asking about the bulk alone.
 
-.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice tt
 
 XM1 d g s 0 sky130_fd_pr__nfet_01v8 L=1 W=5
 
