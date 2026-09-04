@@ -12,7 +12,7 @@
 *
 *   ngspice -b spice/load_line.spice
 
-.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice tt
 
 Vdd vdd 0 dc 1.8
 

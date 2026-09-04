@@ -5,7 +5,7 @@ to do with it, and what does it say when I get it wrong?*
 
 Five analyses cover everything in AD103 and most of second year. Each one below is a
 **complete deck that ships in a lab package** — you never have to retype one — and every
-output is from that exact file, run in `hpretl/iic-osic-tools:2026.04`, ngspice **46**.
+output is from that exact file, run in `hpretl/iic-osic-tools:2026.08`, ngspice **46**.
 
 ```bash
 cd labs/survival-card
@@ -29,7 +29,7 @@ looks hung.
 ## Every deck starts the same way
 
 ```spice
-.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice tt
 ```
 
 That one line loads the typical-typical corner of SKY130. Two things about it are worth
@@ -37,11 +37,11 @@ knowing before you copy the shorter-looking path from somewhere else.
 
 **Use the `.tt.red` file.** There are two ways to name the tt corner and one of them is
 twenty-four times slower, because `sky130.lib.spice` `.include`s a tree of files while
-`sky130.lib.spice.tt.red` is that tree already flattened into one 12 MB file:
+`sky130.lib.spice` is that tree already flattened into one 12 MB file:
 
 | `.lib` line | run 1 | run 2 |
 |---|---:|---:|
-| `sky130.lib.spice.tt.red tt` | 1.951 s | 1.955 s |
+| `sky130.lib.spice tt` | 1.951 s | 1.955 s |
 | `sky130.lib.spice tt` | 47.583 s | 47.250 s |
 
 Same circuit, same answer, 45 seconds of your life per run. If a deck of yours takes
@@ -61,7 +61,7 @@ the deck Lab 01's `make` uses, minus the `nf=1 m=1` that XSchem writes:
 
 ```spice
 * .op -- one bias point of one NMOS
-.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice tt
 XM1 d g 0 0 sky130_fd_pr__nfet_01v8 L=0.15 W=1
 Vgs g 0 1.8
 Vds d 0 1.8
@@ -115,7 +115,7 @@ is the path to it. Get it wrong and ngspice says `Error: no such vector`.
 
 ```spice
 * AD103 survival card, analysis 2 -- .dc, sweep a source
-.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice tt
 XM1 d g 0 0 sky130_fd_pr__nfet_01v8 L=1 W=5
 Vgs g 0 0
 Vds d 0 1.8
@@ -193,7 +193,7 @@ vector yourself with `let id = -i(Vds)` and hand `meas` the name `id`.
 
 ```spice
 * AD103 survival card, analysis 3 -- .tran, the time domain
-.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice tt
 Vin in 0 pulse(0 1.8 1n 10p 10p 50n 100n)
 XR1 in out sky130_fd_pr__res_generic_po W=1 L=200
 XC1 out 0 sky130_fd_pr__cap_mim_m3_1 W=10 L=10 MF=1 m=1
@@ -229,7 +229,7 @@ to subtract the delay and your RC is 47 % too big.
 
 ```spice
 * AD103 survival card, analysis 4 -- .ac, the frequency domain
-.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice tt
 Vin in 0 dc 0 ac 1
 XR1 in out sky130_fd_pr__res_generic_po W=1 L=200
 XC1 out 0 sky130_fd_pr__cap_mim_m3_1 W=10 L=10 MF=1 m=1

@@ -17,7 +17,7 @@
 * cgg is the total gate capacitance - what the circuit driving this gate has
 * to charge. It is the price tag on the area.
 
-.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice tt
 
 XS1 s1 g 0 0 sky130_fd_pr__nfet_01v8 L=0.15 W=0.75
 XS2 s2 g 0 0 sky130_fd_pr__nfet_01v8 L=0.5  W=2.5

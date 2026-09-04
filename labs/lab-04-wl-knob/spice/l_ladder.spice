@@ -11,7 +11,7 @@
 * vdsat is the model's own opinion of where saturation begins for that device.
 * Watch it move down the ladder - it is the receipt for why 1/L fails.
 
-.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice tt
 
 XL015 l015 g 0 0 sky130_fd_pr__nfet_01v8 L=0.15 W=5
 XL025 l025 g 0 0 sky130_fd_pr__nfet_01v8 L=0.25 W=5

@@ -5,7 +5,7 @@
 * has these same parts: models, devices, sources, an analysis, an end.
 
 * --- models -----------------------------------------------------------------
-.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice tt
 
 * --- devices ----------------------------------------------------------------
 * W and L are PLAIN MICRON NUMBERS. W=1 means one micrometre. Never W=1u.

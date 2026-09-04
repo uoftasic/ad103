@@ -63,7 +63,7 @@ C {devices/gnd.sym} -300 0 0 0 {name=g1 lab=0}
 C {devices/vsource.sym} -400 -30 0 0 {name=Vin value=0}
 C {devices/lab_pin.sym} -400 -60 0 0 {name=l_in2 lab=in}
 C {devices/gnd.sym} -400 0 0 0 {name=g2 lab=0}
-C {devices/code_shown.sym} -420 215 0 0 {name=MODELS only_toplevel=true value=".lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt"}
+C {devices/code_shown.sym} -420 215 0 0 {name=MODELS only_toplevel=true value=".lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice tt"}
 C {devices/code_shown.sym} -420 280 0 0 {name=CONTROL only_toplevel=true value="
 .control
 dc Vin 0 1.8 0.001

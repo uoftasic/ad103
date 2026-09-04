@@ -3,7 +3,7 @@
 
 Reads what this lab just produced and says PASS or FAIL in one line. Every
 reference number below came from a real run of these decks inside
-hpretl/iic-osic-tools:2026.04 - none of them is a textbook value.
+hpretl/iic-osic-tools:2026.08 - none of them is a textbook value.
 
     python3 src/check.py
     python3 src/check.py --data results/diode_iv_bent.txt

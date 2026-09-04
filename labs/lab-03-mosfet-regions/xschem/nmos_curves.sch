@@ -38,7 +38,7 @@ C {devices/gnd.sym} -160 90 0 0 {name=g1 lab=0}
 C {devices/vsource.sym} 140 -50 0 0 {name=Vds value=0}
 C {devices/gnd.sym} 140 20 0 0 {name=g2 lab=0}
 C {devices/gnd.sym} 20 110 0 0 {name=g3 lab=0}
-C {devices/code_shown.sym} -180 185 0 0 {name=MODELS only_toplevel=true value=".lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt"}
+C {devices/code_shown.sym} -180 185 0 0 {name=MODELS only_toplevel=true value=".lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice tt"}
 C {devices/code_shown.sym} -180 250 0 0 {name=CONTROL only_toplevel=true value="
 .control
 foreach vg 0.6 0.9 1.2 1.5 1.8

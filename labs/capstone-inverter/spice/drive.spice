@@ -13,7 +13,7 @@
 * This is the same device you met in Lab 01 at exactly the same bias, so one
 * of the two numbers below should already be familiar.
 
-.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice tt
 
 Vdd vdd 0 1.8
 

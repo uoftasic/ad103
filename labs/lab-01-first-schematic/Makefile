@@ -1,6 +1,6 @@
 # AD103 Lab 01 - your first schematic
 #
-# Runs in a bare iic-osic-tools:2026.04 container with no environment setup:
+# Runs in a bare iic-osic-tools:2026.08 container with no environment setup:
 # it pins PDK itself, because the image ships with PDK=ihp-sg13g2 and every
 # sky130 symbol and model silently disappears if you leave it that way.
 #

@@ -3,7 +3,7 @@
 * The point is the ROW COUNT: 905 = 5 x 181, five curves laid end to end in
 * ONE vector. Index 180 is the last point of curve 1; index 181 is the first
 * point of curve 2, back at V_DS = 0.
-.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice tt
 XM1 d g 0 0 sky130_fd_pr__nfet_01v8 L=1 W=5
 Vgs g 0 0
 Vds d 0 0

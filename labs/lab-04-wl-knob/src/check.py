@@ -2,7 +2,7 @@
 """AD103 Lab 04 verdict.
 
 Recomputes ten numbers from the runs this lab just did and compares each one
-with a reference measured on hpretl/iic-osic-tools:2026.04. Every reference
+with a reference measured on hpretl/iic-osic-tools:2026.08. Every reference
 below came out of a real run of these exact decks. None is a textbook value.
 
     python3 src/check.py

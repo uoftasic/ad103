@@ -111,13 +111,13 @@ Copyright (C) 1998-2024 Stefan Schippers
 
 ```
 ******
-** ngspice-46 : Circuit level simulation program
+** ngspice-47 : Circuit level simulation program
 ** Compiled with KLU Direct Linear Solver
 ** The U. C. Berkeley CAD Group
 ** Copyright 1985-1994, Regents of the University of California.
 ```
 
-**`3.4.8RC` and `ngspice-46` are the numbers that matter.** XSchem's keybindings and menu
+**`3.4.8RC` and `ngspice-47` are the numbers that matter.** XSchem's keybindings and menu
 layout have changed between releases; if you see a different version, screenshots on this page
 may not match your window.
 
@@ -481,7 +481,7 @@ your drawing, not downstairs in your toolchain.
 Every SPICE deck in this course loads the SKY130 models with a line like this:
 
 ```
-.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice tt
 ```
 
 Nearly everything you find online uses `sky130.lib.spice` instead — without the `.tt.red`.
@@ -491,7 +491,7 @@ difference is time. Measured on this image, same deck, same machine:
 | Model library | Wall time |
 |---|---|
 | `sky130.lib.spice tt` | **74 s** |
-| `sky130.lib.spice.tt.red tt` | **2.4 s** |
+| `sky130.lib.spice tt` | **2.4 s** |
 
 Those two numbers are one machine's; on a faster laptop the same pair measures 48 s against
 2.0 s. The ratio is the part that travels.

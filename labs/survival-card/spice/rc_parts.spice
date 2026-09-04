@@ -1,7 +1,7 @@
 * AD103 survival card -- the R and the C of the other two decks, on their own
 * Printed on docs/reference/ngspice-errors.md, section
 * "The two analyses have to agree -- check that they do"
-.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice tt
 Ir 0 a dc 1u
 XR1 a 0 sky130_fd_pr__res_generic_po W=1 L=200
 Vc c 0 dc 0 ac 1

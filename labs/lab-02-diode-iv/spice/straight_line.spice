@@ -11,7 +11,7 @@
 *
 *   ngspice -b spice/straight_line.spice
 
-.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice tt
 
 * --- linear one-port: a 100 kohm resistor ------------------------------------
 Vra ra 0 dc 0.35

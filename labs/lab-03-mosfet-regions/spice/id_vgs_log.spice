@@ -5,7 +5,7 @@
 * to zero - it goes to zero EXPONENTIALLY, and how fast is a number every
 * chip designer knows: the subthreshold slope, in millivolts per decade.
 
-.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice tt
 
 XM1 d g 0 0 sky130_fd_pr__nfet_01v8 L=1 W=5
 

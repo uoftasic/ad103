@@ -5,7 +5,7 @@
 *
 
 * --- models -----------------------------------------------------------------
-.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice tt
 
 * --- devices ----------------------------------------------------------------
 * The only change from nmos_op.spice is the "u" on L and W below.

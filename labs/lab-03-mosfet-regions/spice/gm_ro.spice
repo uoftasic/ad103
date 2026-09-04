@@ -13,7 +13,7 @@
 * and gm/I_D move with bias. gm/I_D is the efficiency number analog designers
 * actually size with.
 
-.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice tt
 
 XMA da g 0 0 sky130_fd_pr__nfet_01v8 L=0.15 W=5
 XMB db g 0 0 sky130_fd_pr__nfet_01v8 L=0.5  W=5

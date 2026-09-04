@@ -29,7 +29,7 @@ C {devices/lab_pin.sym} -20 -80 0 0 {name=l_a lab=anode}
 C {devices/vsource.sym} -180 0 0 0 {name=Vd value=0}
 C {devices/gnd.sym} -180 60 0 0 {name=g1 lab=0}
 C {devices/gnd.sym} 140 80 0 0 {name=g2 lab=0}
-C {devices/code_shown.sym} -180 130 0 0 {name=MODELS only_toplevel=true value=".lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt"}
+C {devices/code_shown.sym} -180 130 0 0 {name=MODELS only_toplevel=true value=".lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice tt"}
 C {devices/code_shown.sym} -180 195 0 0 {name=CONTROL only_toplevel=true value="
 .control
 dc Vd -1 0.9 0.001

@@ -13,7 +13,7 @@ cd labs/survival-card
 make            # all five decks and a verdict, about 14 seconds
 ```
 
-Runs in a bare `hpretl/iic-osic-tools:2026.04` container with no environment setup.
+Runs in a bare `hpretl/iic-osic-tools:2026.08` container with no environment setup.
 
 ## Files
 

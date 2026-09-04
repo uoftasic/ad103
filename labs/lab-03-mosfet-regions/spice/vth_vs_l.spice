@@ -8,7 +8,7 @@
 * V_DS is held at 50 mV deliberately: at 1.8 V the drain reaches into the
 * channel and moves vth as well, and this deck is asking about length alone.
 
-.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice tt
 
 XM0 d0 g 0 0 sky130_fd_pr__nfet_01v8 L=0.15 W=5
 XM1 d1 g 0 0 sky130_fd_pr__nfet_01v8 L=0.2  W=5

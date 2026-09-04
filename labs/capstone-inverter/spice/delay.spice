@@ -20,7 +20,7 @@
 *
 *   ngspice -b spice/delay.spice
 
-.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice tt
 
 Vdd vdd 0 1.8
 * 20 ps edges, 2 ns high, 4 ns period - fast enough that the edge is not the

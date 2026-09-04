@@ -10,7 +10,7 @@
 *
 *   ngspice -b spice/reverse_floor.spice
 
-.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice tt
 
 Vr1 rev1 0 dc -1.0
 XR1 rev1 0 sky130_fd_pr__diode_pw2nd_05v5 area=1 perim=4

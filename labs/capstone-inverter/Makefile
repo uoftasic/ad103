@@ -1,6 +1,6 @@
 # AD103 capstone - the CMOS inverter
 #
-# Runs in a bare hpretl/iic-osic-tools:2026.04 container with no environment
+# Runs in a bare hpretl/iic-osic-tools:2026.08 container with no environment
 # setup: it pins PDK itself, because the image ships with PDK=ihp-sg13g2 and
 # every sky130 model silently disappears if you leave it that way.
 #

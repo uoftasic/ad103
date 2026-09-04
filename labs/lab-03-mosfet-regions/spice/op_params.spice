@@ -9,7 +9,7 @@
 * internal device called m.xma.msky130_fd_pr__nfet_01v8 - that is why the name
 * is so long, and why it is lower case.
 
-.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice tt
 
 XMA da g 0 0 sky130_fd_pr__nfet_01v8 L=1    W=5
 XMB db g 0 0 sky130_fd_pr__nfet_01v8 L=1    W=10

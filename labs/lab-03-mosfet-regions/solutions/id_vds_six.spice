@@ -5,7 +5,7 @@
 * numbering shifts - the new sweep runs second, so it is dc2 and everything
 * after it moves down by one. That last part is the whole exercise.
 
-.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice tt
 
 XM1 d g 0 0 sky130_fd_pr__nfet_01v8 L=1 W=5
 

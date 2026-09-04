@@ -16,7 +16,7 @@
 *
 *   ngspice -b spice/double_w.spice
 
-.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice.tt.red tt
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice tt
 
 XA  da g 0 0 sky130_fd_pr__nfet_01v8 L=1 W=5
 XB  db g 0 0 sky130_fd_pr__nfet_01v8 L=1 W=10

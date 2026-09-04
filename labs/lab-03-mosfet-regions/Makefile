@@ -1,6 +1,6 @@
 # AD103 Lab 03 - the regions of a MOSFET
 #
-# Runs in a bare iic-osic-tools:2026.04 container with no environment setup.
+# Runs in a bare iic-osic-tools:2026.08 container with no environment setup.
 # It pins PDK itself, because the image ships with PDK=ihp-sg13g2 and every
 # sky130 model silently disappears if you leave it that way.
 #
