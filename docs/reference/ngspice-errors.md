@@ -337,7 +337,8 @@ Warning: sky130_fd_pr__diode_pw2nd_05v5: IKR too small - model effect disabled!
   correctly anyway.
 - **`IKR too small - model effect disabled!`** (2): a high-injection knee current that the models
   set to zero. It appears whenever a junction diode is in the deck, which is always, and has
-  nothing to do with your circuit.
+  nothing to do with your circuit. Every Lab 02 `results/*.log` contains it, and
+  `grep -c 'Simulation interrupted' results/*.log` still prints `0` for every file.
 - **`Note: No compatibility mode selected!`** prints on every run, including perfect ones. It is
   ngspice saying it is not pretending to be HSPICE.
 
@@ -367,6 +368,22 @@ legal and deliberate, and the run is unaffected.
 | `Too few parameters for subcircuit type "sky130_fd_pr__cap_var_lvt" (instance: xxcv)` | gave the wrong number of *nodes*. The varactor has three terminals, not two. |
 | `Error: incomplete or empty netlist` / `no simulations run!` | nothing by itself. It is the second message; the real error is a few lines above it. |
 | `Error: Library …/osdi/psp103.osdi couldn't be loaded!` | nothing at all. Some image builds print several of these at the start of every run; see [above](reference/ngspice-errors.md#osdi-error-lines). |
+| `Error: unknown subckt: xd1 a 0 sky130_fd_pr__diode_pw2nd_05v5 area=1 perim=4`, then `Error: incomplete or empty netlist` | one of two things: there is **no `.lib` line**, or the **model name is misspelled**. The error quotes your device line, not the cause. Check the `.lib` line first; it is the more common one. |
+| `make: ngspice: No such file or directory` | ran `make` on your own machine, not in the workbench container. The labs need `hpretl/iic-osic-tools:2026.08`. |
+
+### Diode sizes that give no error
+
+ngspice accepts all of these without a word, and the current is wrong. Lab 02, Part 7 runs each
+one.
+
+| You see | You did |
+|---|---|
+| a current about **66×** larger than expected | wrote `pj=` instead of `perim=`. `pj` is ignored and `perim` keeps its default of 1e6. |
+| a current about **a million times** smaller (picoamps where you expected microamps) | put a `u` on `area` or `perim`. Diode sizes are bare micron numbers. |
+| megaamps | left the XSchem symbol's defaults, `area=1e12 perim=4e6`, in place. |
+
+In Lab 02, the checker saying `no sweep data at …` means `make sweep` has not run, or
+`make clean` removed its output. Run `make`.
 
 ## Exit codes
 
