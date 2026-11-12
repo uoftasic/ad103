@@ -1,29 +1,30 @@
-# Lab 03 — The regions of a MOSFET
+# Lab 03 — MOSFET regions
 
-Full runnable package:
-[`labs/lab-03-mosfet-regions/`](https://github.com/uoftasic/ad103/tree/main/labs/lab-03-mosfet-regions).
+You'll sweep a real SKY130 `nfet_01v8` and find cutoff, triode, saturation and subthreshold on
+your own curves. You'll extract its threshold voltage two ways and see them disagree by 86 mV,
+measure $g_m$ as the slope of a curve, and test whether current really scales with $W/L$.
 
-## Prerequisites
+Package: [`labs/lab-03-mosfet-regions/`](https://github.com/uoftasic/ad103/tree/main/labs/lab-03-mosfet-regions)
 
-- [Getting started](guide/getting-started.md) complete — `make` in
-  `lab-01-first-schematic` prints `PASS` and **501.046 µA**
-- [Lab 02 — The diode I–V curve](labs/lab-02-diode-iv-overview.md) done
-- Read Movement III: [A MOSFET is a valve](guide/a-mosfet-is-a-valve.md) →
-  [Four regions, not three](guide/four-regions-not-three.md) →
-  [Where saturation starts](guide/where-saturation-starts.md)
+## Before you start
 
-## Objectives
+- Finish [Lab 02](labs/lab-02-diode-iv-overview.md).
+- Read [How a MOSFET works](guide/a-mosfet-is-a-valve.md),
+  [The four regions](guide/four-regions-not-three.md) and
+  [Where saturation starts](guide/where-saturation-starts.md).
+- Open a terminal in the workbench and go to the lab folder:
 
-- Sweep a real SKY130 `nfet_01v8` and identify cutoff, triode, saturation and
-  subthreshold on your own measured curves
-- Extract $V_{TH}$ two different ways from two different sweeps, and explain why
-  the two answers differ by 86 mV
-- Measure $g_m$ as the slope of a curve and check it against the simulator's own $g_m$
-- Show that $I_D$ scales with $W$ but not with $1/L$, and name both reasons
-- Read the exact ngspice error a unit suffix on `W` produces, on purpose, before
-  you produce it by accident
+  ```bash
+  cd /foss/designs/modules/ad103/labs/lab-03-mosfet-regions
+  ```
 
-## Theory (short)
+  The `Makefile` sets `PDK=sky130A` itself, so no other setup is needed. For the optional XSchem
+  part at the end, load the environment first (`. /foss/designs/common/.designinit`).
+
+**Time:** about 2 hours. `make` takes about 50 seconds; the other targets take a few seconds each
+once `make` has run, or about ten seconds when they run a deck of their own.
+
+The equations from the guide pages, for reference:
 
 $$
 I_D^{\text{tri}} = \mu_n C_{ox}\frac{W}{L}\Big[(V_{GS}-V_{TH})V_{DS} - \tfrac{1}{2}V_{DS}^2\Big]
@@ -31,174 +32,275 @@ I_D^{\text{tri}} = \mu_n C_{ox}\frac{W}{L}\Big[(V_{GS}-V_{TH})V_{DS} - \tfrac{1}
 I_D^{\text{sat}} = \tfrac{1}{2}\mu_n C_{ox}\frac{W}{L}(V_{GS}-V_{TH})^2
 $$
 
-with the boundary at $V_{DS} = V_{ov} = V_{GS} - V_{TH}$, and
+with the boundary at $V_{DS} = V_{ov} = V_{GS} - V_{TH}$. The two slopes are
 
 $$
 g_m = \frac{\partial I_D}{\partial V_{GS}}
 \qquad
 r_o = \left(\frac{\partial I_D}{\partial V_{DS}}\right)^{-1}
-\qquad
-S = \frac{\partial V_{GS}}{\partial (\log_{10} I_D)}\ \ \text{[mV/decade]}
 $$
 
-Below threshold the square law does not apply at all: $I_D$ is exponential in
-$V_{GS}$, and $S$ is the number that describes it.
+and below threshold, where the square law doesn't apply, the subthreshold slope
+$S = \partial V_{GS} / \partial (\log_{10} I_D)$, in mV/decade, describes the exponential.
 
-## Procedure
+## Part 1: Run the sweeps
 
-```bash
-. /foss/designs/common/.designinit
-echo $PDK                      # must say sky130A
-mod ad103
-cd labs/lab-03-mosfet-regions
-make
-```
+1. Run the four sweeps and the operating-point dump, and check the results:
 
-**13–22 seconds** and it ends in a verdict. Then work through the four blocks:
+   ```bash
+   make
+   ```
 
-```bash
-make extract     # every parameter, with its working
-make figures     # the six plots and the channel cross-sections
-make vth-l       # vth at nine channel lengths
-make wrong-units # the error you will otherwise meet at 1 a.m.
-```
+   ```
+   == sweeping spice/id_vds.spice
+      wrote results/id_vds.txt
+   == sweeping spice/id_vgs.spice
+      wrote results/id_vgs.txt
+   == sweeping spice/id_vgs_log.spice
+      wrote results/id_vgs_log.txt
+   == sweeping spice/wl_sweep.spice
+      wrote results/wl_sweep.txt
+   == operating point   spice/op_params.spice
+      wrote results/op_params.log
+   == checking
+     YOUR NUMBERS
+     ok  I_D  from id_vds.txt, V_GS=1.8 V     696.2755 uA      (reference 696.2750)
+     ok  I_D  W=5 L=1, V_GS=V_DS=1.8 V        696.2755 uA      (reference 696.2750)
+     ok  I_D  W=10 L=1, same bias            1395.3199 uA      (reference 1395.3200)
+     ok  I_D  W=5 L=2, same bias              380.7284 uA      (reference 380.7280)
+     ok  I_D  W=1 L=0.15, same bias           501.0462 uA      (reference 501.0460)
+     ok  V_TH by linear extrapolation           0.6016 V       (reference 0.6016)
+     ok  V_TH by sqrt(I_D) extrapolation        0.5159 V       (reference 0.5159)
+     ok  g_m at V_GS = 1.8 V                  914.6500 uS      (reference 914.6500)
+     ok  subthreshold slope                    85.5629 mV/dec  (reference 85.6000)
 
-### Step 1 — the output characteristic
+   PASS  all nine extracted parameters match the reference run
+   ```
 
-![I_D vs V_DS for five gate voltages, with the regions shaded](../assets/img/ad103-id-vds-family.png)
+   If any line says `XX`, `check.py` tells you which one and lists the four things that most often
+   cause it, most frequent first.
 
-- **Try this:** run `make extract` and read the first block. Compare the `knee
-  V_DS` column with $V_{GS} - V_{TH}$ using your own extracted $V_{TH}$ = 0.6016 V.
-- **What you should see:** at $V_{GS}$ = 0.9 V the knee lands at **0.29 V** against a
-  predicted 0.298 V — a hit. At 1.8 V it lands at **0.89 V** against a predicted
-  1.198 V — 34 % out, in the same direction, every time.
-- **Why an engineer cares:** the textbook boundary is a *long-channel, low-field*
-  answer. Real saturation starts earlier because carriers hit a speed limit, and
-  the model will tell you where if you ask it for `vdsat`.
+2. Draw the plots into `results/`:
 
-### Step 2 — the transfer characteristic, and $V_{TH}$
+   ```bash
+   make figures
+   ```
 
-![Two threshold extractions side by side](../assets/img/ad103-vth-extraction.png)
+   It writes six PNGs and the channel cross-section figure. Open them as you go through the parts
+   below.
 
-- **Try this:** read the two `V_TH` blocks from `make extract`, then find
-  `@m.xma...[vth]` in `results/op_params.log`.
-- **What you should see:** **0.6016 V** by linear extrapolation, **0.5159 V** by
-  $\sqrt{I_D}$ extrapolation, **0.5895 V** from the model. Three answers, one
-  device, 86 mV of spread.
-- **Why an engineer cares:** $V_{TH}$ is defined by its extraction method. A
-  datasheet threshold with no method beside it has a tolerance you cannot see.
+3. Print every extracted parameter with its working. You'll read this output block by block in
+   Parts 2 to 6:
 
-### Step 3 — the region your textbook deleted
+   ```bash
+   make extract
+   ```
 
-![I_D vs V_GS on a log axis](../assets/img/ad103-subthreshold.png)
+**You should see** `PASS  all nine extracted parameters match the reference run`, and seven PNG
+files in `results/`.
 
-- **Try this:** before running it, write down what you think $I_D$ is at $V_{GS}$
-  = 0.30 V, half the threshold. Then read the `below threshold` block.
-- **What you should see:** **1.3645 nA** — not zero, and part of a straight line
-  **5.96 decades** tall with a slope of **85.6 mV/decade**.
-- **Why an engineer cares:** ten million transistors at 2.1853 pA each is 21.9 µA
-  of leakage; the same ten million with a threshold 0.3 V lower is **13.6 mA**.
-  That factor of 624 is why threshold control is a whole discipline.
+## Part 2: Extract the threshold two ways
 
-### Step 4 — $g_m$, twice
+1. Open `results/ad103-vth-extraction.png`:
 
-![g_m from the sweep, with ngspice's own g_m overlaid](../assets/img/ad103-gm.png)
+   ![Two threshold extractions side by side](../assets/img/ad103-vth-extraction.png)
 
-- **Try this:** the green curve is `numpy.gradient` on your sweep; the circles are
-  what ngspice reports at five bias points. They are computed by completely
-  different means.
-- **What you should see:** at $V_{GS}$ = 1.8 V, **914.650 µS** from the slope
-  against **915.312 µS** from the model — **0.07 %** apart. Also read the
-  $g_m/I_D$ column: 5.90 /V at $V_{GS}$ = 0.9 V, falling to 1.31 /V at 1.8 V.
-- **Why an engineer cares:** $g_m/I_D$ is transconductance per unit of current
-  burned — efficiency. It is highest near threshold and worst wide open, which is
-  exactly the opposite of where a beginner biases an amplifier.
+2. Find the two `V_TH` blocks in the `make extract` output: linear extrapolation at
+   $V_{DS}$ = 0.05 V, and $\sqrt{I_D}$ extrapolation at $V_{DS}$ = 1.8 V.
 
-### Step 5 — $W/L$
+3. Find the model's own threshold for the same device in the operating-point log:
 
-![Four device geometries at the same bias](../assets/img/ad103-wl-sweep.png)
+   ```bash
+   grep -i 'xma.*\[vth\]' results/op_params.log
+   ```
 
-- **Try this:** predict the three currents from $W/L$ alone before you run it.
-- **What you should see:** width is honest to **0.20 %**; doubling $L$ costs 9.4 %
-  less current than $1/L$ predicts; and the minimum-length device delivers
-  **501.046 µA** against a predicted 928.367 µA — **54 %**.
-- **Why an engineer cares:** [W and L are a
-  choice](guide/w-and-l-are-a-choice.md) closes that 54 % in two steps, and the
-  two steps are the two reasons analog designers avoid minimum length.
+   Compare all three with the `your number vs the model's own number` block near the end of the
+   `make extract` output.
 
-### Step 6 — the trap, on purpose
+**You should see** **0.6016 V** by linear extrapolation, **0.5159 V** by $\sqrt{I_D}$
+extrapolation and **0.5895 V** from the model: three answers for one device, 86 mV apart.
+[Where saturation starts](guide/where-saturation-starts.md#two-methods-86-mv-apart) explains why.
+Use 0.6016 V as $V_{TH}$ for the rest of this lab.
 
-```bash
-make wrong-units
-```
+## Part 3: The output characteristic
 
-```
-could not find a valid modelname
-    Simulation interrupted due to error!
-```
+1. Open `results/ad103-id-vds-family.png`:
 
-- **Try this:** run it, then `diff spice/id_vds.spice spice/id_vds_wrong_units.spice`.
-- **What you should see:** two characters. `L=1u W=5u` instead of `L=1 W=5`.
-- **Why an engineer cares:** SKY130's models are binned in microns, so a width in
-  metres matches no bin and ngspice stops with a message that names neither `W`
-  nor units. Reading a `FAIL` is a skill, and the best time to practise it is
-  when you caused it on purpose.
+   ![I_D vs V_DS for five gate voltages, with the regions shaded](../assets/img/ad103-id-vds-family.png)
 
-## Expected results
+2. Read the first block of `make extract`, `I_D vs V_DS`. Look at the `channel R at V_DS=10 mV`
+   column first: the channel's resistance at each gate voltage.
 
-`make` prints all nine and a verdict:
+3. Compare the `knee V_DS` column with $V_{GS} - V_{TH}$, using your $V_{TH}$ of 0.6016 V. Then
+   find the `knee of each curve vs the model's vdsat` table at the end of the output.
 
-```
-  YOUR NUMBERS
-  ok  I_D  from id_vds.txt, V_GS=1.8 V     696.2755 uA      (reference 696.2750)
-  ok  I_D  W=5 L=1, V_GS=V_DS=1.8 V        696.2755 uA      (reference 696.2750)
-  ok  I_D  W=10 L=1, same bias            1395.3199 uA      (reference 1395.3200)
-  ok  I_D  W=5 L=2, same bias              380.7284 uA      (reference 380.7280)
-  ok  I_D  W=1 L=0.15, same bias           501.0462 uA      (reference 501.0460)
-  ok  V_TH by linear extrapolation           0.6016 V       (reference 0.6016)
-  ok  V_TH by sqrt(I_D) extrapolation        0.5159 V       (reference 0.5159)
-  ok  g_m at V_GS = 1.8 V                  914.6500 uS      (reference 914.6500)
-  ok  subthreshold slope                    85.5629 mV/dec  (reference 85.6000)
+4. Find the lowest current in the `below threshold` block: $V_{GS}$ = 0 V, with 1.8 V on the
+   drain.
 
-PASS  all nine extracted parameters match the reference run
-```
+**You should see** the channel resistance fall from **26.6 kΩ** to **737 Ω** as $V_{GS}$ goes from
+0.6 V to 1.8 V. At $V_{GS}$ = 0.9 V the knee lands at **0.29 V** against a predicted 0.298 V, a
+hit; at 1.8 V it lands at **0.89 V** against a predicted 1.198 V, 34 % low. The model's `vdsat` is
+below $V_{GS} - V_{TH}$ at every gate voltage. With the gate at 0 V the device still passes
+**2.1853 pA**.
 
-If any line says `XX`, `check.py` tells you which and lists the four things that
-actually cause it, in order of frequency.
+## Part 4: The region your textbook deleted
 
-## Draw it, if you want to
+1. Write down what you predicted for $I_D$ at $V_{GS}$ = 0.30 V when you read
+   [The four regions](guide/four-regions-not-three.md).
+   If you skipped the prediction, make one now.
+
+2. Read the `below threshold` block of `make extract`, and open
+   `results/ad103-subthreshold.png`:
+
+   ![I_D vs V_GS on a log axis](../assets/img/ad103-subthreshold.png)
+
+3. Multiply the $V_{GS}$ = 0 V current by ten million transistors. Then do the same with the
+   $V_{GS}$ = 0.30 V current, which is what a device with a threshold 0.3 V lower would carry with
+   its gate at ground.
+
+**You should see** **1.3645 nA** at $V_{GS}$ = 0.30 V: not zero, and part of a straight line
+**5.96 decades** tall with a slope of **85.6 mV/decade**. Ten million transistors at 2.1853 pA each
+is 21.9 µA of leakage; the same ten million with a threshold 0.3 V lower is **13.6 mA**. That
+factor of 624 is why threshold control is a discipline of its own.
+
+## Part 5: Measure $g_m$ two ways
+
+1. Open `results/ad103-gm.png`:
+
+   ![g_m from the sweep, with ngspice's own g_m overlaid](../assets/img/ad103-gm.png)
+
+   The green curve is `numpy.gradient` applied to your sweep. The circles are the $g_m$ that
+   ngspice's model reports at five bias points. They are computed by completely different means.
+
+2. Read the `g_m = dI_D/dV_GS` block of `make extract`, and the `g_m` line in the
+   `your number vs the model's own number` block.
+
+**You should see** **914.650 µS** from the slope of your sweep against **915.312 µS** from the
+model at $V_{GS}$ = 1.8 V, **0.07 %** apart. In the `g_m/I_D` column, 5.90 /V at $V_{GS}$ = 0.9 V
+falls to 1.31 /V at 1.8 V. $g_m/I_D$ is transconductance per unit of current burned, a measure of
+efficiency: highest near threshold and worst wide open, the opposite of where a beginner tends to
+bias an amplifier. [Transconductance and output resistance](guide/gm-and-ro.md), which you read
+before Lab 04, picks this up.
+
+## Part 6: Four shapes at one bias
+
+The `W/L is a knob` block puts four devices at $V_{GS} = V_{DS}$ = 1.8 V:
+
+| | $W$ | $L$ | $W/L$ |
+|---|---|---|---|
+| A | 5 µm | 1 µm | 5 |
+| B | 10 µm | 1 µm | 10 |
+| C | 5 µm | 2 µm | 2.5 |
+| D | 1 µm | 0.15 µm | 6.67 |
+
+1. Before you look, use $W/L$ alone to predict the currents of B, C and D relative to A, which
+   carries 696.275 µA. Write the three numbers down.
+
+2. Read the `W/L is a knob` block of `make extract`, and open `results/ad103-wl-sweep.png`:
+
+   ![Four device geometries at the same bias](../assets/img/ad103-wl-sweep.png)
+
+3. For each device, work out how far the measurement is from your prediction, in percent.
+
+**You should see** width behave honestly (B is within **0.20 %** of 2×), doubling $L$ give 9.4 %
+more current than $1/L$ predicts, and the minimum-length device D deliver **501.046 µA** against a
+predicted 928.367 µA, only **54 %**. [Sizing with W and L](guide/w-and-l-are-a-choice.md), which
+you read before Lab 04, closes that 54 % gap in two steps.
+
+## Part 7: The units trap, on purpose
+
+1. Run the deck with units on `W` and `L`:
+
+   ```bash
+   make wrong-units
+   ```
+
+   ```
+   Error on line 56 or its substitute:
+     m.xm1.msky130_fd_pr__nfet_01v8 d g 0 0 xm1:sky130_fd_pr__nfet_01v8__model l=    1.000000000000000e-06     w=    5.000000000000000e-06 ...
+   could not find a valid modelname
+       Simulation interrupted due to error!
+
+   Error: incomplete or empty netlist
+          or no ".plot", ".print", or ".fourier" lines in batch mode;
+   no simulations run!
+   ```
+
+2. Find what changed:
+
+   ```bash
+   diff spice/id_vds.spice spice/id_vds_wrong_units.spice
+   ```
+
+**You should see** two characters of difference: `L=1u W=5u` instead of `L=1 W=5`. SKY130's models
+are binned in microns, so a width with a `u` on it matches no bin, and ngspice stops with a message
+that names neither `W` nor units. Reading an error is easiest to practise when you caused it on
+purpose.
+
+## Part 8 (optional): Draw it in XSchem
 
 ![The Lab 03 curve tracer open in XSchem](../assets/img/ad103-xschem-curve-tracer.png)
 
-*`xschem/nmos_curves.sch` — the same circuit as `spice/id_vds.spice`, drawn. The
-`.lib` line and the `.control` block ride along in two `code_shown` symbols, which
-is how a testbench keeps its simulation commands next to its circuit.*
+*`xschem/nmos_curves.sch`: the same circuit as `spice/id_vds.spice`, drawn. The `.lib` line and the
+`.control` block ride along in two `code_shown` symbols, which is how a testbench keeps its
+simulation commands next to its circuit.*
 
-```bash
-cd xschem
-PDK=sky130A xschem nmos_curves.sch &
-```
+1. Make sure `make` has run at least once, so that `results/` exists for the schematic to write
+   into.
 
-**Netlist & Simulate** is a green launcher arrow on the canvas, not a toolbar button, and a
-plain left-click on it only selects it — no netlist, no simulation, no message. **Click the
-arrow once to select it, then press `Ctrl-H`** to fire it. (Ctrl-click on the arrow also works,
-but it misses if your hand drifts between press and release. The
-[XSchem cheat sheet](reference/xschem-cheatsheet.md) has the same note.) Run `make` at least
-once before taking this route, so that `results/` exists for the schematic to write into.
+2. Open the schematic:
 
-Then `python3 src/check.py` from the lab folder. It
-still says `PASS` — the schematic writes the same `results/id_vds.txt`. The drawn
-device does draw **696.226 µA** rather than 696.275 µA, because the XSchem symbol
-adds the diffusion resistances `nrd`/`nrs` that the hand deck omits. Fifty
-nanoamps of layout, showing up in an electrical answer for the first time in this
-course. The package README has the full device line.
+   ```bash
+   cd xschem
+   PDK=sky130A xschem nmos_curves.sch &
+   ```
 
-## Links
+3. Find the green **Netlist & Simulate** launcher arrow on the canvas. It isn't a toolbar button,
+   and a plain left-click on it only selects it: no netlist, no simulation, no message. **Click the
+   arrow once to select it, then press `Ctrl-H`** to fire it. (Ctrl-click on the arrow also works,
+   but it misses if your hand drifts between press and release. The
+   [XSchem cheat sheet](reference/xschem-cheatsheet.md#netlist-and-simulate) has the same note.)
 
-- [Lab package](https://github.com/uoftasic/ad103/tree/main/labs/lab-03-mosfet-regions)
-- [Reference answers to the three extensions](https://github.com/uoftasic/ad103/tree/main/labs/lab-03-mosfet-regions/solutions)
-- Guide: [A MOSFET is a valve](guide/a-mosfet-is-a-valve.md) ·
-  [Four regions, not three](guide/four-regions-not-three.md) ·
-  [Where saturation starts](guide/where-saturation-starts.md) ·
-  [W and L are a choice](guide/w-and-l-are-a-choice.md)
-- Next lab: [Lab 04 — $W/L$ is a knob](labs/lab-04-wl-knob-overview.md)
+4. Back in the lab folder, rerun the checker on the data the schematic wrote:
+
+   ```bash
+   cd ..
+   python3 src/check.py
+   ```
+
+**You should see** `PASS` again, because the schematic writes the same `results/id_vds.txt`. The
+drawn device carries **696.226 µA** rather than 696.275 µA, because the XSchem symbol adds the
+diffusion resistances `nrd` and `nrs` that the hand-written deck leaves out. That 50 nA is layout
+showing up in an electrical answer.
+
+## Finishing
+
+You're done when `make` prints `PASS  all nine extracted parameters match the reference run` and
+you can answer:
+
+- What are the three threshold values for this device, and why do they differ?
+- At $V_{GS}$ = 1.8 V, where does the curve knee, and why is it below $V_{GS} - V_{TH}$?
+- Which of B, C and D in Part 6 matched the $W/L$ prediction, and which missed?
+
+There is nothing to submit.
+
+## Extensions
+
+The decks work, which makes them a starting point. Three changes worth making, in rising order of
+interest. Reference answers are in
+[`labs/lab-03-mosfet-regions/solutions/`](https://github.com/uoftasic/ad103/tree/main/labs/lab-03-mosfet-regions/solutions);
+try them before you open it.
+
+1. **Add a sixth gate voltage.** Add a $V_{GS}$ = 1.05 V curve to `spice/id_vds.spice`. It takes
+   four edits and tests whether you understood how the five columns get written. Nothing in
+   `src/` assumes five curves: `extract.py` reads the gate list back out of the deck, so a correct
+   edit adds a sixth row to the first table, **131.053 µA at $V_{GS}$ = 1.05 V**, in its proper
+   place, and `make` still says `PASS`.
+2. **Repeat it for a PMOS.** Do the same measurements for `pfet_01v8` and find out how much of this
+   lab is about *n*-channel devices specifically.
+3. **Lengthen the short device.** Set device D in `spice/wl_sweep.spice` to `L=0.5`, rerun
+   `make extract`, and watch `vth`, `vdsat` and $I_D$ move together. Check whether the two-step
+   arithmetic in [Sizing with W and L](guide/w-and-l-are-a-choice.md) still closes.
+
+Next on the [Course path](README.md#course-path): read
+[What moves the threshold](guide/threshold-is-not-a-constant.md).
