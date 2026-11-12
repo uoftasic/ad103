@@ -7,9 +7,9 @@ Optimize for **clear student learning paths**, not template maintenance. Prefer 
 ## Goals
 
 - Teach IC development skills: RTL (SystemVerilog/Verilog), simulation, synthesis, FPGA bring-up, and/or open ASIC flows (e.g. Yosys, LibreLane, SKY130) as the course requires.
-- Keep each lab **self-contained**: what you'll build or measure → before you start (guide pages to read, setup) → time → numbered parts with numbered steps, each part ending in a "you should see" check → finishing.
+- Keep each lab **self-contained**, in the lab shape described under [Lab writeup shape](#lab-writeup-shape) below.
 - Keep guide pages (`docs/guide/`) **reading only**: concepts, figures, worked examples. Commands and activities belong in the lab writeups; a guide page points to the lab part where the student does it.
-- Keep the **Course path** table on `docs/README.md` (alternating Read and Do rows, with time estimates) and `docs/_sidebar.md` in the same order.
+- Keep the **Course path** table on `docs/README.md` (alternating Read and Do rows, with time estimates, in the format under [Course path table](#course-path-table)) and `docs/_sidebar.md` in the same order.
 - Separate **what students read** (`docs/`) from **what they run** (`labs/`, `scripts/`, `notebooks/`).
 - Never publish grades, solution keys, or PII under `docs/`. Put keys in `labs/**/solutions/` and gitignore them on student forks when policy requires.
 
@@ -37,11 +37,44 @@ Lab IDs: `lab-NN-short-name` (e.g. `lab-02-counter-sv`).
    - `src/` — HDL / Python / entrypoints
    - `data/` — small inputs (large binaries → Git LFS or external)
    - `requirements.txt` or tool notes when needed
-2. Add `docs/labs/<lab-id>-overview.md` in the lab shape above: what you'll build or measure, before you start, time, numbered parts each ending in a "you should see" check, and finishing.
-3. Add a row for it to the Course path table in `docs/README.md`, and link the writeup from `docs/_sidebar.md` in the same position (and from `_navbar.md` only if it belongs in top nav).
+2. Add `docs/labs/<lab-id>-overview.md` in the [lab writeup shape](#lab-writeup-shape), titled `# Lab NN: Title`.
+3. Add a Do row for it to the Course path table in `docs/README.md` ([format](#course-path-table)), keep the course total on the home page equal to the sum of the row times, and link the writeup from `docs/_sidebar.md` in the same position with the same `Lab NN: Title` text (and from `_navbar.md` only if it belongs in top nav).
 4. Cross-link: writeup → GitHub `labs/<lab-id>/`; package README → `docs/labs/<lab-id>-overview.md`.
 
 **Writeups teach; packages execute.** Do not dump long HDL into Docsify pages — reference files under `labs/`.
+
+### Lab writeup shape
+
+1. What you'll build or measure (2–3 lines), the package link, **Before you start** (guide pages to read, setup), and **Time**. Leave optional parts out of the time, or give their time separately.
+2. Numbered parts (`## Part 1: Label`). Each part opens with the one question it answers, has numbered steps (more than about eight means split or trim it), and ends in a **You should see** check with the observed numbers.
+3. At least one required part where the student produces something: edits a deck or file, writes a test, draws a cell, or computes a number and writes it down before checking it. Ask for a prediction wherever one is reasonable.
+4. When a check would also explain *why*, keep the numbers in the check and turn the explanation into a question with a collapsed answer directly under it:
+
+   ```html
+   <details>
+   <summary>Answer</summary>
+
+   The answer, with Markdown and $math$ as usual. Keep the blank lines.
+
+   </details>
+   ```
+
+5. Optional parts go after the required ones, with `(optional)` in the header. No required part may depend on one.
+6. **Finishing**, always in this order: **You're done when** (one checkable line about the student's own work, not the shipped `PASS`), **Questions** (each with a collapsed answer or a pointer to the step that answers it), **Submit** (what to submit, or "Nothing to submit.").
+7. Then **Going further** (optional), and last the line `Next on the [Course path](README.md#course-path): …`.
+
+Lookup material (troubleshooting tables, warning catalogues, long tool output) goes on the course's reference pages, linked from the step where it comes up. Aim for at most about 2,500 words per writeup, without cutting teaching content to get there. Lab 01 Part 1 is "Load the course": a one-line pointer to IC101 Lab 03 for the workbench, then `.designinit`, `mod add <course>`, the tool versions the outputs depend on, and only the troubleshooting rows specific to this course.
+
+### Course path table
+
+```
+| # | | What | Time |
+|---|---|---|---|
+| 1 | Read | [Page](guide/page.md) · [Page](guide/page.md) | 45 min |
+| 2 | Do | [Lab 01: Title](labs/lab-01-...-overview.md). One sentence on what you'll do. | 1.5 h |
+```
+
+Read and Do are plain text, lab titles use a colon, and every Do row ends with one sentence on what you'll do. The row times add up to the total on the home page.
 
 ## Adding a guide page
 
