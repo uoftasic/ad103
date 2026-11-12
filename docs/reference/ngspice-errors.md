@@ -1,63 +1,57 @@
 # The ngspice survival card
 
-**Question this page answers:** *I have a netlist. What are the five things I can ask ngspice
-to do with it, and what does it say when I get it wrong?*
+The analyses you can ask ngspice to run on a netlist, and what it says when you get one wrong.
 
-Five analyses cover everything in AD103 and most of second year. Each one below is a
-**complete deck that ships in a lab package** — you never have to retype one — and every
-output is from that exact file, run in `hpretl/iic-osic-tools:2026.08`, ngspice **46**.
+Five analyses cover everything in AD103 and most of second year. Each deck below is a complete
+file that **ships in a lab package**, so you never have to retype one, and every output shown is
+from that file, run in `hpretl/iic-osic-tools:2026.08` with ngspice 47.
 
 ```bash
 cd labs/survival-card
 make
 ```
 
-runs all five in about fourteen seconds and checks every number on this page against what
-ngspice just said, so the page and the decks cannot drift apart:
+runs all five in about 50 seconds and checks every number on this page against what ngspice just
+printed, so the page and the decks can't drift apart:
 
 ```
 PASS  every number on the survival card reproduces
 ```
 
+To run a deck of your own:
+
 ```bash
 ngspice -b mydeck.spice
 ```
 
-`-b` is batch: run and exit. Without it you land in an interactive prompt and the terminal
+`-b` is batch mode: run and exit. Without it you land in an interactive prompt and the terminal
 looks hung.
 
-## Every deck starts the same way
+## The `.lib` line
+
+Every deck starts the same way:
 
 ```spice
 .lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice tt
 ```
 
-That one line loads the typical-typical corner of SKY130. Two things about it are worth
-knowing before you copy the shorter-looking path from somewhere else.
+That line loads the typical-typical (`tt`) corner of SKY130. Two things about it:
 
-**Use the `.tt.red` file.** There are two ways to name the tt corner and one of them is
-twenty-four times slower, because `sky130.lib.spice` `.include`s a tree of files while
-`sky130.lib.spice` is that tree already flattened into one 12 MB file:
+- **Loading it is slow.** The `tt` section of `sky130.lib.spice` pulls in a tree of 169 model files.
+  One single-deck run, such as Lab 01's `make`, takes about ten seconds on the reference machine; a
+  deck with no `.lib` line at all runs in about 0.01 s. So almost all of that time is model loading,
+  and a terminal that stays silent for ten seconds is not hung.
+- **`$PDK_ROOT` is already set** to `/foss/pdks` inside the image, so the line works with no setup.
+  `$PDK` is *not* set to what you want (see
+  [the XSchem cheat sheet](reference/xschem-cheatsheet.md#wrong-pdk)), but this line
+  doesn't use it.
 
-| `.lib` line | run 1 | run 2 |
-|---|---:|---:|
-| `sky130.lib.spice tt` | 1.951 s | 1.955 s |
-| `sky130.lib.spice tt` | 47.583 s | 47.250 s |
+## 1. `.op`: one bias point
 
-Same circuit, same answer, 45 seconds of your life per run. If a deck of yours takes
-almost a minute to print one number, this is why.
+*"With these DC voltages applied, what is every node voltage and every current?"*
 
-**`$PDK_ROOT` is already set** to `/foss/pdks` inside the image, so the line works with no
-setup. `$PDK` is *not* what you want it to be — see
-[the XSchem cheat sheet](reference/xschem-cheatsheet.md#the-wrong-pdk-is-silent) — but this
-line does not use it.
-
-## 1. `.op` — one bias point
-
-*"With these DC voltages applied, what is every node and every current?"*
-
-**`labs/lab-01-first-schematic/spice/nmos_op.spice`** — this one you have already run; it is
-the deck Lab 01's `make` uses, minus the `nf=1 m=1` that XSchem writes:
+**`labs/lab-01-first-schematic/spice/nmos_op.spice`**, which you have already run: it is the deck
+Lab 01's `make` uses. Without the `nf=1 m=1` that XSchem writes, it is:
 
 ```spice
 * .op -- one bias point of one NMOS
@@ -76,13 +70,11 @@ print i(Vds)
 i(vds) = -5.01046e-04
 ```
 
-501.046 µA, and it is **negative** because SPICE measures current *into* a voltage source's
-positive terminal — current leaving `Vds` and going down through the transistor comes back
-in the other way. Every drain current you print through a supply will be negative. This is
-not a bug and it is the single most common "my answer has the wrong sign" in first year.
-
-The same circuit ships as `labs/lab-01-first-schematic/spice/nmos_op.spice` (with `nf=1 m=1`
-spelled out), and `make` in that lab prints:
+That is 501.046 µA, and it is **negative** because SPICE measures current flowing *into* a voltage
+source's positive terminal. Current leaving `Vds` and going down through the transistor comes back
+in the other way, so every drain current you print through a supply is negative. This is not a bug,
+and it is the most common cause of "my answer has the wrong sign" in first year. `make` in that lab
+prints:
 
 ```
   drain current : 501.046 uA  (reference 501.046 uA)
@@ -90,7 +82,7 @@ spelled out), and `make` in that lab prints:
 PASS  netlist and operating point match the reference run
 ```
 
-`.op` also gives you the small-signal parameters that AD103's Movement IV is about:
+`.op` also gives you the small-signal parameters that the device-parameter pages use:
 
 ```spice
 print @m.XM1.msky130_fd_pr__nfet_01v8[vth] @m.XM1.msky130_fd_pr__nfet_01v8[gm] @m.XM1.msky130_fd_pr__nfet_01v8[gds] @m.XM1.msky130_fd_pr__nfet_01v8[cgg]
@@ -103,15 +95,15 @@ print @m.XM1.msky130_fd_pr__nfet_01v8[vth] @m.XM1.msky130_fd_pr__nfet_01v8[gm] @
 @m.xm1.msky130_fd_pr__nfet_01v8[cgg] = 8.568632e-16
 ```
 
-The name is ugly and it is not optional. `XM1` is *your* instance; inside it the PDK's
-subcircuit builds a real MOSFET called `msky130_fd_pr__nfet_01v8`, and `@m.XM1.<that>[...]`
-is the path to it. Get it wrong and ngspice says `Error: no such vector`.
+The name is ugly and you can't shorten it. `XM1` is *your* instance; inside it, the PDK's
+subcircuit builds a real MOSFET called `msky130_fd_pr__nfet_01v8`, and `@m.XM1.<that>[...]` is the
+path to it. Get it wrong and ngspice says `Error: no such vector`.
 
-## 2. `.dc` — sweep a source
+## 2. `.dc`: sweep a source
 
 *"Sweep this voltage and give me a curve."*
 
-**`labs/survival-card/spice/dc_id_vgs.spice`** — `make dc`:
+**`labs/survival-card/spice/dc_id_vgs.spice`**, run by `make dc`:
 
 ```spice
 * AD103 survival card, analysis 2 -- .dc, sweep a source
@@ -136,11 +128,11 @@ id_0v9              =  6.38760e-05
 vg_at_1ua           =  5.65815e-01
 ```
 
-181 rows because 0 to 1.8 in steps of 0.01 is 181 points, ends included. Count them; if the
-row count is not what you expect, your sweep is not what you think it is.
+There are 181 rows because 0 to 1.8 in steps of 0.01 is 181 points, counting both ends. Check the
+row count: if it isn't what you expect, your sweep isn't what you think it is.
 
-The `dc` command takes `source start stop step`. Add four more arguments for a second, outer
-sweep and you get a family of curves in one run:
+The `dc` command takes `source start stop step`. Add four more arguments for a second, outer sweep
+and you get a family of curves in one run:
 
 ```spice
 dc Vds 0 1.8 0.01 Vgs 0.6 1.8 0.3
@@ -154,42 +146,42 @@ id[180] = 2.005399e-06
 id[181] = 1.881519e-42
 ```
 
-905 rows is $5 \times 181$ — five gate voltages, each a full $V_{DS}$ sweep, laid end to end
-in **one** vector. Index 180 is the last point of the first curve and index 181 is the first
-point of the second, back at $V_{DS} = 0$. That is why
-`labs/lab-03-mosfet-regions/spice/id_vds.spice` uses `foreach` and `alter` instead: five
-separate `dc` commands give you five separate plots, addressable as `dc1.i(vds)` …
-`dc5.i(vds)`, which is what you want when each curve becomes its own column in a file.
+905 rows is $5 \times 181$: five gate voltages, each a full $V_{DS}$ sweep, laid end to end in
+**one** vector. Index 180 is the last point of the first curve and index 181 is the first point of
+the second, back at $V_{DS} = 0$. That is why `labs/lab-03-mosfet-regions/spice/id_vds.spice` uses
+`foreach` and `alter` instead: five separate `dc` commands give five separate plots, addressable as
+`dc1.i(vds)` … `dc5.i(vds)`, which is what you want when each curve becomes its own column in a
+file.
 
-To get data out of ngspice and into a plot, `wrdata`:
+To get data out of ngspice and into a plot, use `wrdata`:
 
 ```spice
 wrdata ../results/id_vds.txt id_vgs06 id_vgs09 id_vgs12 id_vgs15 id_vgs18
 ```
 
-Plain text, one **x,y pair per vector** on every row — five vectors give ten columns, and
-the x column is repeated five times. Verified against the file that command writes:
+It writes plain text with one **x,y pair per vector** on every row: five vectors give ten columns,
+with the x column repeated five times. From the file that command writes:
 
 ```
  0.00000000e+00  1.78502380e-42  0.00000000e+00  1.88151889e-42  0.00000000e+00  1.97801397e-42  ...
  1.00000000e-02  3.75258957e-07  1.00000000e-02  3.95382562e-06  1.00000000e-02  7.76418855e-06  ...
 ```
 
-**`let` first, then `meas`.** Write `-i(Vds)` directly inside `print` or `meas` and:
+**`let` first, then `meas`.** If you write `-i(Vds)` directly inside `print` or `meas`, you get:
 
 ```
 Error: no such vector as -i(vds).
  meas dc id_at_1v8 find -i(vds) at=1.8 failed!
 ```
 
-`i(Vds)` is a vector; `-i(Vds)` is an *expression*, and `meas` wants a vector name. Make the
-vector yourself with `let id = -i(Vds)` and hand `meas` the name `id`.
+`i(Vds)` is a vector; `-i(Vds)` is an *expression*, and `meas` wants a vector name. Make the vector
+yourself with `let id = -i(Vds)` and give `meas` the name `id`.
 
-## 3. `.tran` — the time domain
+## 3. `.tran`: the time domain
 
 *"Step the input and watch the output move."*
 
-**`labs/survival-card/spice/tran_rc.spice`** — `make tran`:
+**`labs/survival-card/spice/tran_rc.spice`**, run by `make tran`:
 
 ```spice
 * AD103 survival card, analysis 3 -- .tran, the time domain
@@ -211,21 +203,21 @@ tau                 =  3.10826e-09
 vfinal              =  1.80000e+00
 ```
 
-`tran <step> <stop>` — the step is a *hint*, not a promise; ngspice takes smaller steps
-where the waveform is moving, which is why 40 ns at 5 ps produced 8014 rows and not 8000.
+`tran <step> <stop>`: the step is a *hint*, not a promise. ngspice takes smaller steps where the
+waveform is moving, which is why 40 ns at 5 ps produced 8014 rows rather than 8000.
 
 `pulse(v1 v2 delay risetime falltime width period)`. Here the edge starts at **1 ns**.
 
-**`meas ... when` returns an absolute time, not an interval.** 1.1376 V is
-$0.632 \times 1.8$, so `tau` should be one time constant — and 3.10826 ns is one time
-constant *after the edge at 1 ns*. The time constant is $3.10826 - 1 = 2.10826$ ns. Forget
-to subtract the delay and your RC is 47 % too big.
+**`meas ... when` returns an absolute time, not an interval.** 1.1376 V is $0.632 \times 1.8$, so
+`tau` should be one time constant, and 3.10826 ns is one time constant *after the edge at 1 ns*.
+The time constant is $3.10826 - 1 = 2.10826$ ns. Forget to subtract the delay and your RC comes out
+47 % too big.
 
-## 4. `.ac` — the frequency domain
+## 4. `.ac`: the frequency domain
 
 *"Same circuit. Where does it stop responding?"*
 
-**`labs/survival-card/spice/ac_rc.spice`** — `make ac`. Same two devices as the `.tran` deck:
+**`labs/survival-card/spice/ac_rc.spice`**, run by `make ac`. Same two devices as the `.tran` deck:
 
 ```spice
 * AD103 survival card, analysis 4 -- .ac, the frequency domain
@@ -245,17 +237,17 @@ No. of Data Rows : 1001
 f3db                =  7.56449e+07
 ```
 
-`ac dec <points-per-decade> <fstart> <fstop>`. Five decades at 200 points each is 1001 rows.
-The source needs `ac 1` on it — `dc 0` alone gives you a silent zero everywhere and a flat
-line at $-\infty$ dB.
+`ac dec <points-per-decade> <fstart> <fstop>`. Five decades at 200 points each is 1001 rows. The
+source needs `ac 1` on it: `dc 0` alone gives you zero everywhere, with no warning, and a flat line
+at $-\infty$ dB.
 
-`vdb(out)` is $20\log_{10}|v(\text{out})|$. Half power is $-3.0103$ dB, not $-3$; using $-3$
-shifts your answer by about 0.1 %, which is fine until you compare against arithmetic.
+`vdb(out)` is $20\log_{10}|v(\text{out})|$. Half power is $-3.0103$ dB, not $-3$; using $-3$ shifts
+your answer by about 0.1 %, which is fine until you compare it against arithmetic.
 
-### The two analyses have to agree — check that they do
+### The two analyses have to agree
 
-The resistor and the capacitor in those two decks can be measured on their own —
-**`labs/survival-card/spice/rc_parts.spice`**, `make parts`:
+The resistor and the capacitor in those two decks can be measured on their own, in
+**`labs/survival-card/spice/rc_parts.spice`**, run by `make parts`:
 
 ```
 r = 1.018463e+04
@@ -266,16 +258,15 @@ $$RC = 10184.63 \times 206.5822\times10^{-15} = 2.10396\ \text{ns}$$
 
 $$f_{-3\text{dB}} = \frac{1}{2\pi RC} = 75.6453\ \text{MHz}$$
 
-`.ac` measured **75.6449 MHz** — 0.0005 % from the arithmetic. `.tran` measured
-**2.10826 ns** — 0.20 % from the arithmetic, and high rather than random, because a 5 ps
-step cannot land exactly on the crossing. Two analyses and a hand calculation agreeing to
-four figures is what "the deck is right" looks like. Make this check a habit: whenever you
-have an RC, one of the three numbers is free. `make` in that package prints exactly this
-comparison at the end, so you can see it close.
+`.ac` measured **75.6449 MHz**, 0.0005 % from the arithmetic. `.tran` measured **2.10826 ns**,
+0.20 % from the arithmetic, and high rather than randomly off, because a 5 ps step can't land
+exactly on the crossing. Two analyses and a hand calculation agreeing to four figures is what a
+correct deck looks like. Make it a habit: whenever you have an RC, one of the three numbers is
+free. `make` in that package prints this comparison at the end.
 
-## 5. `.meas` — get a number out instead of a picture
+## 5. `.meas`: a number instead of a picture
 
-`meas` is not a fifth analysis; it is how the other four stop being pictures. It runs
+`meas` isn't a fifth analysis. It is how the other four produce numbers instead of plots. It runs
 *after* an analysis, in the same `.control` block, and prints one line.
 
 | Form | Means |
@@ -287,53 +278,47 @@ comparison at the end, so you can see it close.
 | `meas tran <name> avg <vec> from=<t1> to=<t2>` | the average over a window |
 | `meas tran <name> trig v(a) val=0.9 rise=1 targ v(b) val=0.9 fall=1` | a propagation delay |
 
-Three rules that cost people an evening each:
+Three rules that each cost people an evening:
 
-1. The analysis type in `meas dc` / `meas tran` / `meas ac` must match the analysis you just
-   ran, or the measurement silently fails.
-2. `when` gives you the x-axis value (time, or frequency, or the swept voltage); `find`
-   gives you the y-axis value.
-3. A failed `meas` prints ` meas <name> ... failed!` and **ngspice keeps going and exits 0**.
-   Read the output; do not trust the exit code.
+1. The analysis type in `meas dc` / `meas tran` / `meas ac` must match the analysis you just ran,
+   or the measurement fails without a clear message.
+2. `when` gives you the x-axis value (time, frequency, or the swept voltage); `find` gives you the
+   y-axis value.
+3. A failed `meas` prints ` meas <name> ... failed!` and **ngspice keeps going and exits 0**. Read
+   the output; don't trust the exit code.
 
-## Output that looks like trouble and is not
+## Output that looks like trouble and isn't
 
-### The four `Error:` lines that open every single run
+### OSDI `Error:` lines
 
-Before ngspice has read one character of your circuit:
+On some builds of the workbench image, every run opens with a block like this before ngspice has
+read one character of your circuit:
 
 ```
 Error opening osdi lib "/foss/pdks/sky130A/libs.tech/ngspice/osdi/psp103.osdi": No such file or directory!
 Error: Library /foss/pdks/sky130A/libs.tech/ngspice/osdi/psp103.osdi couldn't be loaded!
 Error opening osdi lib "/foss/pdks/sky130A/libs.tech/ngspice/osdi/psp103_nqs.osdi": No such file or directory!
 Error: Library /foss/pdks/sky130A/libs.tech/ngspice/osdi/psp103_nqs.osdi couldn't be loaded!
-Error opening osdi lib "/foss/pdks/sky130A/libs.tech/ngspice/osdi/r3_cmc.osdi": No such file or directory!
-Error: Library /foss/pdks/sky130A/libs.tech/ngspice/osdi/r3_cmc.osdi couldn't be loaded!
-Error opening osdi lib "/foss/pdks/sky130A/libs.tech/ngspice/osdi/mosvar.osdi": No such file or directory!
-Error: Library /foss/pdks/sky130A/libs.tech/ngspice/osdi/mosvar.osdi couldn't be loaded!
+...
 Warning: OSDI libs have not been loaded successfully.
     Any of the following steps may fail, if Verilog A models are involved!.
 ```
 
-**This is the most alarming output in the course and it means nothing.** Every MOSFET run on
-this page produced it, including the ones whose numbers are quoted to six figures.
+**It looks alarming, and it doesn't matter.** OSDI is ngspice's plug-in interface for compiled
+Verilog-A models. SKY130's `nfet_01v8`, `pfet_01v8`, resistors and diodes are all *built-in* BSIM
+and diode models, so none of those libraries is ever needed, and the image doesn't ship them. Runs
+that print this block go on to produce numbers quoted to six figures.
 
-OSDI is ngspice's plug-in interface for compiled Verilog-A models. SKY130's `nfet_01v8`,
-`pfet_01v8`, resistors and diodes are all *built-in* BSIM and diode models, so none of those
-four libraries is ever needed. The image simply does not ship them.
-
-Note what this does to the rule at the bottom of this page: these lines say `Error` and are
-**not** followed by `Simulation interrupted due to error!`, and the run exits `0`. That is
-precisely the distinction — `Error:` on its own is not enough. Look for the pair.
-
-Every AD103 `Makefile` redirects this to a log, so you will first meet it the day you type
+These lines say `Error` but are **not** followed by `Simulation interrupted due to error!`, and the
+run exits `0`. That is the distinction: `Error:` on its own isn't enough. Look for the pair. Every
+AD103 `Makefile` sends ngspice's output to a log, so you'll only see these when you run
 `ngspice -b` yourself.
 
-### The warning block every resistor and diode prints
+### The warning block from resistors and diodes
 
-Run anything against this PDK and stderr fills with warnings. They are scenery. This is the
-complete stderr of a deck that instantiates eight resistors and a capacitor and gets every
-number right — 18 lines:
+Run anything against this PDK and stderr fills with warnings, and they are harmless. This is the
+complete stderr of a deck that instantiates eight resistors and a capacitor and gets every number
+right, 18 lines:
 
 ```
 Warning: Model issue on line 4842 :
@@ -347,21 +332,19 @@ Warning: sky130_fd_pr__model__parasitic__diode_ps2nw: IKR too small - model effe
 Warning: sky130_fd_pr__diode_pw2nd_05v5: IKR too small - model effect disabled!
 ```
 
-- **`unrecognized parameter (sw_et) - ignored`** (10 of them) — the PDK's resistor model
-  cards carry parameters written for a different simulator. ngspice drops them and models
-  the resistor correctly anyway.
-- **`IKR too small - model effect disabled!`** (2) — a high-injection knee current the
-  models set to zero. Not your circuit; it appears whenever a junction diode is in the deck,
-  which is always.
-- **`Note: No compatibility mode selected!`** — prints on every single run, including
-  perfect ones.
+- **`unrecognized parameter (sw_et) - ignored`** (10 of them): the PDK's resistor model cards carry
+  parameters written for a different simulator. ngspice drops them and models the resistor
+  correctly anyway.
+- **`IKR too small - model effect disabled!`** (2): a high-injection knee current that the models
+  set to zero. It appears whenever a junction diode is in the deck, which is always, and has
+  nothing to do with your circuit.
+- **`Note: No compatibility mode selected!`** prints on every run, including perfect ones.
 
-**Warnings go to stderr, results go to stdout.** `ngspice -b deck.spice > results.log` gives
-you a clean log and leaves the noise on your terminal. The rule for telling scenery from a
-real problem: a real problem says `Error` and is followed by
-`Simulation interrupted due to error!`.
+**Warnings go to stderr, results go to stdout.** `ngspice -b deck.spice > results.log` gives you a
+clean log and leaves the noise on your terminal. To tell a harmless message from a real problem: a
+real problem says `Error` and is followed by `Simulation interrupted due to error!`.
 
-## Error messages, with the exact text
+## Error messages
 
 | ngspice says | You did |
 |---|---|
@@ -371,26 +354,26 @@ real problem: a real problem says `Error` and is followed by
 | `warning, can't find model 'sky130_fd_pr__nfet_01v8' from line` | started the line with `M` for a device that *is* a `.subckt`. Transistors are `X` lines. |
 | `Too many parameters for subcircuit type "sky130_fd_pr__res_generic_po" (instance: xxr1)` | passed `mult=1` to a device whose subcircuit has no `mult`. Not every resistor takes the same parameters. |
 | `Too few parameters for subcircuit type "sky130_fd_pr__cap_var_lvt" (instance: xxcv)` | gave the wrong number of *nodes*. The varactor has three terminals, not two. |
-| `Error: incomplete or empty netlist` / `no simulations run!` | nothing on its own. It is the second message; the real error is a few lines above it. |
-| `Error: Library …/osdi/psp103.osdi couldn't be loaded!` | nothing at all. Four of these open every run on this image; see [above](reference/ngspice-errors.md#the-four-error-lines-that-open-every-single-run). |
+| `Error: incomplete or empty netlist` / `no simulations run!` | nothing by itself. It is the second message; the real error is a few lines above it. |
+| `Error: Library …/osdi/psp103.osdi couldn't be loaded!` | nothing at all. Some image builds print several of these at the start of every run; see [above](reference/ngspice-errors.md#osdi-error-lines). |
 
 ## Exit codes
 
-Measured, on the decks on this page:
+Measured on the decks on this page:
 
 | Deck | exit |
 |---|---:|
 | a correct `.op` | `0` |
-| `W=1u` — `could not find a valid modelname` | `1` |
+| `W=1u`: `could not find a valid modelname` | `1` |
 | a deck whose `meas` failed | `0` |
 | a deck with no `.control` block at all | `0` |
-| any of the above, with the four OSDI `Error:` lines | unchanged |
+| any of the above, with the OSDI `Error:` lines | unchanged |
 
-So `$?` catches a deck that would not build, and catches nothing else. Every AD103 lab
-`Makefile` therefore reads the log and prints its own `PASS` or `FAIL` rather than trusting
-ngspice's status — and so should any script of yours.
+So `$?` catches a deck that wouldn't build, and nothing else. That is why every AD103 lab `Makefile`
+reads the log and prints its own `PASS` or `FAIL` instead of trusting ngspice's exit status, and any
+script of yours should do the same.
 
 ---
 
-Next: [Reading a SKY130 device model](reference/sky130-device-guide.md), which is where
+Next: [Reading a SKY130 device model](reference/sky130-device-guide.md), where
 `could not find a valid modelname` gets its full explanation.
