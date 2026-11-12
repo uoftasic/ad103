@@ -145,4 +145,4 @@ Part 7.
 3. You need to lower a diode's voltage by 77 mV at fixed current. Roughly how much bigger must the
    junction be, if area alone set the current? Why is the real answer bigger still?
 
-Next: [Lab 02 — The diode I–V curve](labs/lab-02-diode-iv-overview.md).
+Next: [Lab 02: The diode I–V curve](labs/lab-02-diode-iv-overview.md).

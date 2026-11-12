@@ -1,4 +1,4 @@
-# Capstone — The CMOS inverter
+# Capstone: The CMOS inverter
 
 Writeup: [uoftasic.com/ad103 → Capstone](https://uoftasic.com/ad103/#/labs/capstone-inverter-overview).
 The steps, expected output and explanations are there; this file is a quick reference.

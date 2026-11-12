@@ -193,4 +193,4 @@ this course come back there.
 3. Using $r_o$ = 410.6 kΩ, how much would the copied current change if $V_{out}$ moved by 0.5 V?
 4. Why do two W = 5 µm devices in parallel copy a current more accurately than one W = 10 µm device?
 
-Next: [Capstone — The CMOS inverter](labs/capstone-inverter-overview.md).
+Next: [Capstone: The CMOS inverter](labs/capstone-inverter-overview.md).

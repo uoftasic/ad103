@@ -1,4 +1,4 @@
-# Capstone — The CMOS inverter
+# Capstone: The CMOS inverter
 
 You'll draw a CMOS inverter, measure the voltage at which it switches, find that it isn't the
 number you predicted, fix it, find that your fix is also off, and then see that both answers were

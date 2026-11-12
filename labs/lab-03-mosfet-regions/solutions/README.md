@@ -1,4 +1,4 @@
-# Lab 03 — reference answers
+# Lab 03: reference answers
 
 **Don't read this first.** Each deck here is four to six lines away from one that already ships
 and works, and the value of each exercise is in those few lines. Try it, run it, notice what

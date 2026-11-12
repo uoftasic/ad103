@@ -1,27 +1,27 @@
 - [Home](README.md)
 - **Start here**
   - [Getting started](guide/getting-started.md)
-  - [Lab 01 — Your first schematic](labs/lab-01-first-schematic-overview.md)
+  - [Lab 01: Your first schematic](labs/lab-01-first-schematic-overview.md)
 - **The diode**
   - [Linearity and superposition](guide/the-straight-line-runs-out.md)
   - [The operating point](guide/the-operating-point.md)
   - [The diode equation](guide/the-diode-is-an-exponential.md)
   - [Three diode models](guide/three-models-of-one-diode.md)
-  - [Lab 02 — The diode I–V curve](labs/lab-02-diode-iv-overview.md)
+  - [Lab 02: The diode I–V curve](labs/lab-02-diode-iv-overview.md)
 - **The MOSFET**
   - [How a MOSFET works](guide/a-mosfet-is-a-valve.md)
   - [The four regions](guide/four-regions-not-three.md)
   - [Where saturation starts](guide/where-saturation-starts.md)
-  - [Lab 03 — MOSFET regions](labs/lab-03-mosfet-regions-overview.md)
+  - [Lab 03: MOSFET regions](labs/lab-03-mosfet-regions-overview.md)
 - **Device parameters**
   - [What moves the threshold](guide/threshold-is-not-a-constant.md)
   - [Transconductance and output resistance](guide/gm-and-ro.md)
   - [Sizing with W and L](guide/w-and-l-are-a-choice.md)
-  - [Lab 04 — Testing the W/L rule](labs/lab-04-wl-knob-overview.md)
+  - [Lab 04: Testing the W/L rule](labs/lab-04-wl-knob-overview.md)
 - **Capstone**
   - [The CMOS inverter](guide/the-inverter-is-an-amplifier.md)
   - [The current mirror](guide/the-current-mirror.md)
-  - [Capstone — The CMOS inverter](labs/capstone-inverter-overview.md)
+  - [Capstone: The CMOS inverter](labs/capstone-inverter-overview.md)
 - **Reference**
   - [XSchem cheat sheet](reference/xschem-cheatsheet.md)
   - [The ngspice survival card](reference/ngspice-errors.md)

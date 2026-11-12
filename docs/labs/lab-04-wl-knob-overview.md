@@ -1,4 +1,4 @@
-# Lab 04 — Testing the W/L rule
+# Lab 04: Testing the W/L rule
 
 The square law says that only the ratio $W/L$ matters:
 

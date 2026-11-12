@@ -253,4 +253,4 @@ Answer these on paper before you start Lab 01.
 5. You netlisted a schematic in a folder with no `xschemrc`. Where did the netlist go, and what
    happens to it when the container is removed?
 
-Next: [Lab 01 — Your first schematic](labs/lab-01-first-schematic-overview.md).
+Next: [Lab 01: Your first schematic](labs/lab-01-first-schematic-overview.md).

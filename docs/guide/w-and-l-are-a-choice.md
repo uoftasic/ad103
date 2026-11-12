@@ -155,4 +155,4 @@ arithmetic above still closes for a longer device.
 4. Two designs have $W/L$ = 5, one at minimum length and one at L = 1 µm. Name one property the
    long one wins on and one it loses on.
 
-Next: [Lab 04 — Testing the W/L rule](labs/lab-04-wl-knob-overview.md).
+Next: [Lab 04: Testing the W/L rule](labs/lab-04-wl-knob-overview.md).

@@ -1,4 +1,4 @@
-# Lab 02 — The diode I–V curve
+# Lab 02: The diode I–V curve
 
 You'll sweep one real SKY130 diode through nine decades of current, show that superposition has
 stopped working, and pull two of SkyWater's own model parameters back out of the shape of your
