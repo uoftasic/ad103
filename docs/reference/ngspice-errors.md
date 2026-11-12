@@ -391,7 +391,7 @@ one.
 |---|---|
 | a current about **66×** larger than expected | wrote `pj=` instead of `perim=`. `pj` is ignored and `perim` keeps its default of 1e6. |
 | a current about **a million times** smaller (picoamps where you expected microamps) | put a `u` on `area` or `perim`. Diode sizes are bare micron numbers. |
-| megaamps | left the XSchem symbol's defaults, `area=1e12 perim=4e6`, in place. |
+| megaamps | gave no size at all, so the subcircuit's defaults, `area=1e12 perim=1e6`, apply: a junction one metre square. An unedited XSchem `diode.sym` writes the same area, with `perim=4e6`. |
 
 In Lab 02, the checker saying `no sweep data at …` means `make sweep` has not run, or
 `make clean` removed its output. Run `make`.

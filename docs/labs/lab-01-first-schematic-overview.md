@@ -2,8 +2,8 @@
 
 You'll load the course, draw one transistor in XSchem, watch it become seven lines of SPICE,
 and get a current out of it. Then you'll break the same circuit twice on purpose: once so loudly
-that ngspice refuses to run, and once so quietly that it hands you an answer that is wrong by a
-factor of 6821.
+that ngspice refuses to run, and once so quietly that it hands you a wrong answer without any
+error.
 
 Package: [`labs/lab-01-first-schematic/`](https://github.com/uoftasic/ad103/tree/main/labs/lab-01-first-schematic)
 
@@ -35,8 +35,8 @@ If you haven't set up the workbench yet, do
              run 'mod' to list course modules, or 'mod <name>' to enter one.
    ```
 
-   Check that it says `PDK=sky130A`. The image's own default is `ihp-sg13g2`, which is the wrong
-   process for this course.
+   Check that it says `PDK=sky130A`; `echo $PDK` prints the same. The image's own default is
+   `ihp-sg13g2`, which is the wrong process for this course.
 
 3. Get the course files:
 
@@ -96,8 +96,10 @@ Does your workbench give the reference answer, and what does a SPICE device line
    PASS  netlist and operating point match the reference run
    ```
 
-2. Read the device line before the current. The four node names, `d g 0 0`, are in the order
-   **drain, gate, source, body**. You'll find each of them on the drawing in Part 3.
+2. Read the device line before the current. `make` netlists `xschem/nmos_probe.sch` and prints
+   the device line from that netlist; the drain current comes from simulating the hand-written
+   deck `spice/nmos_op.spice`. The four node names, `d g 0 0`, are in the order **drain, gate,
+   source, body**. You'll find each of them on the drawing in Part 3.
 
 3. Open `results/nmos_op.log` and find `i(vds) = -5.01046e-04`. The log opens with several
    `Error opening osdi lib` lines; they are harmless, and
@@ -299,8 +301,8 @@ Can you draw the reference circuit yourself, with a transistor twice as wide?
    > gives a confident `FAIL - the netlist has no nfet_01v8` that sends you hunting for a
    > placement bug that isn't there. Check the `*` has gone from the tab first.
 
-**You should see** an `nfet_01v8` in the gap with `W=2` and `L=0.15`, a dot on every junction, and
-no `*` in the tab title.
+**You should see** an `nfet_01v8` in the gap with `W=2` and `L=0.15`, no hollow square on any wire
+end or pin, a dot where the source and body wires meet, and no `*` in the tab title.
 
 ## Part 5: Simulate your drawing
 
@@ -331,25 +333,27 @@ Does a transistor twice as wide carry twice the current?
    PASS  you drew a transistor, XSchem turned it into SPICE, and ngspice
          answered 1030.4200 uA. That is the whole chain, and it is the
          chain every other lab in this course runs on.
-   ```
 
-   It then prints a short note comparing your current with twice the reference; step 3 goes
-   through it.
+     One more thing before you leave. The reference schematic is W=1 and
+     draws 500.9410 uA. Yours is twice as wide. Twice 500.9410 is
+     1001.8820, and you measured 1030.4200 - +2.85 %.
+     Small, and not zero, and not noise. Lab 04 is entirely about that gap.
+   ```
 
    If it says `FAIL`, it names which of five things went wrong (a missing device, a unit suffix
    on `W`, a `net7` where a wire did not land, the source on the wrong node, the body left
    floating) and what to do about each.
 
-3. Compare the result with your prediction. The note uses 500.941 µA for the reference device,
-   the current *the XSchem netlist* gives for $W$ = 1 µm, so twice the reference is
-   1001.882 µA. How far is your 1030.42 µA from that, and is the difference a mistake?
+3. Compare the result with your prediction. The note at the end compares your current with twice
+   the reference schematic's 500.9410 µA. What does the +2.85 % say about the rule "current is
+   proportional to $W$"?
 
    <details>
    <summary>Answer</summary>
 
-   It is **2.85 % more**: doubling the width bought slightly more than double the current. That
-   is too small to be a mistake and too large to be noise. It is the first crack in "current is
-   proportional to $W$", and [Lab 04](labs/lab-04-wl-knob-overview.md) is about what is behind it.
+   Doubling the width bought slightly more than double the current. That is too small to be a
+   mistake and too large to be noise. It is the first crack in "current is proportional to $W$",
+   and [Lab 04](labs/lab-04-wl-knob-overview.md) is about what is behind it.
 
    </details>
 
@@ -434,9 +438,16 @@ What does ngspice do with a gate wire that stops short of the pin?
         v(net1) = 5.017472e-01
    ```
 
-3. Open `xschem/broken_probe.sch` next to `xschem/nmos_probe.sch` (from the `xschem/` folder,
-   `xschem broken_probe.sch &`) and find the difference. It is one wire, ending 20 units short of
-   the gate pin: about a millimetre on screen.
+3. Open the broken schematic in its own window and compare it with `nmos_probe.sch` (open that
+   too if you closed it after Part 3):
+
+   ```bash
+   cd xschem
+   xschem broken_probe.sch &
+   ```
+
+   Find the difference. It is one wire, ending 20 units short of the gate pin: about a millimetre
+   on screen.
 
 4. Compare the current with Part 2's 501.046 µA. By what factor is it wrong?
 
@@ -451,9 +462,10 @@ What does ngspice do with a gate wire that stops short of the pin?
 
    </details>
 
-6. Search the netlists for invented names:
+6. Go back to the lab folder and search the netlists for invented names:
 
    ```bash
+   cd ..
    grep 'net[0-9]' xschem/simulation/*.spice
    ```
 
@@ -502,8 +514,8 @@ Answer these without looking anything up. Each one points to where the lab answe
 1. How do you set `W` and `L` on an `nfet_01v8`, and what goes wrong if you write `W=1u`?
    (Part 4, step 5, and Part 6.)
 2. How do you draw a wire that isn't diagonal, and make sure it lands on a pin? (Part 4, step 6.)
-3. How do you connect two things by net name alone? (Part 4, step 1: two `lab_pin`s with the same
-   label are one net. `Alt-L` places one.)
+3. How do you connect two things by net name alone? (Part 4, step 1, and the key table in
+   Part 3.)
 4. Where does XSchem write the netlist when you press **Netlist**? (Part 3, steps 5 to 7.)
 5. What are the four node names on a device line, in order, and what does a `net7` on it mean?
    (Part 2, step 2, and Part 7.)

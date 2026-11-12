@@ -120,8 +120,9 @@ What is $V_{TH}$ for this device?
    grep -i 'xma.*\[vth\]' results/op_params.log
    ```
 
-   Compare all three with the `your number vs the model's own number` block near the end of the
-   `make extract` output.
+   `xma` is device A in `spice/op_params.spice`, the same W = 5 µm, L = 1 µm transistor. Compare all
+   three with the `your number vs the model's own number` block near the end of the `make extract`
+   output.
 
 **You should see** **0.6016 V** by linear extrapolation, **0.5159 V** by $\sqrt{I_D}$
 extrapolation and **0.5895 V** from the model: three answers for one device, 86 mV apart. Use
@@ -134,8 +135,8 @@ Which of the three is the right threshold, and why do they disagree?
 
 None of them is wrong. $V_{TH}$ is defined by its extraction method, and the methods disagree
 because the square law they both rely on isn't exactly true for this device. Linear extrapolation
-relies on it only very near threshold and lands within 2 % of the model; $\sqrt{I_D}$
-extrapolation relies on it across a whole volt of overdrive and is 12 % out.
+relies on it only very near threshold and lands 2.07 % from the model; $\sqrt{I_D}$ extrapolation
+relies on it across a whole volt of overdrive and is 12.49 % out.
 [Where saturation starts](guide/where-saturation-starts.md#two-methods-86-mv-apart) has the
 details.
 
@@ -152,8 +153,8 @@ Where does each output curve knee, and does it land at $V_{GS} - V_{TH}$?
 2. Read the first block of `make extract`, `I_D vs V_DS`. Look at the `channel R at V_DS=10 mV`
    column first: the channel's resistance at each gate voltage.
 
-3. Work out $V_{GS} - V_{TH}$ for each gate voltage, using your $V_{TH}$ of 0.6016 V, and compare
-   it with the `knee V_DS` column. Then find the `knee of each curve vs the model's vdsat` table
+3. Work out $V_{GS} - V_{TH}$ for the 0.9 V to 1.8 V curves, using your $V_{TH}$ of 0.6016 V, and
+   compare it with the `knee V_DS` column. Then find the `knee of each curve vs the model's vdsat` table
    at the end of the output.
 
 4. Find the lowest current in the `below threshold` block: $V_{GS}$ = 0 V, with 1.8 V on the
@@ -161,7 +162,7 @@ Where does each output curve knee, and does it land at $V_{GS} - V_{TH}$?
 
 **You should see** the channel resistance fall from **26.6 kΩ** to **737 Ω** as $V_{GS}$ goes from
 0.6 V to 1.8 V. At $V_{GS}$ = 0.9 V the knee lands at **0.29 V** against a predicted 0.298 V, a
-hit; at 1.8 V it lands at **0.89 V** against a predicted 1.198 V, 34 % low. The model's `vdsat` is
+hit; at 1.8 V it lands at **0.89 V** against a predicted 1.198 V, so the prediction is 34 % high. The model's `vdsat` is
 below $V_{GS} - V_{TH}$ at every gate voltage. With the gate at 0 V the device still passes
 **2.1853 pA**.
 
@@ -234,8 +235,8 @@ What does $g_m/I_D$ measure, and what does its trend say about where to bias an 
 
 $g_m/I_D$ is transconductance per unit of current burned, a measure of efficiency. It is highest
 near threshold and worst wide open, the opposite of where a beginner tends to bias an amplifier.
-[Transconductance and output resistance](guide/gm-and-ro.md), which you read before Lab 04, picks
-this up.
+[Transconductance and output resistance](guide/gm-and-ro.md), which you'll read before Lab 04,
+picks this up.
 
 </details>
 
@@ -264,7 +265,7 @@ The `W/L is a knob` block puts four devices at $V_{GS} = V_{DS}$ = 1.8 V:
 **You should see** width behave honestly (B is within **0.20 %** of 2×), doubling $L$ give 9.4 %
 more current than $1/L$ predicts, and the minimum-length device D deliver **501.046 µA** against a
 predicted 928.367 µA, only **54 %**. [Sizing with W and L](guide/w-and-l-are-a-choice.md), which
-you read before Lab 04, closes that 54 % gap in two steps.
+you'll read before Lab 04, closes that 54 % gap in two steps.
 
 ## Part 7: Units on `W` and `L`
 
@@ -319,9 +320,8 @@ $V_{GS}$ = 1.05 V, which sits between the 0.9 V and 1.2 V curves. It takes four 
    first `make extract` table. Write it down.
 
 2. Open `spice/id_vds.spice` in a text editor and add `1.05` to the `foreach` line as the second
-   entry, right after `0.6`, as the reference deck in `solutions/` does. (Appending it at the end
-   also works, but then nothing else in the deck has to change, and steps 3 and 4 are the
-   exercise.)
+   entry, right after `0.6`. (Appending it at the end also works, and then the existing `let`
+   lines keep their numbers. Putting it second is what makes step 3 worth doing.)
 
 3. Each `dc` command makes its own plot, named `dc1`, `dc2`, … in the order the sweeps ran. Add a
    `let` line for the new curve (call it `id_vgs105`), and fix the `dcN` numbers on the other
@@ -345,7 +345,8 @@ $V_{GS}$ = 1.05 V, which sits between the 0.9 V and 1.2 V curves. It takes four 
 
    </details>
 
-4. Add `id_vgs105` to the `wrdata` line, and save the file.
+4. Add `id_vgs105` to the `wrdata` line, and save the file. Its position in that list doesn't
+   matter: `extract.py` matches each column to its gate voltage through the vector's name.
 
 5. Run the lab and print the extraction again:
 
@@ -382,15 +383,15 @@ discusses it.
 line and the `.control` block ride along in two `code_shown` symbols, which is how a testbench
 keeps its simulation commands next to its circuit.*
 
-1. Put `spice/id_vds.spice` back to five curves:
+1. Do this part after you've finished Part 8 and checked its line in Finishing, because this step
+   throws your Part 8 edit away. The schematic writes five columns, and `check.py` reads the gate
+   list from the deck, so with your six-curve deck in place it reports `the results file is stale`.
+   Put `spice/id_vds.spice` back to five curves:
 
    ```bash
    git checkout -- spice/id_vds.spice
    make
    ```
-
-   The schematic writes five columns, and `check.py` reads the gate list from the deck, so with
-   your six-curve deck in place it reports `the results file is stale`.
 
 2. Open the schematic:
 
