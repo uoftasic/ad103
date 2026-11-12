@@ -120,7 +120,7 @@ every bin, so no model matches and ngspice stops. The message names neither `W` 
 is why the habit to build is "check `W` and `L` first" rather than "read the error".
 [Reading a SKY130 device model](reference/sky130-device-guide.md) has the full explanation.
 
-You'll cause this error on purpose in Lab 01, Part 5, so you recognise it later.
+You'll cause this error on purpose in Lab 01, Part 6, so you recognise it later.
 
 ## How wires connect
 
@@ -210,7 +210,7 @@ XM1 d net1 0 0 sky130_fd_pr__nfet_01v8 L=0.15 W=1 nf=1 ...
 invented names all look like `net` followed by a number. So after every netlist, search for
 them with `grep 'net[0-9]' simulation/*.spice`. Any hit is a wire you think is connected and
 isn't. This is faster and more reliable than squinting at the canvas, and it finds nine out of
-ten wiring mistakes in this course. Lab 01, Part 6 shows you what ngspice does with a circuit
+ten wiring mistakes in this course. Lab 01, Part 7 shows you what ngspice does with a circuit
 like this.
 
 ## Simulation time
