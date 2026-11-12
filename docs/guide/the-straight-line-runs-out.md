@@ -44,8 +44,8 @@ For the diode, superposition predicts **250.8180 pA**, and the circuit delivers 
 That is out by a factor of **15,618**.
 
 The wrong answer is not noisy or obviously broken. It is a clean, plausible-looking number with
-seven significant figures, and nothing in the output says "superposition does not apply". You
-have to know.
+seven significant figures, and nothing in the output says "superposition does not apply", so
+knowing when it doesn't is your job.
 
 > **Check before you reach for a linear tool.** Before you write down a Thévenin equivalent, a
 > superposition sum or an impedance divider, ask whether every element in the loop is linear. One

@@ -1,6 +1,6 @@
 # Lab 01 — Your first schematic
 
-You'll set up the workbench, draw one transistor in XSchem, watch it become six lines of SPICE,
+You'll set up the workbench, draw one transistor in XSchem, watch it become seven lines of SPICE,
 and get a current out of it. Then you'll break the same circuit twice on purpose: once so loudly
 that ngspice refuses to run, and once so quietly that it hands you an answer that is wrong by a
 factor of 6821.
@@ -100,7 +100,8 @@ almost all of it ngspice loading the SKY130 models.
    ** Copyright 1985-1994, Regents of the University of California.
    ```
 
-**You should see** `PDK=sky130A` in the banner, `XSCHEM V3.4.8RC`, and `ngspice-47`. XSchem's
+**You should see** `PDK=sky130A` in the `.designinit` banner from step 4, `XSCHEM V3.4.8RC`, and
+`ngspice-47`. XSchem's
 keys and menus have changed between releases, so if your version is different, the screenshots
 in this course may not match your window.
 
@@ -184,7 +185,7 @@ fine and the problem is in your drawing.
 
    > **Warning:** `nmos_probe.sch` is the lab's reference, and `make` checks against it.
    > Practise on it freely (`u` undoes any number of steps), but don't save over it. If you
-   > already did, `git checkout -- xschem/nmos_probe.sch` inside the module puts it back.
+   > already did, run `git checkout -- xschem/nmos_probe.sch` from the lab folder to put it back.
 
    If you can't see the status bar at the bottom of the window: on the default 1280×800 desktop,
    XSchem opens 764 px tall at 29 px down, which puts its last 24 px behind the Xfce taskbar.
@@ -215,7 +216,7 @@ fine and the problem is in your drawing.
    .end
    ```
 
-**You should see** the six-line netlist above, with `d g 0 0` on the device line matching the
+**You should see** the seven-line netlist above, with `d g 0 0` on the device line matching the
 nets on the drawing.
 
 ## Part 4: Draw your own transistor
@@ -327,15 +328,26 @@ nets on the drawing.
    make mine
    ```
 
+   It netlists what you drew and checks the wiring before it simulates anything:
+
    ```
+     WHAT YOU DREW
+       XM1 d g 0 0 sky130_fd_pr__nfet_01v8 L=0.15 W=2 nf=1 ad=0.58 as=0.58 pd=4.58 ps=4.58 nrd=0.145 nrs=0.145 sa=0 sb=0 sd=0 mult=1
+
+     Wired correctly. Simulating it.
+
      YOUR TRANSISTOR
        W = 2 um, L = 0.15 um, V_GS = V_DS = 1.8 V
        drain current    1030.4200 uA
        reference        1030.4200 uA
 
    PASS  you drew a transistor, XSchem turned it into SPICE, and ngspice
-         answered 1030.4200 uA.
+         answered 1030.4200 uA. That is the whole chain, and it is the
+         chain every other lab in this course runs on.
    ```
+
+   It then prints a short note comparing your current with twice the reference; step 10 goes
+   through it.
 
    If it says `FAIL`, it names which of five things went wrong (a missing device, a unit suffix
    on `W`, a `net7` where a wire did not land, the source on the wrong node, the body left
@@ -406,8 +418,9 @@ what the `u` does.
         v(net1) = 5.017472e-01
    ```
 
-2. Open `xschem/broken_probe.sch` next to `xschem/nmos_probe.sch` and find the difference. It is
-   one wire, ending 20 units short of the gate pin: about a millimetre on screen.
+2. Open `xschem/broken_probe.sch` next to `xschem/nmos_probe.sch` (from the `xschem/` folder,
+   `xschem broken_probe.sch &`) and find the difference. It is one wire, ending 20 units short of
+   the gate pin: about a millimetre on screen.
 
 3. Compare the current with Part 2. **73.4593 nA**, where the working circuit gives 501.046 µA:
    wrong by a factor of **6821**, with no error anywhere. `v(net1) = 0.5017472 V` is the gate,

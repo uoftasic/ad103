@@ -183,7 +183,7 @@ Vds d 0 1.8
 .end
 ```
 
-Your whole drawing is in those six lines. `XM1 d g 0 0` is the transistor and its four terminals
+Your whole drawing is in those seven lines. `XM1 d g 0 0` is the transistor and its four terminals
 in order: **drain, gate, source, body**. The names are the labels you placed, and `0` is ground,
 which SPICE has always called zero.
 
