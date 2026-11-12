@@ -347,7 +347,7 @@ clean log and leaves the noise on your terminal. To tell a harmless message from
 real problem says `Error on line …`, followed by `Simulation interrupted due to error!` and then
 `no simulations run!`. If you see numbers after the warnings, the warnings didn't matter.
 
-### `Eta0 is negative`
+### Eta0 is negative
 
 ```
 Warning: Eta0 = -0.0310679 is negative.
@@ -355,6 +355,17 @@ Warning: Eta0 = -0.0310679 is negative.
 
 SkyWater's model card has a negative fitting parameter, which BSIM allows and mentions. It is
 legal and deliberate, and the run is unaffected.
+
+Every Lab 04 run leaves the same note in a three-line `bsim4v5.out` in the lab folder:
+
+```
+Checking parameters for BSIM 4.5 model xf:sky130_fd_pr__nfet_01v8__model.5
+Warning: Eta0 = -0.0310679 is negative.
+```
+
+`spice/double_w.spice` writes it, and `xf` is its `nf=2` device. BSIM's parameter checker writes
+this file whenever a model card carries a value it wants to comment on, here `nfet_01v8` bin 5.
+`make clean` removes it.
 
 ## Error messages
 
