@@ -23,8 +23,8 @@ Package: [`labs/lab-02-diode-iv/`](https://github.com/uoftasic/ad103/tree/main/l
 
   This lab needs no environment setup: no `.designinit`, no `mod`, no `PDK`. The decks find the
   models through `PDK_ROOT`, which the image already sets to `/foss/pdks`, and the `Makefile`
-  sets it anyway. The XSchem bench in `xschem/` needs `PDK=sky130A` to find its symbols, so
-  `xschem/xschemrc` sets that itself. (On the image's default IHP process, this bench netlists to
+  sets it anyway. You don't need XSchem in this lab, but if you open the bench in `xschem/`, it
+  needs `PDK=sky130A` to find its symbols, so `xschem/xschemrc` sets that itself. (On the image's default IHP process, this bench netlists to
   `D1 - diode IS MISSING !!!!`, simulates without a single error, and writes a column of zeros.)
 
 **Time:** about 1.75 hours. `make` takes about 25 seconds; each of the other targets takes about
@@ -48,8 +48,8 @@ You'll measure the left-hand sides and solve for $n$ and $I_0$.
 
 Does your workbench reproduce the reference sweep?
 
-1. Look at the bench you are about to simulate. `xschem/diode_tb.sch` is the same circuit as
-   `spice/diode_iv.spice`, drawn:
+1. Look at the bench you are about to simulate, in the picture below. `make` simulates the
+   hand-written deck `spice/diode_iv.spice`; `xschem/diode_tb.sch` is the same circuit, drawn:
 
    ![diode_tb.sch in XSchem: one SKY130 diode, one swept source, and the model and control text blocks](../assets/img/ad103-xschem-diode-tb.png)
 
@@ -88,6 +88,9 @@ table has the diode errors.
 
 Does doubling the drive double a diode's current, the way it does a resistor's?
 
+The test drives a 100 kΩ resistor and a 1 µm² diode three times each: with input A (0.35 V), with
+input B (0.35 V), and with A+B (0.70 V).
+
 1. Predict: will the diode's `i_d_ab` equal `i_d_a` plus `i_d_b`? Write down yes or no, and if no,
    which way it misses.
 
@@ -120,7 +123,8 @@ Does doubling the drive double a diode's current, the way it does a resistor's?
 
 **You should see** the resistor's sum match to every digit (7.000000 µA), and the diode's
 prediction of 250.8180 pA against a measured 3.917437 µA: a factor of **15,618**. The checker's
-last two lines report the same thing.
+lines near the end of `make` report the same thing:
+`resistor: superposition off by 0.0000 %` and `diode   : superposition off by a factor of 15,618.6`.
 
 ## Part 3: Read the curve on two axes
 
@@ -183,7 +187,9 @@ What are the ideality factor and series resistance of this diode, and does SkyWa
    ```
 
    Divide the slope by the ideal 59.556 mV/decade: $77.037 / 59.556 = 1.2935$. That is the
-   **ideality factor**.
+   **ideality factor**. The `leaves the line` row is where the curve starts to bend away from the
+   straight line, at 0.699 V; [The diode equation](guide/the-diode-is-an-exponential.md#where-the-straight-line-ends)
+   explains the bend.
 
 2. Find the series-resistance block and check its arithmetic: 95.989 mV dropped outside the
    junction, divided by 98.0354 µA.
@@ -240,7 +246,8 @@ Where does one resistor and one diode in series settle, and how close was the ha
 
 2. Compare `v(n2)` and `i_100k` with the hand iteration on
    [The operating point](guide/the-operating-point.md#worked-example-guess-correct-repeat)
-   (0.7335 V and 10.665 µA). How far off was the hand answer, in mV and in percent?
+   (0.7335 V and 10.665 µA). How far off was the hand answer: the voltage in mV, and the current
+   in percent?
 
    <details>
    <summary>Answer</summary>
@@ -281,11 +288,11 @@ Where does one resistor and one diode in series settle, and how close was the ha
    ```
 
 **You should see** the plot's marked crossings at `0.7398 V` and `0.6561 V`, matching `v(n2)` and
-`v(n3)`, and the sweep crossing agreeing with `op`'s 7.398473e-01 V and 1.060153e-05 A to six
-digits.
+`v(n3)`, and the sweep crossing agreeing with `op`'s 7.398473e-01 V and 1.060153e-05 A to within
+one in the sixth digit.
 
-The plot was drawn from the sweep, and `op` solved a different circuit. Why do they agree to six
-digits?
+The plot was drawn from the sweep, and `op` solved a different circuit. Why do they agree that
+closely?
 
 <details>
 <summary>Answer</summary>
@@ -320,14 +327,16 @@ Is the flat reverse current on the log plot the diode, or the simulator?
    j_p0v1 = 6.735706e-14
    ```
 
-2. Subtract $\text{GMIN}\times V$ from each of the four reverse numbers (the `m1v0` and `m0v5`
-   lines). Use $10^{-12}$ S for the `i_` lines and $10^{-15}$ S for the `j_` lines. Write down
-   what's left.
+2. GMIN is the small conductance ngspice puts across every junction; the default is
+   $10^{-12}$ S. Subtract $\text{GMIN}\times V$ from each of the four reverse numbers (the `m1v0`
+   and `m0v5` lines). Use $10^{-12}$ S for the `i_` lines and $10^{-15}$ S for the `j_` lines, and
+   keep the signs: $V$ is negative. Write down what's left.
 
 3. Compare what's left with the `I0` that the forward fit reported in Part 4.
 
-**You should see** **3.56, 3.558, 3.559 and 3.558 fA**: the same constant four times, from two
-voltages and two simulator settings, against **3.5864 fA** from the opposite end of the curve.
+**You should see** **−3.56, −3.558, −3.559 and −3.558 fA** (negative because the current flows
+backwards): the same constant four times, from two voltages and two simulator settings, against
+**3.5864 fA** from the opposite end of the curve.
 
 Suppose you had reported "this diode leaks 1 pA" from the default run. What would you have been
 reporting?
@@ -363,10 +372,11 @@ What does a bigger junction buy, and what happens when the size is written wrong
 2. Predict, before you calculate: a hundred times the area ought to be a hundred times the
    current. Divide `i_100um` by `i_1um`. Then repeat the face-and-edge fit from
    [Three diode models](guide/three-models-of-one-diode.md#what-junction-area-buys) using only the
-   first and last rows, and check it predicts the middle two.
+   first and last rows, and check it predicts the middle two. That page has the numbers to check
+   your fit against.
 
-3. Read the second half of the same output. These four device lines are all meant to be a 1 µm²
-   junction:
+3. Read the second half of the same output. (The `Part 1` and `Part 2` in it are the deck's own
+   sections.) All four of these currents are meant to come from a 1 µm² junction:
 
    ```
    --- Part 2: three lines that all mean to say 1 um^2, at 0.700 V (amps) ---
@@ -393,15 +403,16 @@ What does a bigger junction buy, and what happens when the size is written wrong
    |---|---|---|
    | `area=1 perim=4` | **3.917437 µA** | correct |
    | `area=1 pj=4` | 257.1530 µA, **66× too big** | `pj` is the raw model card's name for it. The subcircuit parameter is `perim`, so `pj=4` is an unknown parameter, silently ignored, and `perim` keeps its default of **1e6**: a junction one metre around. |
-   | *(no parameters at all)* | 2,291,258 A | the XSchem symbol's own defaults, `area=1e12 perim=4e6`: a junction **one metre square**. Two and a quarter **mega**amps. |
+   | *(no parameters at all)* | 2,291,258 A | the subcircuit's own defaults, `area=1e12 perim=1e6`: a junction **one metre square**. Two and a quarter **mega**amps. An XSchem `diode.sym` you never edit writes the same area, with `perim=4e6`. |
    | `area=1u perim=4u` | 4.541414 pA | micron numbers carry **no unit suffix**, exactly as with `W` and `L` in Lab 01. `1u` is a millionth of a square micron. |
 
    </details>
 
    ![The XSchem property editor on a diode.sym instance, showing model=diode_pw2nd_05v5, area=1e12, perim=4e6](../assets/img/xschem-diode-defaults.png)
 
-   *The symbol-defaults line, as you meet it: press <kbd>q</kbd> on a fresh `diode.sym` and this is
-   what the symbol ships with, `area=1e12` and `perim=4e6`. Change **both** before you netlist.*
+   *The symbol-defaults row as you would meet it in XSchem: a fresh `diode.sym` ships with
+   `area=1e12` and `perim=4e6`, shown here in its property editor (<kbd>q</kbd>). Whenever you
+   place one, change **both** before you netlist.*
 
 **You should see** a ratio of **60.19** rather than 100, and four "1 µm²" diodes whose currents
 span from picoamps to megaamps with no error message.
@@ -465,8 +476,8 @@ Why didn't the slope change, and what does that tell you about reading a wrong c
 <details>
 <summary>Answer</summary>
 
-A 5 % scaling error doesn't change the slope of a log plot at all. It slides the whole line
-sideways by $77.04 \times \log_{10}(1.05) = 1.63$ mV, which is exactly the shift in the three
+A 5 % scaling error moves every point by the same factor, so it doesn't change the slope of a log
+plot; the fit's last digits move by 0.002 %. It slides the whole line sideways by $77.04 \times \log_{10}(1.05) = 1.63$ mV, which is exactly the shift in the three
 decade voltages.
 
 That is the diagnostic habit this lab is teaching. On a log-current plot, **the slope tells you
@@ -505,7 +516,8 @@ What does 100 °C do to the slope, to $n$ and to $I_0$?
    make sweep plots
    ```
 
-   The fit block now reads:
+   The fit block now reads (191 points instead of 154, because two decades now span 191 mV of the
+   1 mV sweep):
 
    ```
      fit over 191 points from 1e-09 A to 1e-07 A:
@@ -527,7 +539,8 @@ What does 100 °C do to the slope, to $n$ and to $I_0$?
 
    </details>
 
-5. Compare $I_0$ with Part 4's 3.5864 fA. How much of the change is $V_T$, and how much is $I_0$?
+5. Compare $I_0$ with Part 4's 3.5864 fA. Two things moved the curve: the slope, through $V_T$,
+   and the intercept $I_0$. Which moved more?
 
    <details>
    <summary>Answer</summary>
@@ -558,11 +571,11 @@ What does 100 °C do to the slope, to $n$ and to $I_0$?
 
    </details>
 
-7. Delete the `.options temp=100` line (or run `git checkout -- spice/diode_iv.spice`) and run
-   `make`.
+7. Delete the `.options temp=100` line and run `make`. (Your course folder is the git clone from
+   Lab 01's `mod add`, so `git checkout -- spice/diode_iv.spice` also puts the deck back.)
 
 **You should see** a slope of **95.634 mV/decade** at 100 °C, within 0.2 % of the prediction, your
-own $n$ of about 1.29, $I_0$ of **8067.1022 fA**, and `PASS  every number matches the reference
+own $n$ of 1.2916, $I_0$ of **8067.1022 fA**, and `PASS  every number matches the reference
 run` again once the line is gone.
 
 ## Finishing
@@ -574,7 +587,7 @@ comes out at 1.2916, and `make` prints `PASS` again after you take the line out.
 
 1. What are $n$ and $r_s$ for this diode, from your fit, and what does the model card say?
    (Part 4.)
-2. Why is the reverse current at −1 V not the saturation current? (Part 6.)
+2. Why is the reverse current at −1 V not the saturation current $I_0$? (Part 6.)
 3. Why did a hundred times the area give only 60.19 times the current? (Part 7, step 2: the
    face-and-edge fit from [Three diode models](guide/three-models-of-one-diode.md#what-junction-area-buys).)
 
