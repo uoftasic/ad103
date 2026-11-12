@@ -421,7 +421,7 @@ then run, then read, in that order.
    what breaks $1/L$, the short-channel error should shrink, and it does, from +75.5 % to +29.5 %.
    Then look at what happens at the long end.
 
-## Output that looks alarming but is normal
+## Harmless messages
 
 Every run leaves a three-line `bsim4v5.out` in the lab folder:
 

@@ -482,7 +482,7 @@ and you can do these without looking anything up:
 
 There is nothing to submit.
 
-## Output that looks alarming but is normal
+## Harmless messages
 
 On some builds of the workbench image, a deck you run by hand with `ngspice -b` opens with a
 block like this before your circuit is even read:
