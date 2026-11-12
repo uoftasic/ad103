@@ -57,7 +57,7 @@ PASS  all nine extracted parameters match the reference run
 | `src/check.py` | recomputes the extracted numbers and prints `PASS` or `FAIL` with a reason |
 | `xschem/nmos_curves.sch` | the same curve tracer as `id_vds.spice`, drawn |
 | `xschem/xschemrc` | project-local XSchem config: SKY130 symbols, netlists into `simulation/` |
-| `solutions/` | reference answers to the three extensions in the writeup |
+| `solutions/` | reference answers: the sixth curve from Part 8 of the writeup, and the two Going further items |
 
 ## The drawn version
 
