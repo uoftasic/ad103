@@ -1,272 +1,427 @@
-# Lab 04 — $W/L$ is a knob
+# Lab 04 — Testing the W/L rule
 
-Full runnable package:
-[`labs/lab-04-wl-knob/`](https://github.com/uoftasic/ad103/tree/main/labs/lab-04-wl-knob).
-
-Seventeen transistors, one bias point, and one rule under test. You write six predictions down
-before you run anything. Two of them land. Four of them miss, by up to 91 %, and they miss in a
-pattern you can read off the sign column.
-
-The best of the four is this: **five devices whose $W/L$ is 5.000 in every case carry five
-different currents**, spanning a factor of 2.19.
-
-## Prerequisites
-
-- [Lab 03 — The regions of a MOSFET](labs/lab-03-mosfet-regions-overview.md) done. This lab
-  uses its reference device — $W$ = 5 µm, $L$ = 1 µm, **696.2755 µA** — as the anchor for every
-  prediction
-- Read Movement IV: [Threshold is not a constant](guide/threshold-is-not-a-constant.md) →
-  [Transconductance and output resistance](guide/gm-and-ro.md) →
-  [W and L are a choice](guide/w-and-l-are-a-choice.md)
-- No environment setup. The `Makefile` pins `PDK=sky130A` itself
-
-## Objectives
-
-- Test "$I_D \propto W$" over a hundredfold range of width and find where it stops being true
-- Test "$I_D \propto 1/L$" over a 27-fold range of length and find that it never quite was
-- Show that two 5 µm transistors in parallel and one 10 µm transistor are **not the same
-  device**, and that the first pair agrees with your prediction to every digit
-- Find a device parameter that ngspice accepts, ignores, and never mentions
-- Put a price on $W/L$ = 5: area, gate capacitance, and output resistance
-
-## Theory (short)
+The square law says that only the ratio $W/L$ matters:
 
 $$
 I_D^{\text{sat}} = \tfrac12\,\mu_n C_{ox}\frac{W}{L}\,(V_{GS}-V_{TH})^2
 $$
 
-$\mu_n$ and $C_{ox}$ belong to the foundry. $V_{GS}$ belongs to the rest of the circuit. $W$
-and $L$ are the two numbers you type, and the equation says only their **ratio** matters.
+You'll test that claim on seventeen transistors at one bias point, after writing six predictions
+down. Two of them land. Four miss, by up to 91 %, in a pattern you can read off the sign column,
+and five devices whose $W/L$ is exactly 5 carry five different currents. First you'll use the
+Lab 03 package to watch the threshold move and to measure how much gain one transistor can give.
 
-This lab is an experiment on that last clause.
+Package: [`labs/lab-04-wl-knob/`](https://github.com/uoftasic/ad103/tree/main/labs/lab-04-wl-knob),
+plus three targets in [`labs/lab-03-mosfet-regions/`](https://github.com/uoftasic/ad103/tree/main/labs/lab-03-mosfet-regions)
 
-## Procedure
+## Before you start
 
-**Before anything else**, open `predictions.txt` and fill in the six blanks. It takes ninety
-seconds, and it is the only part of this lab you cannot get back afterwards.
+- Finish [Lab 03](labs/lab-03-mosfet-regions-overview.md). This lab uses its reference device,
+  $W$ = 5 µm, $L$ = 1 µm at **696.2755 µA**, as the anchor for every prediction.
+- Read [What moves the threshold](guide/threshold-is-not-a-constant.md),
+  [Transconductance and output resistance](guide/gm-and-ro.md) and
+  [Sizing with W and L](guide/w-and-l-are-a-choice.md).
+- Open a terminal in the workbench. Both `Makefile`s set `PDK=sky130A` themselves, so no other
+  setup is needed.
 
-```bash
-cd labs/lab-04-wl-knob
-make            # about 9 s, ends in a verdict
-make predict    # scores what you wrote
-make extract    # the four blocks, with the working shown
-make figures    # the three PNGs on this page
-```
+**Time:** about 2 hours. `make` in this lab takes about 40 seconds; each Lab 03 target in Parts 2
+and 3 takes about ten. Wall times depend on your machine. Every other number on this page is
+fixed, and the checker enforces it.
 
-| Target | What it does | Time |
-|---|---|---|
-| `make` | four ngspice runs, then check ten numbers | ~9 s |
-| `make predict` | your six guesses next to the rule and the measurement | <1 s |
-| `make extract` | every number this lab teaches, with its arithmetic | <1 s |
-| `make figures` | redraw the three figures into `results/` | ~3 s |
-| `make broken` | hands the checker a run that is 3 % wrong — **fails on purpose** | <1 s |
+## Part 1: Write your predictions
 
-Wall times are **ballpark**. Every other number on this page is golden and the checker enforces
-it.
+Do this before you run anything. It takes ninety seconds, and it is the only part of the lab you
+can't redo afterwards.
 
-### Step 1 — score your predictions
+1. Go to the lab folder and open `predictions.txt` in a text editor:
 
-```bash
-make predict
-```
+   ```bash
+   cd /foss/designs/modules/ad103/labs/lab-04-wl-knob
+   ```
 
-```
-  device            W/L    the W/L rule       measured       rule err   your guess    your err
-  ------------------------------------------------------------------------------------------------
-  W=10   L=1      10.00    1392.551 uA   1395.3200 uA     -0.2 %           --         --
-  W=50   L=1      50.00    6962.755 uA   6762.1370 uA     +3.0 %           --         --
-  W=5    L=2       2.50     348.138 uA    380.7284 uA     -8.6 %           --         --
-  W=5    L=0.15   33.33    4641.837 uA   2644.1910 uA    +75.5 %           --         --
-  W=0.75 L=0.15    5.00     696.275 uA    364.9284 uA    +90.8 %           --         --
-  W=20   L=4       5.00     696.275 uA    798.0193 uA    -12.7 %           --         --
-```
+2. Read the header. Your one measured anchor is the Lab 03 device: W = 5 µm, L = 1 µm,
+   $V_{GS} = V_{DS}$ = 1.8 V, $I_D$ = 696.2755 µA.
 
-- **Try this:** cover the last two columns and read only `rule err`, top to bottom.
-- **What you should see:** the two rows where you changed only $W$ are within 3 %. The four
-  where you changed $L$ are out by 8 to 91 % — **positive every time you made $L$ shorter, and
-  negative every time you made it longer.**
-- **Why an engineer cares:** you now know which half of $W/L$ you may use in a hand
-  calculation and which half you may not. That is a more useful thing to know than either the
-  rule or its failure.
+3. For each of the six devices, write the current the $W/L$ rule predicts, in microamps, to one
+   decimal place. Don't run anything first, and don't go back and change a prediction once you've
+   seen the answer.
 
-### Step 2 — width, over a hundredfold range
+   ```
+   P1  W=10   L=1      =
+   P2  W=50   L=1      =
+   P3  W=5    L=2      =
+   P4  W=5    L=0.15   =
+   P5  W=0.75 L=0.15   =
+   P6  W=20   L=4      =
+   ```
 
-![The W ladder: measured current against the proportional-to-W line, and current per micron of width](../assets/img/ad103-w-ladder.png)
+4. Save the file.
 
-```
-   W (um)      I_D           I_D / W        W x I(W=1)     model vth
-   1         127.1470 uA  127.1470 uA/um     +0.00 %     615.2253 mV
-   2         269.4032 uA  134.7016 uA/um     -5.61 %     603.4546 mV
-   5         696.2755 uA  139.2551 uA/um     -8.69 %     589.4596 mV
-   10       1395.3200 uA  139.5320 uA/um     -8.88 %     576.6242 mV
-   20       2740.1490 uA  137.0075 uA/um     -7.20 %     564.0813 mV
-   50       6762.1370 uA  135.2427 uA/um     -5.99 %     556.5815 mV
-```
+**You should see** six numbers in `predictions.txt`. Leave it until Part 4.
 
-- **Try this:** on the left figure, the measured line and the prediction are almost on top of
-  each other. Look at the right one instead, which is the same data divided by $W$.
-- **What you should see:** current per micron of width is **not** a constant. It climbs 9.7 %
-  from $W$ = 1 to $W$ = 10, then falls 3.1 % again by $W$ = 50 — a broad hump. The model's
-  `vth` falls monotonically across the whole ladder, by 58.6438 mV.
-- **Why an engineer cares:** the direction is honest — a wider device has a lower threshold, so
-  it turns on harder — but a monotonic cause cannot on its own produce a non-monotonic effect.
-  Something else is moving the other way past $W$ = 10 µm and this course does not claim to
-  know what. What you can take away is the size: over a hundredfold range of width, "current is
-  proportional to $W$" is wrong by less than 10 %. Use it.
+## Part 2: Move the threshold
 
-### Step 3 — three ways to build "twice as wide", and two of them lie
+These two decks are in the Lab 03 package.
 
-```
-   A   W=5            696.2755 uA   1.0000 x A   the reference
-   B   W=10          1395.3200 uA   2.0040 x A   drawn twice as wide
-   C   W=5 + W=5     1392.5510 uA   2.0000 x A   two of A, wired in parallel
-   D   W=5 m=2       1392.5510 uA   2.0000 x A   ngspice's own multiplier
-   E   W=5 mult=2     696.2755 uA   1.0000 x A   the subckt's 'multiplier'
-   F   W=10 nf=2     1458.1360 uA   2.0942 x A   folded into two fingers
+1. Go to the Lab 03 folder and lift the source above the bulk:
 
-   A doubled by hand    1392.5510 uA
-```
+   ```bash
+   cd ../lab-03-mosfet-regions
+   make vth-body
+   ```
 
-- **Try this:** compare C and D against the last line, digit by digit.
-- **What you should see:** **1392.5510 against 1392.5510.** Two 5 µm transistors in parallel
-  carry exactly twice one of them, and so does `m=2`. Your prediction was not approximately
-  right; it was right.
-- **Why an engineer cares — three separate reasons, and this is the densest block in the lab:**
+   ```
+   == spice/vth_body.spice
+   --- vth and I_D vs V_SB, W = 5 um, L = 1 um, V_GS = 1.8 V, V_DS = 0.05 V ---
+   V_SB = 0 V
+   @m.xm1.msky130_fd_pr__nfet_01v8[vth] = 5.894596e-01
+   i(vds) = -6.63374e-05
+   ...
+   V_SB = 1.2 V
+   @m.xm1.msky130_fd_pr__nfet_01v8[vth] = 8.222507e-01
+   i(vds) = -5.15967e-05
+   --- and the same device, V_SB = 0, at three temperatures ---
+   T = -40 C
+   @m.xm1.msky130_fd_pr__nfet_01v8[vth] = 6.499250e-01
+   i(vds) = -9.38168e-05
+   ...
+   T = 125 C
+   @m.xm1.msky130_fd_pr__nfet_01v8[vth] = 5.010177e-01
+   i(vds) = -4.50650e-05
+   ```
 
-  **B is not two of A.** One 10 µm device carries 2.7690 µA more than two 5 µm ones,
-  +0.199 %. The model reports `vth` = 589.4596 mV for the 5 µm device and 576.6242 mV for the
-  10 µm one — 12.8354 mV apart, at identical bias and identical length. Width is inside the
-  model, not merely a multiplier in front of it. *"Twice as wide" and "two of them" are
-  different circuits.*
+   The rows marked `...` are in your terminal, and tabulated on
+   [What moves the threshold](guide/threshold-is-not-a-constant.md#body-effect).
 
-  **E is a silent lie.** The sky130 subcircuit declares a parameter called `mult` and then
-  never uses it — you can read that in
-  `/foss/pdks/sky130A/libs.tech/ngspice/sky130.lib.spice`, where the `.subckt` line
-  lists `mult = 1` and the device line inside carries no `m = {mult}`. So `mult=2` in a
-  hand-written deck is accepted, ignored, and never mentioned. `m=2` is the one that works.
-  XSchem's symbol writes `m=` for you whenever `mult` is not 1 — set `mult=2` in the property
-  editor and the device line comes out `... sd=0 mult=2 m=2`, and the current doubles. (At
-  `mult=1` the line ends `... sd=0 mult=1` with no `m=`, because there is nothing to multiply.)
-  That is why the schematic route gets this right and copying a device line by hand does not.
+2. Work out the threshold shift at each $V_{SB}$, relative to $V_{SB}$ = 0, and the drop in drain
+   current at $V_{SB}$ = 1.2 V. Check one row against the body-effect formula with
+   $\gamma$ = 0.4108 √V and $2\phi_F$ = 0.600 V.
 
-  **F is not in $W/L$ at all.** `nf=2` folds one 10 µm channel into two 5 µm fingers that share
-  a drain diffusion. Same $W$, same $L$, same bias, **+4.50 %**. That is a fact about the
-  layout, and [AD104](https://uoftasic.com/ad104/) is where you draw it.
+3. From the temperature block, work out the threshold's slope in mV/°C, and the change in current
+   from 27 °C to 125 °C. Predict the sign of the current change before you calculate it.
 
-> **A dead end, so you do not find it at midnight.** Do not push `nf` higher to see how far the
-> effect goes. `W=10 nf=5` aborts the entire run with
-> `Fatal: Drout = -1.76308 is negative` and
-> `doAnalyses: no such parameter on this device or parameter is missing` — a BSIM parameter
-> check failing inside a model bin, not a mistake you made. Two fingers is the demonstration.
+4. Measure the threshold at nine channel lengths:
 
-### Step 4 — length, which was never a clean $1/L$
+   ```bash
+   make vth-l
+   ```
 
-![The L ladder on log axes, and I_D times L, which 1/L says should be constant](../assets/img/ad103-l-ladder.png)
+   ```
+   == spice/vth_vs_l.spice
+      L        model vth
+      0.15 um    7.078517e-01 V
+      0.2 um     6.872240e-01 V
+      0.3 um     6.553824e-01 V
+      0.5 um     6.300670e-01 V
+      0.8 um     6.003750e-01 V
+      1 um       5.894596e-01 V
+      1.5 um     5.627056e-01 V
+      2 um       5.495175e-01 V
+      4 um       5.364102e-01 V
+   ```
 
-```
-   L (um)      I_D         I_D x L      vs 1/L from L=1   vth      vdsat
-   0.15     2644.1910 uA   396.6287        +75.55 %     707.44   351.92 mV
-   0.25     1818.6050 uA   454.6513        +53.14 %     658.63   426.29 mV
-   0.5      1196.0170 uA   598.0085        +16.43 %     626.23   628.45 mV
-   1         696.2755 uA   696.2755         +0.00 %     589.46   779.46 mV
-   2         380.7284 uA   761.4568         -8.56 %     549.52   912.45 mV
-   4         197.9738 uA   791.8952        -12.07 %     536.41  1001.27 mV
-```
+**You should see** a shift of **+232.791 mV** at $V_{SB}$ = 1.2 V with **22.2 %** less current, the
+formula within a fraction of a millivolt of the measurement, a slope of about **−0.9 mV/°C** with
+the hot device carrying **32.1 % less** current, and a threshold that *rises* by **171.44 mV** as
+the length shrinks from 4 µm to 0.15 µm. [What moves the threshold](guide/threshold-is-not-a-constant.md)
+explains each of these.
 
-- **Try this:** the $I_D \times L$ column is the test. If $1/L$ were the law, it would be one
-  number six times.
-- **What you should see:** it runs from **396.63 to 791.90 — it doubles.** And `vdsat`, the
-  model's own opinion of where saturation begins, runs from 351.92 mV to 1001.27 mV over the
-  same ladder, against overdrives of 1092.6 mV and 1263.6 mV.
-- **Why an engineer cares:** the 0.15 µm device stopped responding to its drain at a third of
-  the overdrive the square law assumed it would use. That is velocity saturation, and it is why
-  $1/L$ over-promises on every short device.
+## Part 3: Efficiency and intrinsic gain
 
-**Now close the gap, one effect at a time.** `make extract` does the arithmetic:
+1. Still in the Lab 03 folder, measure $g_m$ and $g_{ds}$ at four lengths and six gate voltages:
 
-```
-   Closing the L = 0.15 um gap, one effect at a time:
-     1/L alone                                   4641.837 uA
-     1/L, with each device's own vth and (V_ov)^2  3781.114 uA
-     measured                                    2644.191 uA
-   The threshold step closes 43.1 % of the gap.
-```
+   ```bash
+   make gm-ro
+   ```
 
-- **Why an engineer cares:** the threshold step is real, it is measurable, and it closes **less
-  than half**. No further arithmetic on `vth` reaches the rest, because the square law has no
-  term for a carrier speed limit. **This is where hand calculation stops and the simulator
-  starts**, and knowing exactly where that line falls is worth more than either tool alone.
+   The first block is four lengths at $V_{GS} = V_{DS}$ = 1.8 V; the first of them reads:
 
-### Step 5 — five devices, one ratio, five currents
+   ```
+   --- W = 5 um, V_GS = V_DS = 1.8 V, four channel lengths ---
+   L = 0.15 um
+   i(vda) = -2.64419e-03
+   @m.xma.msky130_fd_pr__nfet_01v8[gm] = 2.468806e-03
+   @m.xma.msky130_fd_pr__nfet_01v8[gds] = 2.787163e-04
+   ```
 
-![Five devices with W/L = 5, and what their area buys](../assets/img/ad103-same-ratio.png)
+   The second block steps the gate of the L = 1 µm device from 0.7 V to 1.8 V.
 
-```
-   W / L        I_D          gate area      cgg        I_D per um^2
-    0.75 / 0.15   364.9284 uA    0.1125 um^2     0.6427 fF    3243.81 uA/um^2
-     2.5 / 0.5    582.9524 uA    1.2500 um^2     7.6137 fF     466.36 uA/um^2
-       5 / 1      696.2755 uA    5.0000 um^2    30.5632 fF     139.26 uA/um^2
-      10 / 2      770.4110 uA   20.0000 um^2   121.0871 fF      38.52 uA/um^2
-      20 / 4      798.0193 uA   80.0000 um^2   484.1798 fF       9.98 uA/um^2
-```
+2. For each length, compute $r_o = 1/g_{ds}$ and the intrinsic gain $g_m r_o = g_m/g_{ds}$.
 
-- **Try this:** check the ratio in the first column. 0.75/0.15 = 5. 20/4 = 5. Every row is 5.
-- **What you should see:** **364.9284 µA to 798.0193 µA — a factor of 2.1868**, for identical
-  $W/L$ at identical bias. The biggest device buys 2.19× the current of the smallest for
-  **711× the gate area** and **753× the gate capacitance**. Per square micron of gate, the
-  small one is **325× more efficient.**
-- **Why an engineer cares:** area is money — a wafer costs what it costs and you are billed for
-  the square millimetres you occupy — and gate capacitance is time, because whatever drives
-  that gate has to charge it. So what does 711× the area actually buy? Read the same run's
-  `gds`:
+3. In the second block, compute $g_m/I_D$ at $V_{GS}$ = 0.7 V and at 1.8 V. Compare both with the
+   ceiling of 26.9 /V from [Transconductance and output resistance](guide/gm-and-ro.md).
 
-```
-     gds(0.75/0.15) =   38.855 uS  ->  r_o =   25.74 kohm
-     gds(20/4)      =    7.435 uS  ->  r_o =  134.50 kohm
-```
+**You should see** an intrinsic gain of **8.86** at L = 0.15 µm rising to **106.11** at L = 4 µm,
+even though $g_m$ falls by a factor of nine over the same range, and $g_m/I_D$ of **13.50 /V** at
+$V_{GS}$ = 0.7 V, about half the ceiling, against 1.31 /V wide open.
 
-  **5.23× the output resistance.** An amplifier's gain is $g_m r_o$, so that factor is the
-  entire reason an analog designer pays for a long channel, and its absence is the entire
-  reason a digital designer does not.
+## Part 4: Run the lab and score your predictions
 
-### Step 6 — read a FAIL you caused
+1. Go back to the Lab 04 folder and run the four decks:
 
-```bash
-make broken
-```
+   ```bash
+   cd ../lab-04-wl-knob
+   make
+   ```
 
-It copies your own W ladder, moves the $W$ = 10 µm current by 3 %, and hands that to the
-checker. Three percent is far too small to see by eye and quite large enough to be a wrong
-device.
+   ```
+   == spice/w_ladder.spice
+      wrote results/w_ladder.log
+   == spice/l_ladder.spice
+      wrote results/l_ladder.log
+   == spice/same_ratio.spice
+      wrote results/same_ratio.log
+   == spice/double_w.spice
+      wrote results/double_w.log
+   == checking
+     YOUR NUMBERS
+     ok  I_D  W=1  L=1                  127.1470 uA  (reference 127.1470)
+     ok  I_D  W=5  L=1                  696.2755 uA  (reference 696.2755)
+     ok  I_D  W=10 L=1                 1395.3200 uA  (reference 1395.3200)
+     ok  I_D  W=50 L=1                 6762.1370 uA  (reference 6762.1370)
+     ok  I_D  W=5  L=0.15              2644.1910 uA  (reference 2644.1910)
+     ok  I_D  W=5  L=4                  197.9738 uA  (reference 197.9738)
+     ok  I_D  W=0.75 L=0.15             364.9284 uA  (reference 364.9284)
+     ok  I_D  W=20 L=4                  798.0193 uA  (reference 798.0193)
+     ok  two W=5 in parallel           1392.5510 uA  (reference 1392.5510)
+     ok  vth(W=10) - vth(W=5)           -12.8354 mV  (reference -12.8354)
 
-- **What you should see:** one `XX` row among nine `ok` rows, naming the number, both values
-  and the percentage — then three causes in order of how often they happen, with a `grep` for
-  the first one.
-- **Why an engineer cares:** reading a `FAIL` is a skill, and the best time to practise it is
-  when you already know the answer.
+     2 x I_D(W=5)           =    1392.5510 uA
+     two W=5 in parallel    =    1392.5510 uA   (difference +0.000000 uA)
 
-## Expected results
+   PASS  all ten measured values match the reference run
+   ```
 
-```
-  YOUR NUMBERS
-  ok  I_D  W=1  L=1                  127.1470 uA  (reference 127.1470)
-  ok  I_D  W=5  L=1                  696.2755 uA  (reference 696.2755)
-  ok  I_D  W=10 L=1                 1395.3200 uA  (reference 1395.3200)
-  ok  I_D  W=50 L=1                 6762.1370 uA  (reference 6762.1370)
-  ok  I_D  W=5  L=0.15              2644.1910 uA  (reference 2644.1910)
-  ok  I_D  W=5  L=4                  197.9738 uA  (reference 197.9738)
-  ok  I_D  W=0.75 L=0.15             364.9284 uA  (reference 364.9284)
-  ok  I_D  W=20 L=4                  798.0193 uA  (reference 798.0193)
-  ok  two W=5 in parallel           1392.5510 uA  (reference 1392.5510)
-  ok  vth(W=10) - vth(W=5)           -12.8354 mV  (reference -12.8354)
+2. Score your predictions:
 
-  2 x I_D(W=5)           =    1392.5510 uA
-  two W=5 in parallel    =    1392.5510 uA   (difference +0.000000 uA)
+   ```bash
+   make predict
+   ```
 
-PASS  all ten measured values match the reference run
-```
+   ```
+     device            W/L    the W/L rule       measured       rule err   your guess    your err
+     ------------------------------------------------------------------------------------------------
+     W=10   L=1      10.00    1392.551 uA   1395.3200 uA     -0.2 %           --         --
+     W=50   L=1      50.00    6962.755 uA   6762.1370 uA     +3.0 %           --         --
+     W=5    L=2       2.50     348.138 uA    380.7284 uA     -8.6 %           --         --
+     W=5    L=0.15   33.33    4641.837 uA   2644.1910 uA    +75.5 %           --         --
+     W=0.75 L=0.15    5.00     696.275 uA    364.9284 uA    +90.8 %           --         --
+     W=20   L=4       5.00     696.275 uA    798.0193 uA    -12.7 %           --         --
+   ```
 
-## Scary but normal
+   Your own numbers appear in the last two columns. (If `make predict` says `predictions.txt
+   still has 6 blank(s)`, you didn't save the file in Part 1.)
+
+3. Cover the last two columns and read only `rule err`, top to bottom.
+
+**You should see** the two rows where only $W$ changed within 3 %, and the four where $L$ changed
+out by 8 to 91 %: **positive every time $L$ got shorter, negative every time it got longer.** That
+tells you which half of $W/L$ you may use in a hand calculation and which half you may not.
+
+## Part 5: Width
+
+1. Print every table this lab produces, with its working:
+
+   ```bash
+   make extract
+   ```
+
+2. Read block 1, the W ladder, and open `results/ad103-w-ladder.png`:
+
+   ![The W ladder: measured current against the proportional-to-W line, and current per micron of width](../assets/img/ad103-w-ladder.png)
+
+   ```
+      W (um)      I_D           I_D / W        W x I(W=1)     model vth
+      1         127.1470 uA  127.1470 uA/um     +0.00 %     615.2253 mV
+      2         269.4032 uA  134.7016 uA/um     -5.61 %     603.4546 mV
+      5         696.2755 uA  139.2551 uA/um     -8.69 %     589.4596 mV
+      10       1395.3200 uA  139.5320 uA/um     -8.88 %     576.6242 mV
+      20       2740.1490 uA  137.0075 uA/um     -7.20 %     564.0813 mV
+      50       6762.1370 uA  135.2427 uA/um     -5.99 %     556.5815 mV
+   ```
+
+   On the left plot the measurement and the proportional-to-$W$ line are almost on top of each
+   other. Look at the right one, the same data divided by $W$.
+
+3. Read block 2, six ways of asking for "twice as wide":
+
+   ```
+      A   W=5            696.2755 uA   1.0000 x A   the reference
+      B   W=10          1395.3200 uA   2.0040 x A   drawn twice as wide
+      C   W=5 + W=5     1392.5510 uA   2.0000 x A   two of A, wired in parallel
+      D   W=5 m=2       1392.5510 uA   2.0000 x A   ngspice's own multiplier
+      E   W=5 mult=2     696.2755 uA   1.0000 x A   the subckt's 'multiplier'
+      F   W=10 nf=2     1458.1360 uA   2.0942 x A   folded into two fingers
+
+      A doubled by hand    1392.5510 uA
+   ```
+
+   Compare C and D with the last line, digit by digit.
+
+**You should see** current per micron of width climb 9.7 % from $W$ = 1 to $W$ = 10 and then fall
+3.1 % by $W$ = 50, while the model's `vth` falls at every step of the ladder, by 58.6438 mV in all.
+Over a hundredfold range of width, "current is proportional to $W$" is wrong by less than 10 %, so
+use it. The direction of the `vth` trend makes sense (a wider device has a lower threshold, so it
+turns on harder), but a cause that only ever moves one way can't on its own produce a rise and
+then a fall. Something else moves the other way past $W$ = 10 µm, and this course doesn't claim to
+know what.
+
+In block 2, C and D match **1392.5510** to every digit. Two 5 µm transistors in parallel carry
+exactly twice one of them, and so does `m=2`. The other rows each teach something different:
+
+- **B is not two of A.** One 10 µm device carries 2.7690 µA (+0.199 %) more than two 5 µm ones.
+  The model reports `vth` = 589.4596 mV for the 5 µm device and 576.6242 mV for the 10 µm one,
+  12.8354 mV apart at identical bias and length. Width is inside the model, not just a multiplier
+  in front of it. "Twice as wide" and "two of them" are different circuits.
+- **E is silently ignored.** The SKY130 subcircuit declares a parameter called `mult` and never
+  uses it. You can see this in
+  `/foss/pdks/sky130A/libs.ref/sky130_fd_pr/spice/sky130_fd_pr__nfet_01v8__tt.pm3.spice`, where
+  the `.subckt`'s `.param` line lists `mult = 1` and the device line inside carries no
+  `m = {mult}`. So `mult=2` in a hand-written deck is accepted, ignored, and never mentioned;
+  `m=2` is the one that works. XSchem's symbol writes `m=` for you whenever `mult` isn't 1: set
+  `mult=2` in the property editor and the device line comes out `... sd=0 mult=2 m=2`, and the
+  current doubles. (At `mult=1` the line ends `... sd=0 mult=1` with no `m=`, because there is
+  nothing to multiply.) That is why drawing the schematic gets this right and copying a device line
+  by hand doesn't.
+- **F isn't in $W/L$ at all.** `nf=2` folds one 10 µm channel into two 5 µm fingers that share a
+  drain diffusion. Same $W$, same $L$, same bias, and **+4.50 %**. That is a fact about the layout,
+  and [AD104](https://uoftasic.com/ad104/) is where you draw it.
+
+> **Don't push `nf` higher to see how far the effect goes.** `W=10 nf=5` aborts the entire run
+> with `Fatal: Drout = -1.76308 is negative` and
+> `doAnalyses: no such parameter on this device or parameter is missing`. That is a BSIM parameter
+> check failing inside a model bin, not a mistake you made. Two fingers is enough to show the
+> effect.
+
+## Part 6: Length
+
+1. Read block 3 of `make extract`, the L ladder, and open `results/ad103-l-ladder.png`:
+
+   ![The L ladder on log axes, and I_D times L, which 1/L says should be constant](../assets/img/ad103-l-ladder.png)
+
+   ```
+      L (um)      I_D         I_D x L      vs 1/L from L=1   vth      vdsat
+      0.15     2644.1910 uA   396.6287        +75.55 %     707.44   351.92 mV
+      0.25     1818.6050 uA   454.6513        +53.14 %     658.63   426.29 mV
+      0.5      1196.0170 uA   598.0085        +16.43 %     626.23   628.45 mV
+      1         696.2755 uA   696.2755         +0.00 %     589.46   779.46 mV
+      2         380.7284 uA   761.4568         -8.56 %     549.52   912.45 mV
+      4         197.9738 uA   791.8952        -12.07 %     536.41  1001.27 mV
+   ```
+
+2. The $I_D \times L$ column is the test. If $1/L$ were the law, it would show one number six times.
+
+3. Compare `vdsat` with the overdrive $V_{GS} - V_{TH}$ for the shortest and longest devices
+   (1092.6 mV and 1263.6 mV).
+
+4. Read the end of the block, which closes the gap at L = 0.15 µm one effect at a time:
+
+   ```
+      Closing the L = 0.15 um gap, one effect at a time:
+        1/L alone                                   4641.837 uA
+        1/L, with each device's own vth and (V_ov)^2  3781.114 uA
+        measured                                    2644.191 uA
+      The threshold step closes 43.1 % of the gap.
+   ```
+
+**You should see** $I_D \times L$ run from **396.63 to 791.90**, so it doubles, and `vdsat` run from
+351.92 mV to 1001.27 mV. The 0.15 µm device stopped responding to its drain at a third of the
+overdrive the square law assumed. That is velocity saturation, and it is why $1/L$ over-promises on
+every short device. Correcting for each device's threshold closes **less than half** of the gap,
+and no further arithmetic on `vth` reaches the rest, because the square law has no term for a
+carrier speed limit. This is where hand calculation stops and the simulator takes over.
+
+## Part 7: Five devices, one ratio
+
+1. Read block 4 of `make extract`, and open `results/ad103-same-ratio.png`:
+
+   ![Five devices with W/L = 5, and what their area buys](../assets/img/ad103-same-ratio.png)
+
+   ```
+      W / L        I_D          gate area      cgg        I_D per um^2
+       0.75 / 0.15    364.9284 uA    0.1125 um^2     0.6427 fF    3243.81 uA/um^2
+        2.5 / 0.5     582.9524 uA    1.2500 um^2     7.6137 fF     466.36 uA/um^2
+          5 / 1       696.2755 uA    5.0000 um^2    30.5632 fF     139.26 uA/um^2
+         10 / 2       770.4110 uA   20.0000 um^2   121.0871 fF      38.52 uA/um^2
+         20 / 4       798.0193 uA   80.0000 um^2   484.1798 fF       9.98 uA/um^2
+   ```
+
+2. Check the ratio in the first column: 0.75/0.15 = 5, and 20/4 = 5. Every row is 5.
+
+3. Work out what the largest device buys over the smallest: the ratio of currents, of gate areas
+   and of gate capacitances.
+
+4. Read the two `gds` lines at the end of the block:
+
+   ```
+        gds(0.75/0.15) =   38.855 uS  ->  r_o =   25.74 kohm
+        gds(20/4)      =    7.435 uS  ->  r_o =  134.50 kohm
+   ```
+
+**You should see** **364.9284 µA to 798.0193 µA, a factor of 2.1868**, for identical $W/L$ at
+identical bias. The biggest device buys 2.19× the current of the smallest for **711× the gate
+area** and **753× the gate capacitance**; per square micron of gate, the small one is **325× more
+efficient**. Area is money, and gate capacitance is time, because whatever drives the gate has to
+charge it. What the area does buy is **5.23× the output resistance**. An amplifier's gain is
+$g_m r_o$, so that factor is the whole reason an analog designer pays for a long channel, and the
+reason a digital designer doesn't.
+
+## Part 8: Read a FAIL you caused
+
+1. Hand the checker a run that is 3 % wrong:
+
+   ```bash
+   make broken
+   ```
+
+   It copies your W ladder, moves the $W$ = 10 µm current by 3 %, and gives that to the checker.
+   Three percent is far too small to see by eye, and large enough to be a wrong device.
+
+   ```
+     XX  I_D  W=10 L=1                 1437.1800 uA  (reference 1395.3200)
+   ...
+   FAIL
+     - I_D  W=10 L=1: got 1437.1800, reference 1395.3200 (+3.00 %)
+
+     Three things cause this, in order of how often:
+      1. A unit suffix on W or L somewhere in spice/. They are plain
+         microns. Check with:  grep -n 'W=[0-9.]*[a-z]' spice/*.spice
+   ```
+
+2. Run `make` again to get back to `PASS`.
+
+**You should see** one `XX` row among nine `ok` rows, naming the number, both values and the
+percentage, followed by three causes in order of how often they happen, with a `grep` for the
+first one.
+
+## Finishing
+
+You're done when `make` prints `PASS  all ten measured values match the reference run`,
+`make predict` shows your six predictions next to the measurements, and you can answer:
+
+- Which half of $W/L$ can you trust in a hand calculation, and by roughly how much?
+- Why does one 10 µm device differ from two 5 µm devices in parallel?
+- Five devices with $W/L$ = 5: what does the largest one buy for its 711× area?
+
+There is nothing to submit.
+
+## Extensions
+
+Three, with reference answers in
+[`solutions/`](https://github.com/uoftasic/ad103/tree/main/labs/lab-04-wl-knob/solutions). Predict,
+then run, then read, in that order.
+
+1. **Widen further.** Add `W=100` to the W ladder, then `W=200`. One of them tells you where the
+   model ends, and the error it gives is one you have already met for a completely different
+   reason.
+2. **Repeat the ladder in PMOS.** Build the same ladder out of `pfet_01v8`. At $L$ = 1 µm the NMOS
+   carries **6.685×** the PMOS; the capstone measures the same ratio at $L$ = 0.15 µm and gets
+   **2.496**. The ratio between the two device types isn't a property of the process alone.
+3. **Lower the gate.** Re-run the L ladder at $V_{GS}$ = 0.9 V. If velocity saturation is really
+   what breaks $1/L$, the short-channel error should shrink, and it does, from +75.5 % to +29.5 %.
+   Then look at what happens at the long end.
+
+## Output that looks alarming but is normal
 
 Every run leaves a three-line `bsim4v5.out` in the lab folder:
 
@@ -275,31 +430,10 @@ Checking parameters for BSIM 4.5 model xf:sky130_fd_pr__nfet_01v8__model.5
 Warning: Eta0 = -0.0310679 is negative.
 ```
 
-`spice/double_w.spice` writes it, and `xf` is the `nf=2` device. BSIM's parameter checker dumps
-a file whenever a model card carries a value it wants to comment on, and SkyWater's
-`nfet_01v8` bin 5 has a negative `Eta0`, which is legal and deliberate. The run is unaffected
-and `make clean` removes it.
+`spice/double_w.spice` writes it, and `xf` is the `nf=2` device. BSIM's parameter checker writes
+this file whenever a model card carries a value it wants to comment on, and SkyWater's `nfet_01v8`
+bin 5 has a negative `Eta0`, which is legal and deliberate. The run is unaffected, and `make clean`
+removes the file.
 
-## Extensions
-
-Three, with reference answers in
-[`solutions/`](https://github.com/uoftasic/ad103/tree/main/labs/lab-04-wl-knob/solutions).
-Predict, then run, then read — in that order.
-
-1. Add `W=100` to the W ladder, then `W=200`. One of them tells you where the model ends, and
-   the error it gives you is one you have already met for a completely different reason.
-2. Build the same ladder out of `pfet_01v8`. At $L$ = 1 µm the NMOS carries **6.685×** the
-   PMOS; the capstone measures the same ratio at $L$ = 0.15 µm and gets **2.496**. The ratio
-   between the two device types is not a property of the process.
-3. Re-run the L ladder at $V_{GS}$ = 0.9 V. If velocity saturation is really what breaks
-   $1/L$, the short-channel error should shrink — and it does, from +75.5 % to +29.5 %. Then
-   look at what happened to the long end.
-
-## Links
-
-- [Lab package](https://github.com/uoftasic/ad103/tree/main/labs/lab-04-wl-knob)
-- [Reference answers](https://github.com/uoftasic/ad103/tree/main/labs/lab-04-wl-knob/solutions)
-- Guide: [W and L are a choice](guide/w-and-l-are-a-choice.md) ·
-  [Where saturation starts](guide/where-saturation-starts.md) ·
-  [Transconductance and output resistance](guide/gm-and-ro.md)
-- Next: [Capstone — The CMOS inverter](labs/capstone-inverter-overview.md)
+Next on the [Course path](README.md#course-path): read
+[The CMOS inverter](guide/the-inverter-is-an-amplifier.md).
