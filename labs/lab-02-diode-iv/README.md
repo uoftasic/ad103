@@ -1,8 +1,8 @@
 # AD103 Lab 02 — The diode I–V curve
 
-Runnable package. The writeup that goes with it is
-[`docs/labs/lab-02-diode-iv-overview.md`](../../docs/labs/lab-02-diode-iv-overview.md),
-published at <https://uoftasic.com/ad103/#/labs/lab-02-diode-iv-overview>.
+Writeup: [`docs/labs/lab-02-diode-iv-overview.md`](../../docs/labs/lab-02-diode-iv-overview.md),
+published at <https://uoftasic.com/ad103/#/labs/lab-02-diode-iv-overview>. The steps and expected
+output are there; this file is a quick reference.
 
 ## Run it
 
@@ -13,25 +13,26 @@ cd labs/lab-02-diode-iv
 make
 ```
 
-About six seconds, and it ends in `PASS` or `FAIL`. **No environment setup is required** — not
-`.designinit`, not `mod`, not `PDK`. The decks find the models through `PDK_ROOT`, which the
-image already sets to `/foss/pdks`, and the `Makefile` pins it anyway. The XSchem bench in
-`xschem/` resolves its symbols through `PDK`, so `xschem/xschemrc` pins that to `sky130A`
-itself; on the image's default IHP process the same bench would netlist to
-`D1 - diode IS MISSING !!!!` and simulate a column of zeros without complaining.
+It takes about 25 seconds and ends in `PASS` or `FAIL`. No environment setup is required: no
+`.designinit`, no `mod`, no `PDK`. The decks find the models through `PDK_ROOT`, which the image
+already sets to `/foss/pdks`, and the `Makefile` sets it anyway. The XSchem bench in `xschem/`
+resolves its symbols through `PDK`, so `xschem/xschemrc` sets that to `sky130A` itself.
+
+## Targets
 
 | Target | What it does |
 |---|---|
 | `make` | DC sweep + additivity test + three plots + verdict |
 | `make sweep` | just the 1901-point DC sweep |
+| `make line` | print the additivity test again |
 | `make plots` | just the plots, from `results/diode_iv.txt` |
-| `make area` | what junction area buys you, and three silent unit traps |
+| `make area` | what junction area buys you, and three silent unit mistakes |
 | `make floor` | what the flat reverse line on the log plot really is |
 | `make op` | one resistor and one diode in series, three times |
 | `make broken` | hands the checker a 5 %-wrong sweep, on purpose |
 | `make clean` | delete `results/` |
 
-## What is in here
+## Files
 
 ```
 spice/diode_iv.spice        the DC sweep: -1.000 V to +0.900 V, 1 mV steps
@@ -43,23 +44,11 @@ src/iv.py                   reading and fitting helpers, shared by the two scrip
 src/plot_iv.py              draws the three figures and prints every number on them
 src/check.py                the verdict
 src/bend_it.py              makes the deliberately wrong sweep for `make broken`
+xschem/diode_tb.sch         the same bench as spice/diode_iv.spice, drawn
+xschem/xschemrc             project-local XSchem config; sets PDK=sky130A for this bench
 ```
 
-Every deck loads `sky130.lib.spice`, the pre-flattened typical corner. It gives a
-**byte-identical** sweep to the unflattened `sky130.lib.spice` and reads about 30× faster —
-2.4 s instead of 74 s, per deck, per run.
+Every deck loads the typical corner with `.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice tt`.
 
-## The two numbers this lab exists to produce
-
-| | measured here | SkyWater's model card |
-|---|---|---|
-| ideality factor $n$ | **1.29351** | `n = 1.2928` |
-| series resistance | **979.1 Ω** | `rs = 981` |
-
-Both were extracted from the shape of a graph, not read off the card.
-
-## Units, once
-
-`area` is in **square microns**, `perim` is in **microns**, and neither takes a unit suffix —
-the same rule as `W` and `L` on a MOSFET. `area=1 perim=4` is a 1 µm × 1 µm junction.
-`area=1u` is a millionth of a square micron and ngspice will simulate it without complaint.
+`area` is in square microns and `perim` in microns, and neither takes a unit suffix:
+`area=1 perim=4` is a 1 µm × 1 µm junction.
