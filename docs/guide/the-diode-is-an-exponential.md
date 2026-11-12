@@ -264,7 +264,7 @@ slope shows it taking over (annotations added here):
    0.850  6.2443e-05      217.80     <- mostly a resistor now
 ```
 
-## Current sets the voltage
+## Driving a diode with a current
 
 Everything above says a diode's *voltage* is set by its current, not the other way round. That
 inversion is the hardest habit to build, because for two years you've treated a component as

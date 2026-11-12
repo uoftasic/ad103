@@ -78,7 +78,7 @@ across a whole volt of overdrive, where it isn't, and is 12 % out.
 For the rest of this course, **$V_{TH} = 0.6016$ V** for this device, because that is what the
 linear extrapolation gives, and every prediction below is checked against it.
 
-## The knee comes early
+## The measured knee
 
 Take the five output curves and find where each one stops rising. Lab 03's `src/mosfit.py` uses one
 explicit rule and says so: **the knee is the first $V_{DS}$ at which the slope has fallen to 10 % of
@@ -132,7 +132,7 @@ Two consequences you'll use constantly:
 > square law before your arithmetic. Simulate, and use the hand calculation for *direction*
 > ("wider means more current") and the simulator for *magnitude*.
 
-## The saturation region slopes upward
+## Channel-length modulation
 
 The right-hand end of the $V_{GS} = 1.8$ V curve isn't horizontal. It rises from **682.502 µA** at
 $V_{DS} = 1.2$ V to **696.275 µA** at 1.8 V: 2.0 % more current for 0.6 V more drain.

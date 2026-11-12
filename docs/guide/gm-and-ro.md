@@ -124,7 +124,7 @@ amplifier, 5 for something that has to be fast) and let the geometry follow from
 $g_m$ tells you how much signal current you get. To turn current back into voltage you have to
 push it through a resistance, and the largest one available is the transistor's own $r_o$: the
 slope of the "flat" saturation region that
-[Where saturation starts](guide/where-saturation-starts.md#the-saturation-region-slopes-upward)
+[Where saturation starts](guide/where-saturation-starts.md#channel-length-modulation)
 showed isn't flat.
 
 Multiply the two and the current cancels:

@@ -182,7 +182,7 @@ isn't the threshold voltage of either device (769.27 mV and 510.03 mV) or their 
 input at which the two currents are equal. It is the first parameter in this course that belongs to
 a circuit rather than to a transistor.
 
-## Part 4: Fix it, and be wrong again
+## Part 4: Size the PMOS from the drive ratio
 
 1. Read block 1 of `make extract`, the drive of each transistor on its own:
 
@@ -299,7 +299,7 @@ $V_{in}$ = 0.891 V, where both are on at once and current runs straight from `vd
 no useful work. That is why CMOS replaced everything before it, and why a processor gets hot when it
 computes and cool when it idles.
 
-## Part 8: A wiring mistake that doesn't announce itself
+## Part 8: A silent wiring mistake
 
 1. Run the broken deck:
 

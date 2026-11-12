@@ -270,7 +270,7 @@ $r_s$ = 979.1 Ω against `rs = 981`. You extracted two foundry parameters from t
 digits. The plot was drawn from the sweep; `op` solved a different circuit. This is what "bias
 point" means in practice, and it is the first step in designing anything analog.
 
-## Part 6: Find out what the reverse floor is
+## Part 6: The reverse floor
 
 1. Measure the reverse current twice, with two simulator settings:
 
@@ -302,7 +302,7 @@ you had reported "this diode leaks 1 pA", you would have been reporting ngspice'
 the silicon. [The diode equation](guide/the-diode-is-an-exponential.md#the-bottom-of-the-curve-gmin)
 works through the rest of the arithmetic.
 
-## Part 7: Junction area, and three silent size mistakes
+## Part 7: Junction area and size mistakes
 
 1. Run the area deck:
 

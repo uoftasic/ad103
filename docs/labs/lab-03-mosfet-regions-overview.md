@@ -143,7 +143,7 @@ hit; at 1.8 V it lands at **0.89 V** against a predicted 1.198 V, 34 % low. The 
 below $V_{GS} - V_{TH}$ at every gate voltage. With the gate at 0 V the device still passes
 **2.1853 pA**.
 
-## Part 4: The region your textbook deleted
+## Part 4: Subthreshold conduction
 
 1. Write down what you predicted for $I_D$ at $V_{GS}$ = 0.30 V when you read
    [The four regions](guide/four-regions-not-three.md).
