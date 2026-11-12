@@ -1,11 +1,11 @@
-# Lab 03 — The regions of a MOSFET
+# Lab 03 — MOSFET regions
 
-Writeup: [uoftasic.com/ad103 → Lab 03](https://uoftasic.com/ad103/#/labs/lab-03-mosfet-regions-overview)
+Writeup: [uoftasic.com/ad103 → Lab 03](https://uoftasic.com/ad103/#/labs/lab-03-mosfet-regions-overview).
+The steps, expected output and explanations are there; this file is a quick reference.
 
-Five ngspice sweeps of a SKY130 `nfet_01v8`, a plotting script, and a set of
-parameter extractions that turn those sweeps into $V_{TH}$, $g_m$, a subthreshold
-slope and a knee voltage — each one arithmetic on your own data, none of them
-quoted from a datasheet.
+Five ngspice sweeps of a SKY130 `nfet_01v8`, a plotting script, and extractions that turn those
+sweeps into $V_{TH}$, $g_m$, a subthreshold slope and a knee voltage. Lab 04 also runs three of the
+targets here (`vth-body`, `vth-l`, `gm-ro`).
 
 ## Run it
 
@@ -14,34 +14,10 @@ cd labs/lab-03-mosfet-regions
 make
 ```
 
-No environment setup needed. The `Makefile` pins `PDK=sky130A` itself, so this
-runs in a bare container even if `.designinit` failed you.
-
-Expected, in **13–22 seconds** (five timed runs on the reference machine):
+No environment setup is needed. The `Makefile` sets `PDK=sky130A` itself, so this runs in a bare
+container even if `.designinit` failed. It takes about 50 seconds and ends with:
 
 ```
-== sweeping spice/id_vds.spice
-   wrote results/id_vds.txt
-== sweeping spice/id_vgs.spice
-   wrote results/id_vgs.txt
-== sweeping spice/id_vgs_log.spice
-   wrote results/id_vgs_log.txt
-== sweeping spice/wl_sweep.spice
-   wrote results/wl_sweep.txt
-== operating point   spice/op_params.spice
-   wrote results/op_params.log
-== checking
-  YOUR NUMBERS
-  ok  I_D  from id_vds.txt, V_GS=1.8 V     696.2755 uA      (reference 696.2750)
-  ok  I_D  W=5 L=1, V_GS=V_DS=1.8 V        696.2755 uA      (reference 696.2750)
-  ok  I_D  W=10 L=1, same bias            1395.3199 uA      (reference 1395.3200)
-  ok  I_D  W=5 L=2, same bias              380.7284 uA      (reference 380.7280)
-  ok  I_D  W=1 L=0.15, same bias           501.0462 uA      (reference 501.0460)
-  ok  V_TH by linear extrapolation           0.6016 V       (reference 0.6016)
-  ok  V_TH by sqrt(I_D) extrapolation        0.5159 V       (reference 0.5159)
-  ok  g_m at V_GS = 1.8 V                  914.6500 uS      (reference 914.6500)
-  ok  subthreshold slope                    85.5629 mV/dec  (reference 85.6000)
-
 PASS  all nine extracted parameters match the reference run
 ```
 
@@ -53,30 +29,35 @@ PASS  all nine extracted parameters match the reference run
 | `make curves` | just the four ngspice sweeps → `results/*.txt` |
 | `make op` | just the operating-point parameter dump → `results/op_params.log` |
 | `make extract` | print every parameter this lab teaches, with its working |
-| `make figures` | redraw the six plots and the channel cross-sections |
+| `make figures` | redraw the six plots and the channel cross-sections into `results/` |
 | `make vth-l` | the model's `vth` at nine channel lengths |
+| `make vth-body` | the model's `vth` at five source-to-bulk voltages, and at three temperatures |
+| `make gm-ro` | $g_m$, $g_{ds}$ and the gain one transistor can give, at four lengths and six gate voltages |
 | `make netlist` | netlist `xschem/nmos_curves.sch`, and warn about unconnected pins |
-| `make wrong-units` | the same circuit with `W` and `L` in metres — **fails on purpose** |
+| `make wrong-units` | the same circuit with `W` and `L` written in metres; **fails on purpose** |
 | `make clean` | delete `results/` and `xschem/simulation/` |
 
 ## Files
 
 | Path | What it is |
 |---|---|
-| `spice/id_vds.spice` | $I_D$ vs $V_{DS}$, five gate voltages. The output characteristic |
-| `spice/id_vgs.spice` | $I_D$ vs $V_{GS}$ at $V_{DS}$ = 0.05 V and 1.8 V. The transfer characteristic |
+| `spice/id_vds.spice` | $I_D$ vs $V_{DS}$, five gate voltages: the output characteristic |
+| `spice/id_vgs.spice` | $I_D$ vs $V_{GS}$ at $V_{DS}$ = 0.05 V and 1.8 V: the transfer characteristic |
 | `spice/id_vgs_log.spice` | the same saturation sweep, for reading on a log axis |
-| `spice/wl_sweep.spice` | four geometries at one bias — the $W/L$ knob |
-| `spice/op_params.spice` | what BSIM itself thinks `vth`, `vdsat`, `gm` and `gds` are |
+| `spice/wl_sweep.spice` | four geometries at one bias |
+| `spice/op_params.spice` | what BSIM itself reports for `vth`, `vdsat`, `gm` and `gds` |
 | `spice/vth_vs_l.spice` | `vth` at nine channel lengths, at low $V_{DS}$ |
-| `spice/id_vds_wrong_units.spice` | identical to `id_vds.spice` except `L=1u W=5u`. The trap |
+| `spice/vth_body.spice` | `vth` and $I_D$ with the source lifted above the bulk, and at three temperatures |
+| `spice/gm_ro.spice` | `gm` and `gds` at four lengths, and at six gate voltages for L = 1 µm |
+| `spice/id_vds_wrong_units.spice` | identical to `id_vds.spice` except `L=1u W=5u` |
 | `src/mosfit.py` | reads `wrdata` files; the three extraction functions |
 | `src/extract.py` | prints every parameter, showing its working |
 | `src/plot_curves.py` | the six figures on the guide pages |
 | `src/channel_picture.py` | the four channel cross-sections |
-| `src/check.py` | recomputes eight numbers and prints `PASS` or `FAIL` with a reason |
-| `xschem/nmos_curves.sch` | the same curve tracer, drawn |
+| `src/check.py` | recomputes the extracted numbers and prints `PASS` or `FAIL` with a reason |
+| `xschem/nmos_curves.sch` | the same curve tracer as `id_vds.spice`, drawn |
 | `xschem/xschemrc` | project-local XSchem config: SKY130 symbols, netlists into `simulation/` |
+| `solutions/` | reference answers to the three extensions in the writeup |
 
 ## The drawn version
 
@@ -87,53 +68,25 @@ cd xschem
 PDK=sky130A xschem nmos_curves.sch &
 ```
 
-**Netlist & Simulate** is a green launcher arrow drawn on the canvas, not a toolbar
-button. A plain left-click only selects it and nothing happens. **Click it once, then
-press `Ctrl-H`.** Then run `python3 src/check.py` from the lab folder. It should still
-say `PASS`: the schematic writes into the same `results/id_vds.txt` the deck does.
+Select the green **Netlist & Simulate** launcher arrow with one click, then press `Ctrl-H`. Then
+run `python3 src/check.py` from the lab folder; it should still say `PASS`.
 
-**One honest discrepancy.** The schematic's device line comes out as
+The schematic's device line comes out as
 
 ```
 XM1 d g 0 0 sky130_fd_pr__nfet_01v8 L=1 W=5 nf=1 ad=1.45 as=1.45 pd=10.58 ps=10.58 nrd=0.058 nrs=0.058 sa=0 sb=0 sd=0 mult=1
 ```
 
-while `spice/id_vds.spice` says only `L=1 W=5 nf=1 m=1`. The XSchem symbol
-computes the source/drain diffusion geometry from `W` and passes it on;
-`nrd`/`nrs` are diffusion resistances in squares, and they put a little series
-resistance in the path. The result is **696.226 µA** from the schematic against
-**696.275 µA** from the hand deck — 0.007 % apart, well inside `check.py`'s
-tolerance. It is not a rounding artefact; it is a real 50 nA, and it is the
-first time in this course that the *layout* of a device shows up in its
-*electrical* answer. AD104 is where that stops being a footnote.
+while `spice/id_vds.spice` says only `L=1 W=5 nf=1 m=1`. The XSchem symbol computes the
+source/drain diffusion geometry from `W`; `nrd` and `nrs` are diffusion resistances in squares, and
+they add a little series resistance. The result is **696.226 µA** from the schematic against
+**696.275 µA** from the hand deck, 0.007 % apart and well inside `check.py`'s tolerance.
 
-## What to change
+## Reference number
 
-The decks work. That is the starting line, not the finish. Three things worth
-doing, in rising order of interest — see
-[`solutions/`](solutions/README.md) once you have tried them.
-
-1. Add a $V_{GS} = 1.05$ V curve to `id_vds.spice`. Four edits, and it tells you
-   whether you understood how the five columns get written. Nothing in `src/`
-   hard-codes "five curves": `extract.py` reads the gate list back out of the
-   deck, so a correct edit grows the first table a sixth row — **131.053 µA at
-   $V_{GS}$ = 1.05 V** — in its right place, and `make` still says `PASS`.
-2. Do the whole thing for `pfet_01v8` and find out how much of this page is
-   about *n*-channel devices specifically.
-3. Set device D in `wl_sweep.spice` to `L=0.5` and watch `vth`, `vdsat` and
-   $I_D$ move together.
-
-## The one number to know
-
-**696.275 µA** — a SKY130 `nfet_01v8`, W = 5 µm, L = 1 µm, with $V_{GS} = V_{DS}
-= 1.8$ V. Every prediction on the AD103 MOSFET pages is checked against it.
-
-**And the number next door.** The same device, same corner, same $V_{DS}$, with
-the gate at **1.5 V** instead of 1.8 V draws **436.080 µA**. That is the row
-directly above 696.275 in `make extract`'s first table, and the two are not in
-tension — they are two points on one curve, 300 mV apart. If you ever see
-436.080 µA printed under a **1.80 V** label, the *label* is wrong and the
-current is fine: some tool has paired a hard-coded list of gate voltages against
-a column count that changed. Nothing here does that any more — the first line of
-`make check` reads `results/id_vds.txt`, and `extract.py` gets its labels from
-`spice/id_vds.spice` rather than assuming.
+**696.275 µA**: a SKY130 `nfet_01v8`, W = 5 µm, L = 1 µm, with $V_{GS} = V_{DS} = 1.8$ V. The
+MOSFET pages check their predictions against it. The row directly above it in `make extract`'s
+first table, **436.080 µA**, is the same device with the gate at 1.5 V. If you ever see 436.080 µA
+printed under a **1.80 V** label, the label is wrong, not the current: some tool has paired a
+hard-coded list of gate voltages with a column count that changed. Nothing here does that;
+`extract.py` reads its labels from `spice/id_vds.spice`.

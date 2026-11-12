@@ -1,32 +1,41 @@
 # Survival-card decks
 
 The five decks printed on
-[`docs/reference/ngspice-errors.md`](../../docs/reference/ngspice-errors.md) — the
-ngspice survival card. Every number on that page comes out of this directory, and
-`make` checks each one, so the page cannot drift away from what ngspice actually does.
+[`docs/reference/ngspice-errors.md`](../../docs/reference/ngspice-errors.md), the ngspice survival
+card. Every number on that page comes out of this directory, and `make` checks each one, so the page
+can't drift away from what ngspice actually does.
 
-This is not a lab. There is nothing to design and nothing to hand in. It exists so
-that no page in AD103 ever tells you to retype a deck.
+This is not a lab. There is nothing to design and nothing to hand in. It exists so that no page in
+AD103 ever asks you to retype a deck.
 
 ```bash
 cd labs/survival-card
-make            # all five decks and a verdict, about 14 seconds
+make            # all five decks and a verdict, about 50 seconds
 ```
 
-Runs in a bare `hpretl/iic-osic-tools:2026.08` container with no environment setup.
+It runs in a bare `hpretl/iic-osic-tools:2026.08` container with no environment setup.
+
+| Command | What it does |
+|---|---|
+| `make` | run all five decks and print a verdict |
+| `make dc` | `.dc`: sweep a source |
+| `make tran` | `.tran`: the time domain |
+| `make ac` | `.ac`: the frequency domain |
+| `make parts` | the R and the C on their own, so the arithmetic can close |
+| `make clean` | delete `results/` |
 
 ## Files
 
 | File | The page section it belongs to |
 |---|---|
-| `spice/dc_id_vgs.spice` | **2. `.dc`** — sweep a source. 181 rows, three `meas` lines |
-| `spice/dc_family.spice` | **2. `.dc`** — a second, outer sweep: 905 rows in *one* vector |
-| `spice/tran_rc.spice` | **3. `.tran`** — an RC charging, and the 1 ns edge you must subtract |
-| `spice/ac_rc.spice` | **4. `.ac`** — the same RC in frequency |
-| `spice/rc_parts.spice` | **"The two analyses have to agree"** — the $R$ and the $C$ on their own |
-| `src/check.py` | The verdict, plus the three-way $R$ / $C$ / $\tau$ closure |
+| `spice/dc_id_vgs.spice` | **2. `.dc`**: sweep a source. 181 rows, three `meas` lines |
+| `spice/dc_family.spice` | **2. `.dc`**: a second, outer sweep, 905 rows in *one* vector |
+| `spice/tran_rc.spice` | **3. `.tran`**: an RC charging, and the 1 ns edge you must subtract |
+| `spice/ac_rc.spice` | **4. `.ac`**: the same RC in frequency |
+| `spice/rc_parts.spice` | **"The two analyses have to agree"**: the $R$ and the $C$ on their own |
+| `src/check.py` | the verdict, plus the three-way $R$ / $C$ / $\tau$ check |
 
-The `.op` deck from section 1 is not duplicated here — it is
+The `.op` deck from section 1 isn't duplicated here. It is
 [`labs/lab-01-first-schematic/spice/nmos_op.spice`](../lab-01-first-schematic/spice/nmos_op.spice),
 which you have already run.
 
@@ -54,7 +63,6 @@ which you have already run.
 PASS  every number on the survival card reproduces
 ```
 
-That last block is the habit the page is really teaching: **whenever you have an RC,
-you have three numbers and any two of them give you the third for free.** Two
-analyses and one hand calculation agreeing to four figures is what "the deck is
-right" looks like.
+The last block is the habit the page teaches: **whenever you have an RC, you have three numbers,
+and any two of them give you the third.** Two analyses and one hand calculation agreeing to four
+figures is what a correct deck looks like.
