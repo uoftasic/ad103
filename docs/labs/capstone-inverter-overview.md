@@ -45,6 +45,8 @@ $$
 
 ## Part 1: Run the reference decks
 
+Does your workbench reproduce the reference inverter?
+
 1. Run the five decks and the checker:
 
    ```bash
@@ -92,6 +94,8 @@ $$
 
 ## Part 2: Draw the inverter
 
+Can you draw an inverter that behaves exactly like the shipped deck?
+
 1. Open your scaffold:
 
    ```bash
@@ -122,6 +126,10 @@ $$
 
    Read what it says about the PMOS body, then fix the wire, save, and run `make mine` again.
 
+   `make mine` checks the things a first inverter usually gets wrong (a missing device, a unit
+   suffix on `W`, an invented `net7` where a wire didn't land, the PMOS body left on ground) and
+   reports each in words.
+
 5. When it passes, compare your switching threshold with the reference.
 
 **You should see**, once the wiring is right:
@@ -139,13 +147,11 @@ PASS  Wn = Wp = 1 um, and your V_M is 0.838029 V against the
       shipped deck describes, and it behaves identically.
 ```
 
-**0.838029 against 0.838027: two microvolts.** Your drawing and the hand-written deck in
-`spice/vtc.spice` are the same circuit, and now you have proof. Every schematic you draw is a claim
-about a netlist, and this is the habit that checks the claim.
+Your 0.838029 V against the deck's 0.838027 V is two microvolts. Your drawing and the hand-written
+deck in `spice/vtc.spice` are the same circuit, and now you have proof. Every schematic you draw is
+a claim about a netlist, and comparing it against a known deck is how you check the claim.
 
-`make mine` checks the things a first inverter usually gets wrong (a missing device, a unit suffix
-on `W`, an invented `net7` where a wire didn't land, the PMOS body left on ground) and reports each
-in words. Here is the finished version, to compare against once yours works:
+Here is the finished version, to compare against once yours works:
 
 ![xschem/inverter.sch — the completed capstone schematic](../assets/img/ad103-xschem-inverter.png)
 
@@ -153,6 +159,8 @@ in words. Here is the finished version, to compare against once yours works:
 and the `.control` block ride along in two `code_shown` symbols.*
 
 ## Part 3: The switching threshold
+
+Where does an inverter with $W_n = W_p$ switch?
 
 1. Before you look, write down where you think an inverter with $W_n = W_p$ switches. There is only
    one plausible guess.
@@ -179,13 +187,23 @@ and the `.control` block ride along in two `code_shown` symbols.*
    right-hand plot. Between them the gate amplifies noise instead of rejecting it, and the noise
    margins are what is left on either side.
 
-**You should see** $V_M$ = **0.838027 V**, not 0.900 V: **62.0 mV low**. The pull-down is the
-stronger device, so it takes less input voltage than you'd expect to drag the output down. $V_M$
-isn't the threshold voltage of either device (769.27 mV and 510.03 mV) or their average; it is the
-input at which the two currents are equal. It is the first parameter in this course that belongs to
-a circuit rather than to a transistor.
+**You should see** $V_M$ = **0.838027 V**, not 0.900 V: **62.0 mV low**.
+
+Why does the $W_n = W_p$ inverter switch below $V_{DD}/2$?
+
+<details>
+<summary>Answer</summary>
+
+The pull-down is the stronger device, so it takes less input voltage than you'd expect to drag the
+output down. $V_M$ isn't the threshold voltage of either device (769.27 mV and 510.03 mV) or their
+average; it is the input at which the two currents are equal. It is the first parameter in this
+course that belongs to a circuit rather than to a transistor.
+
+</details>
 
 ## Part 4: Size the PMOS from the drive ratio
+
+If you widen the PMOS by the drive ratio, does $V_M$ land at 0.9 V?
 
 1. Read block 1 of `make extract`, the drive of each transistor on its own:
 
@@ -214,12 +232,23 @@ a circuit rather than to a transistor.
    ```
 
 **You should see** **0.882739 V** for $W_p$ = 2.5 µm: 17.3 mV out instead of 62.0, so better, but
-still off. The condition you satisfied isn't the one $V_M$ imposes. At $V_M$ the NMOS has
-$V_{GS} = V_M$ and the PMOS has $V_{SG} = 1.8 - V_M$; **neither device is at 1.8 V**. You matched the
-currents at full drive, and the crossing doesn't happen at full drive. The sweep finds the width
-that does centre it: **3.5 µm, giving $V_M$ = 0.899865 V**, 0.13 mV from the middle.
+still off. The width that does centre it is **3.5 µm, giving $V_M$ = 0.899865 V**, 0.13 mV from the
+middle.
+
+Why didn't matching the drive ratio centre $V_M$?
+
+<details>
+<summary>Answer</summary>
+
+The condition you satisfied isn't the one $V_M$ imposes. At $V_M$ the NMOS has $V_{GS} = V_M$ and
+the PMOS has $V_{SG} = 1.8 - V_M$; **neither device is at 1.8 V**. You matched the currents at full
+drive, and the crossing doesn't happen at full drive.
+
+</details>
 
 ## Part 5: Time the three inverters
+
+Which pull-up width gives equal rise and fall delays?
 
 1. Before you read it, guess which of the three inverters ($W_p$ = 1, 2.5 and 3.5 µm) has the most
    equal pair of delays.
@@ -236,11 +265,16 @@ that does centre it: **3.5 µm, giving $V_M$ = 0.899865 V**, 0.13 mV from the mi
 
 **You should see** the $W_p$ = 2.5 µm inverter with the most equal pair: **30.2508 ps down against
 30.7067 ps up, 1.5 % apart.** The $W_p$ = 3.5 µm inverter, the one with the centred threshold,
-rises 24 % faster than it falls. Delay is charge over current, with the same 10 fF load and the
-same 0.9 V swing, so **making the two saturation currents equal is exactly what makes the two
-delays equal.**
+rises 24 % faster than it falls.
 
-So the two sizings aren't a right answer and a wrong one:
+Why does the drive-ratio width equalise the delays, when it didn't centre $V_M$?
+
+<details>
+<summary>Answer</summary>
+
+Delay is charge over current, with the same 10 fF load and the same 0.9 V swing, so making the two
+saturation currents equal is exactly what makes the two delays equal. The two sizings aren't a
+right answer and a wrong one:
 
 | you want | set $W_p$ to | because |
 |---|---|---|
@@ -250,21 +284,21 @@ So the two sizings aren't a right answer and a wrong one:
 Your Part 4 prediction was the right answer to a question Part 4 wasn't asking, which is the most
 common way an engineering calculation goes wrong.
 
-One more thing in that table: $t_{pHL}$ **rises** from 27.70 to 31.78 ps as the pull-up gets wider,
-although nothing about the pull-down changed. A wider PMOS is still partly on while the NMOS pulls
-down, and it fights it.
+</details>
 
-> **What a real library does: neither.** `sky130_fd_sc_hd__inv_1`, the inverter LibreLane puts in
-> your digital designs, is $W_n$ = 0.65 µm, $W_p$ = 1.0 µm, a ratio of **1.54**. You can read it
-> yourself:
-> ```bash
-> grep -A3 'subckt sky130_fd_sc_hd__inv_1 ' \
->   /foss/pdks/sky130A/libs.ref/sky130_fd_sc_hd/spice/sky130_fd_sc_hd.spice
-> ```
-> It switches at **0.790872 V**, 109 mV below centre, on purpose. Why is the first extension in
-> [`solutions/`](https://github.com/uoftasic/ad103/tree/main/labs/capstone-inverter/solutions).
+In the same table, $t_{pHL}$ rises from 27.70 to 31.78 ps as the pull-up gets wider, although
+nothing about the pull-down changed. Why?
+
+<details>
+<summary>Answer</summary>
+
+A wider PMOS is still partly on while the NMOS pulls down, and it fights it.
+
+</details>
 
 ## Part 6: The same circuit as an amplifier
+
+How much voltage gain do the same two transistors give at a longer $L$?
 
 1. Find what changed between the minimum-length and long-channel decks:
 
@@ -272,7 +306,10 @@ down, and it fights it.
    diff spice/vtc.spice spice/vtc_long.spice
    ```
 
-2. Read block 5 of `make extract`, and open `results/ad103-inverter-gain.png`:
+2. Predict: will the $L$ = 0.5 µm inverter have more gain at $V_M$ or less? Use what Lab 04, Part 3
+   measured about $g_m r_o$.
+
+3. Read block 5 of `make extract`, and open `results/ad103-inverter-gain.png`:
 
    ![The minimum-length and long-channel inverters, and the supply current during a switch](../assets/img/ad103-inverter-gain.png)
 
@@ -282,12 +319,23 @@ down, and it fights it.
    ```
 
 **You should see** the two device lines differ only in `L`, 0.15 against 0.5 (the rest of the diff
-is comments and the output file name), and **8.84× the voltage gain for 3.33× the channel length**, from the same two transistors on the same supply. Lab 04 measured why:
-$r_o$ rises with $L$, and the gain is $g_m (r_{on} \parallel r_{op})$. A logic gate needs enough gain
-to restore a degraded signal and doesn't care beyond that; an amplifier wants every decibel. Same
-two transistors, different $L$, different job.
+is comments and the output file name), and **8.84× the voltage gain for 3.33× the channel
+length**, from the same two transistors on the same supply.
+
+Why does a longer channel give so much more gain, and which inverter would you use for which job?
+
+<details>
+<summary>Answer</summary>
+
+Lab 04 measured why: $r_o$ rises with $L$, and the gain is $g_m (r_{on} \parallel r_{op})$. A logic
+gate needs enough gain to restore a degraded signal and doesn't care beyond that; an amplifier
+wants every decibel. Same two transistors, different $L$, different job.
+
+</details>
 
 ## Part 7: The current while it switches
+
+How much supply current does an inverter draw, and when?
 
 1. Read block 6 of `make extract`:
 
@@ -297,14 +345,28 @@ two transistors, different $L$, different job.
       peak supply current                       20.0048 uA   at V_in = 0.891 V
    ```
 
-**You should see** almost nothing at either end, where one device is off, and **20.0048 µA** at
-$V_{in}$ = 0.891 V, where both are on at once and current runs straight from `vdd` to ground doing
-no useful work. That is why CMOS replaced everything before it, and why a processor gets hot when it
-computes and cool when it idles.
+**You should see** almost nothing at either end and **20.0048 µA** at $V_{in}$ = 0.891 V.
+
+Why is the current almost zero at both ends and largest near the middle, and what does that mean
+for power?
+
+<details>
+<summary>Answer</summary>
+
+At either end one device is off. Near the middle both are on at once, and current runs straight
+from `vdd` to ground doing no useful work. That is why CMOS replaced everything before it, and why
+a processor gets hot when it computes and cool when it idles.
+
+</details>
 
 ## Part 8: A silent wiring mistake
 
-1. Run the broken deck:
+What happens when the PMOS source and body go to the wrong node?
+
+1. Predict: will ngspice or the checker warn you about a PMOS whose source is on ground? Write
+   down your guess.
+
+2. Run the broken deck:
 
    ```bash
    make broken
@@ -331,7 +393,7 @@ computes and cool when it idles.
    FAIL  this circuit is not an inverter
    ```
 
-2. Find the change: `diff spice/vtc.spice spice/vtc_broken.spice`. Apart from comments, spacing and
+3. Find the change: `diff spice/vtc.spice spice/vtc_broken.spice`. Apart from comments, spacing and
    the output file name, the only change is on the `XP` line, where `vdd vdd` became `0 0`.
 
 **You should see** an output pinned at exactly zero for all 1801 points, a supply delivering
@@ -347,6 +409,8 @@ inverter, is the one the checker performs before anything else:
 in the measurement means anything, and no amount of staring at $V_M$ will tell you why.
 
 ## Part 9: The current mirror
+
+How accurately does a mirror copy a current, and what limits it?
 
 1. Force 50 µA into a diode-connected reference and copy it four ways:
 
@@ -390,27 +454,71 @@ in the measurement means anything, and no amount of staring at $V_M$ will tell y
 5. Compare one W = 10 µm device (`i(vo3)` in `part 4`) with two W = 5 µm devices in parallel
    (`i(vo5)`), against twice the 1:1 current.
 
-**You should see** a 1:1 copy good to **0.176 %**, a collapse below about **0.2336 V** where the
-output device leaves saturation, ratios of **2.2423** and **4.7785** instead of 2 and 4 because the
-wide device's threshold is **12.835 mV** lower, and the two parallel unit devices within
-**0.0004 %** of twice the unit current. [The current mirror](guide/the-current-mirror.md) works
-through each of these.
+**You should see** a 1:1 copy good to **0.176 %**, a collapse below about **0.2336 V**, ratios of
+**2.2423** and **4.7785** instead of 2 and 4, a threshold **12.835 mV** lower for the wide device,
+and the two parallel unit devices within **0.0004 %** of twice the unit current.
+
+Why does one wide device copy a current less accurately than two unit devices, and why does the
+copy collapse below 0.2336 V?
+
+<details>
+<summary>Answer</summary>
+
+The wide device's threshold is 12.835 mV lower, so at the same gate voltage it carries more than
+its width alone would give. The two unit devices are each the same 5 µm device as the reference. Below about
+0.2336 V, the reference branch's `vdsat`, the output device leaves saturation.
+[The current mirror](guide/the-current-mirror.md) works through each of these.
+
+</details>
 
 ## Finishing
 
-You're done when `make` prints `PASS  all twelve measured values match the reference run`, `make
-mine` passes with your own schematic, and you can answer:
+**You're done when** `make mine` passes with your own `xschem/my_inverter.sch` and reports a
+switching threshold of 0.838029 V (Part 2).
 
-- Why does the $W_n = W_p$ inverter switch below $V_{DD}/2$?
-- Which $W_p$ gives equal delays, which centres $V_M$, and why are they different?
-- Why does one wide device copy a current less accurately than two unit devices?
+### Questions
 
-There is nothing to submit. Keep `xschem/my_inverter.sch`: AD104 starts from it.
+1. Why does the $W_n = W_p$ inverter switch below $V_{DD}/2$? (Part 3.)
+2. Which $W_p$ gives equal delays, which centres $V_M$, and why are they different? (Part 5.)
+3. Why does one wide device copy a current less accurately than two unit devices? (Part 9.)
 
-## Where this goes
+### Submit
+
+Nothing to submit. Keep `xschem/my_inverter.sch`: AD104 starts from it.
+
+## Going further
+
+### Extensions
+
+Three, with reference answers in
+[`solutions/`](https://github.com/uoftasic/ad103/tree/main/labs/capstone-inverter/solutions):
+
+1. **Why the foundry's inverter isn't symmetric.** `sky130_fd_sc_hd__inv_1`, the inverter
+   LibreLane puts in your digital designs, is $W_n$ = 0.65 µm, $W_p$ = 1.0 µm, a ratio of
+   **1.54**: neither of this lab's answers. You can read it yourself:
+
+   ```bash
+   grep -A3 'subckt sky130_fd_sc_hd__inv_1 ' \
+     /foss/pdks/sky130A/libs.ref/sky130_fd_sc_hd/spice/sky130_fd_sc_hd.spice
+   ```
+
+   It switches at **0.790872 V**, 109 mV below centre, on purpose. Work out why before you read
+   the reference answer.
+2. **The delay arithmetic.** Write out why equal drive currents give equal delays in Part 5, and
+   check that the arithmetic closes.
+3. **More gain.** Take `spice/vtc_long.spice` to longer $L$ and find out how much gain two
+   transistors can give.
+
+### SiliWiz
+
+[SiliWiz](https://tinytapeout.com/siliwiz/), which AD102 used to look at a resistor in
+cross-section, is worth one more visit: draw an NMOS in it, sweep the gate, and watch the channel
+you've been calculating about appear under the oxide.
+
+### What AD104 does with your inverter
 
 You now have a schematic of a real logic gate, sized by you against a criterion you chose and
-verified against a simulation to six digits. **AD104 — Layout** takes this file and asks you to draw
+verified against a simulation to six digits. **AD104: Layout** takes this file and asks you to draw
 it as geometry in Magic. Every transistor becomes a rectangle of diffusion under a stripe of poly,
 and every net becomes metal with a width and a spacing. Then Magic runs **DRC** to check that a fab
 could make what you drew, and netgen runs **LVS** to show that what you drew is the same circuit as
@@ -441,17 +549,8 @@ Three things from AD103 come back in AD104:
 - **Unit devices in an array**, from the current mirror. AD104 is where you see what a mirror looks
   like when it is drawn properly, dummies and all.
 
-## Going further
-
-- **Extensions.** Three, with reference answers in
-  [`solutions/`](https://github.com/uoftasic/ad103/tree/main/labs/capstone-inverter/solutions):
-  why the foundry's inverter isn't symmetric, the delay arithmetic written out, and how much gain
-  two transistors can give at longer $L$.
-- **SiliWiz.** [SiliWiz](https://tinytapeout.com/siliwiz/), which AD102 used to look at a resistor
-  in cross-section, is worth one more visit: draw an NMOS in it, sweep the gate, and watch the
-  channel you've been calculating about appear under the oxide.
-
 Stuck, or want to argue about any of this? Ask in the [team Discord](https://discord.gg/hrJnP5UsGz),
 and bring the number you got and the number you expected.
 
-Next course: [AD104 — Layout](https://uoftasic.com/ad104/).
+Next on the [Course path](README.md#course-path): you've finished AD103. The next course is
+[AD104: Layout](https://uoftasic.com/ad104/), and it starts from your `xschem/my_inverter.sch`.
