@@ -2,7 +2,7 @@
 
 The diode and the MOSFET in XSchem: regions of operation, and what the parameters mean.
 
-The third course in the UofT ASIC Team **analog track**. Published docs live under `./docs` and are served by GitHub Pages; the runnable XSchem/ngspice packages live in `labs/`.
+The third course in the UofT ASIC Team **analog track**. The published docs live under `./docs` and are served by GitHub Pages; the runnable XSchem/ngspice packages live in `labs/`. Students start at the Course path on the course home page.
 
 Org: [github.com/uoftasic](https://github.com/uoftasic)
 
@@ -16,7 +16,7 @@ Org: [github.com/uoftasic](https://github.com/uoftasic)
 
 ## Quick start
 
-Every package under `labs/` runs with `make` alone, in a bare container, with no environment setup — each package pins its own PDK and model paths and ends in `PASS` or `FAIL` with a reason.
+Every package under `labs/` runs with `make` alone, in a bare container, with no environment setup. Each package pins its own PDK and model paths and ends in `PASS` or `FAIL` with a reason.
 
 ```bash
 git clone https://github.com/uoftasic/ad103.git
@@ -33,14 +33,15 @@ Docs preview (requires Node.js):
 npx docsify-cli serve docs      # -> http://localhost:3000
 ```
 
-Tool-heavy courses that need IIC-OSIC-TOOLS / SKY130 should document the team workbench setup in-course rather than bundling Docker in every repo.
+Students run the labs in the team workbench set up in [IC101](https://uoftasic.com/ic101/); Lab 01 walks through it. The `docker run` line above is for checking a package without the workbench.
 
 ## Layout
 
 | Path | On Pages? | Purpose |
 |------|-----------|---------|
 | `docs/` | **Yes** | Human-facing Docsify site |
-| `docs/labs/` | Yes | Lab *writeups* (procedure, theory) |
+| `docs/guide/` | Yes | Guide pages: reading only |
+| `docs/labs/` | Yes | Lab *writeups*: where students run things |
 | `labs/` | No | Runnable packages (HDL, Python, data, graders) |
 | `scripts/` | No | Team utilities / automation |
 | `notebooks/` | No | Exploratory / assignment notebooks |
