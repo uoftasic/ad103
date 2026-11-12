@@ -1,40 +1,34 @@
 # Where saturation starts
 
-**Question this page answers:** *I have the boundary condition $V_{DS} = V_{GS} - V_{TH}$.
-Why does my own measured knee land somewhere else?*
+The textbook boundary between triode and saturation is $V_{DS} = V_{GS} - V_{TH}$. This page
+shows why the knee in a measured curve lands somewhere else, and gives the cause a name and a
+number.
 
-Because the textbook boundary is the answer to a slightly different question, and the
-difference has a name, a cause, and a number you can read off your own sweep.
+Along the way you'll meet the two most useful habits in device work: **extract a parameter from a
+curve instead of looking it up**, and **compare your extraction with the model's own value** to see
+how much your definition mattered.
 
-This is also the page where you meet the two most useful habits in device work: **extract a
-parameter from a curve rather than looking it up**, and **compare your extraction against the
-model's own opinion** to find out how much your definition mattered.
+## Measuring $V_{TH}$
 
-## First: you need $V_{TH}$, and nobody will give it to you
-
-$V_{TH}$ is not printed on the device. It is not a single number in the model card either —
-BSIM computes it from the geometry and the bias, freshly, every operating point. So an
-engineer *measures* it, and the measurement is a construction on a curve.
-
-```bash
-cd labs/lab-03-mosfet-regions
-make figures
-```
+$V_{TH}$ isn't printed on the device. It isn't a single number in the model card either: the BSIM
+model computes it from the geometry and the bias, afresh at every operating point. So engineers
+*measure* it, and the measurement is a construction on a curve. Here are two common ones.
 
 ![Two threshold extractions side by side: linear extrapolation and sqrt(I_D) extrapolation](../assets/img/ad103-vth-extraction.png)
 
-*Both panels: SKY130 `nfet_01v8`, W = 5 µm, L = 1 µm, from `spice/id_vgs.spice`.*
+*Both panels: SKY130 `nfet_01v8`, W = 5 µm, L = 1 µm, from `spice/id_vgs.spice` in the Lab 03
+package.*
 
-### Method 1 — linear extrapolation, at small $V_{DS}$
+### Method 1: linear extrapolation at small $V_{DS}$
 
-Hold the drain at 0.05 V so the device is unambiguously a resistor, and sweep the gate. In
-triode with $V_{DS}$ small, the current is nearly a straight line in $V_{GS}$:
+Hold the drain at 0.05 V so the device is clearly a resistor, and sweep the gate. In triode with
+small $V_{DS}$, the current is nearly a straight line in $V_{GS}$:
 
 $$I_D \approx \mu_n C_{ox}\frac{W}{L}\left(V_{GS}-V_{TH}-\frac{V_{DS}}{2}\right)V_{DS}$$
 
-So: find the steepest point of the measured curve, draw the tangent there, run it down to
+Find the steepest point of the measured curve, draw the tangent there, extend it down to
 $I_D = 0$, and read the intercept. That intercept is $V_{TH} + V_{DS}/2$, so subtract half the
-drain voltage you used. `make extract` does exactly this and shows its working:
+drain voltage. Lab 03's extraction shows its working:
 
 ```
 == V_TH by linear extrapolation   (V_DS = 0.05 V)
@@ -44,13 +38,13 @@ drain voltage you used. `make extract` does exactly this and shows its working:
    minus V_DS/2        V_TH = 0.6016 V
 ```
 
-**0.6016 V.** Four lines of arithmetic on 361 sampled points, no datasheet involved.
+**0.6016 V**, from four lines of arithmetic on 361 sampled points, with no datasheet involved.
 
-### Method 2 — $\sqrt{I_D}$ extrapolation, in saturation
+### Method 2: $\sqrt{I_D}$ extrapolation in saturation
 
-The saturation law says $I_D \propto (V_{GS}-V_{TH})^2$, so $\sqrt{I_D}$ should be a straight
-line whose x-intercept is $V_{TH}$. Sweep the gate with the drain at 1.8 V, take the square
-root, fit a line over a sensible window, extrapolate:
+The saturation law says $I_D \propto (V_{GS}-V_{TH})^2$, so $\sqrt{I_D}$ should be a straight line
+whose x-intercept is $V_{TH}$. Sweep the gate with the drain at 1.8 V, take the square root, fit a
+line over a sensible window, and extrapolate:
 
 ```
 == V_TH by sqrt(I_D) extrapolation   (V_DS = 1.8 V, fit 1.0-1.4 V)
@@ -60,7 +54,7 @@ root, fit a line over a sensible window, extrapolate:
 
 **0.5159 V.**
 
-### They disagree by 86 mV, and that is the lesson
+### Two methods, 86 mV apart
 
 ```
 == your number vs the model's own number   (device A)
@@ -69,29 +63,27 @@ root, fit a line over a sensible window, extrapolate:
    V_TH  (sqrt extrapolation)           0.5159     0.5895   V  -12.49 %
 ```
 
-The `ngspice` column is `@m.xma.msky130_fd_pr__nfet_01v8[vth]` — what BSIM itself thinks the
-threshold is at that operating point, from `spice/op_params.spice`. Two honest methods, one
-device, three answers spread over 86 mV.
+The `ngspice` column is `@m.xma.msky130_fd_pr__nfet_01v8[vth]`, the threshold BSIM itself reports
+at that operating point, from `spice/op_params.spice`. Two reasonable methods on one device give
+three answers spread over 86 mV.
 
-Nobody is wrong. **$V_{TH}$ is defined by its extraction method**, and the methods disagree
-because the square law they both lean on is not exactly true for this device. Method 1 leans
-on it only very near threshold, where it is nearly right, and lands within 2 %. Method 2 leans
-on it hard, over a whole volt of overdrive, where it is not — and pays 12 % for it.
+None of them is wrong. **$V_{TH}$ is defined by its extraction method**, and the methods disagree
+because the square law they both rely on isn't exactly true for this device. Method 1 relies on
+it only very near threshold, where it is nearly right, and lands within 2 %. Method 2 relies on it
+across a whole volt of overdrive, where it isn't, and is 12 % out.
 
-**The reflex check:** any time someone quotes you a threshold voltage, ask *how it was
-extracted*. "0.52 V" and "0.60 V" can be the same transistor. If a number in a datasheet has
-no method beside it, it has a tolerance you cannot see.
+> **Ask how a threshold was extracted.** "0.52 V" and "0.60 V" can be the same transistor. A
+> datasheet threshold with no method beside it has a tolerance you can't see.
 
-For the rest of this course, **$V_{TH} = 0.6016$ V** for this device, because that is the
-number your own linear extrapolation produced and it is the one every prediction below is
-checked against.
+For the rest of this course, **$V_{TH} = 0.6016$ V** for this device, because that is what the
+linear extrapolation gives, and every prediction below is checked against it.
 
-## Now the knee — and why it is early
+## The knee comes early
 
-Take the five output curves and find where each one stops rising. `src/mosfit.py` uses one
-explicit, arbitrary rule, and says so: **the knee is the first $V_{DS}$ at which the slope has
-fallen to 10 % of the slope at the origin.** Ten percent is a choice, not a law; what matters
-is that the same rule is applied to every curve.
+Take the five output curves and find where each one stops rising. Lab 03's `src/mosfit.py` uses one
+explicit rule and says so: **the knee is the first $V_{DS}$ at which the slope has fallen to 10 % of
+the slope at the origin.** Ten percent is a choice, not a law; what matters is that the same rule
+is applied to every curve.
 
 ```
    knee of each curve vs the model's vdsat
@@ -105,80 +97,74 @@ is that the same rule is applied to every curve.
 
 Read the second and third columns together, top to bottom.
 
-At $V_{GS} = 0.9$ V the textbook boundary predicts a knee at 0.298 V and your curve knees at
-**0.29 V**. That is a hit, and it is worth pausing on — the simple theory works, to two
-digits, in its own back yard.
+At $V_{GS} = 0.9$ V the textbook boundary predicts a knee at 0.298 V, and the curve knees at
+**0.29 V**. The simple theory works to two digits at low overdrive.
 
-At $V_{GS} = 1.8$ V the boundary predicts 1.198 V and your curve knees at **0.89 V**. The
-theory is 34 % high. It did not fail gently; it failed progressively, and the further you push
-the gate the worse it gets.
+At $V_{GS} = 1.8$ V the boundary predicts 1.198 V and the curve knees at **0.89 V**. The theory is
+34 % high. The error grows steadily the harder you drive the gate.
 
-## The cause has a name: velocity saturation
+## Velocity saturation
 
-The square law contains an assumption nobody states out loud: that electron drift velocity is
-proportional to electric field, forever. Double the field, double the speed.
+The square law contains an assumption that is rarely stated: that electron drift velocity is
+proportional to electric field, without limit. Double the field, double the speed.
 
-Silicon does not do that. Above roughly $10^4$ V/cm the carriers stop speeding up — they are
-scattering off the lattice as fast as the field can accelerate them — and settle at a
-saturation velocity of about $10^7$ cm/s. Once the carriers in your channel are moving as fast
-as they can move, adding drain voltage adds nothing.
+Silicon doesn't do that. Above roughly $10^4$ V/cm the carriers stop speeding up, because they
+scatter off the crystal lattice as fast as the field can accelerate them, and they settle at a
+**saturation velocity** of about $10^7$ cm/s. Once the carriers in the channel are moving as fast as
+they can, more drain voltage adds nothing. This is **velocity saturation**.
 
-So the channel does not need to wait for $V_{DS}$ to reach $V_{ov}$ before the current stops
-responding. It stops responding as soon as the field along the channel is high enough, which
-for $L = 1\ \mu\mathrm{m}$ and a volt of overdrive is *earlier*. The model reports the true
-value as **`vdsat`**, and `vdsat` is below $V_{ov}$ at every one of the five bias points above.
+So the current doesn't wait for $V_{DS}$ to reach $V_{ov}$ before it stops responding. It stops as
+soon as the field along the channel is high enough, and for $L = 1\ \mu\mathrm{m}$ and a volt of
+overdrive, that happens *earlier*. The model reports the actual value as **`vdsat`**, and `vdsat`
+is below $V_{ov}$ at every one of the five bias points above.
 
-Two consequences you will use constantly:
+Two consequences you'll use constantly:
 
-- **A short device saturates earlier.** The same overdrive across a shorter channel is a
-  higher field. Compare the two extremes at $V_{GS} = 1.8$ V, both from
-  `spice/op_params.spice`: L = 2 µm gives `vdsat = 0.912` V; L = 0.15 µm gives **`vdsat =
-  0.362` V**. The minimum-length device pinches off at less than a third of the drain voltage
-  the long one needs.
-- **The square law degrades toward a straight line.** Fully velocity-saturated, $I_D$ becomes
-  proportional to $V_{ov}$, not $V_{ov}^2$. That is exactly why Method 2 above under-read the
-  threshold by 12 %: it fitted a square root to something that is drifting toward linear.
+- **A short device saturates earlier.** The same overdrive across a shorter channel is a higher
+  field. At $V_{GS} = 1.8$ V, both from `spice/op_params.spice`: L = 2 µm gives `vdsat = 0.912` V,
+  and L = 0.15 µm gives **`vdsat = 0.362` V**. The minimum-length device pinches off at less than a
+  third of the drain voltage the long one needs.
+- **The square law drifts toward a straight line.** When fully velocity-saturated, $I_D$ becomes
+  proportional to $V_{ov}$, not $V_{ov}^2$. That is why Method 2 under-read the threshold by 12 %:
+  it fitted a square root to something drifting toward linear.
 
-**The reflex check:** if a hand calculation with the square law is out by tens of percent on a
-modern short device, the square law is the suspect, not your arithmetic. Simulate, then use
-the hand calculation for *direction* — "wider means more current" — and the simulator for
-*magnitude*.
+> **When a square-law calculation is tens of percent out** on a short modern device, suspect the
+> square law before your arithmetic. Simulate, and use the hand calculation for *direction*
+> ("wider means more current") and the simulator for *magnitude*.
 
-## Saturation is not flat either
+## The saturation region slopes upward
 
-One more comfortable lie to retire. Look hard at the right-hand end of the $V_{GS} = 1.8$ V
-curve. It is not horizontal. It rises from **682.502 µA** at $V_{DS} = 1.2$ V to **696.275 µA**
-at 1.8 V — 2.0 % more current for 0.6 V more drain.
+The right-hand end of the $V_{GS} = 1.8$ V curve isn't horizontal. It rises from **682.502 µA** at
+$V_{DS} = 1.2$ V to **696.275 µA** at 1.8 V: 2.0 % more current for 0.6 V more drain.
 
-The reason is in panel 4 of the [channel cross-section](guide/a-mosfet-is-a-valve.md): as
-$V_{DS}$ grows, the pinch-off point retreats further from the drain, so the *conducting* part
-of the channel gets slightly **shorter**. Shorter channel, more current. This is **channel
-length modulation**, and it is what the $(1 + \lambda V_{DS})$ factor in your textbook is
-patching.
+The reason is in panel 4 of the [channel cross-section](guide/a-mosfet-is-a-valve.md#the-channel-at-four-bias-points).
+As $V_{DS}$ grows, the pinch-off point moves further from the drain, so the conducting part of the
+channel gets slightly **shorter**, and a shorter channel carries more current. This is
+**channel-length modulation**, and it is what the $(1 + \lambda V_{DS})$ factor in your textbook
+approximates.
 
-The slope has a name — output conductance $g_{ds}$ — and its reciprocal is the output
-resistance $r_o$:
+The slope is called the **output conductance** $g_{ds}$, and its reciprocal is the **output
+resistance** $r_o$:
 
 | Device | $g_{ds}$ at $V_{GS}=V_{DS}=1.8$ V | $r_o = 1/g_{ds}$ |
 |---|---|---|
 | W = 5 µm, **L = 1 µm** | 15.593 µS | **64.13 kΩ** |
 | W = 1 µm, **L = 0.15 µm** | 51.415 µS | **19.45 kΩ** |
 
-Both from `spice/op_params.spice`. A transistor in saturation is not a current source; it is a
-current source with 64 kΩ across it — and if you use the minimum-length device, 19 kΩ.
+Both are from `spice/op_params.spice`. A saturated transistor is not an ideal current source; it is
+a current source with 64 kΩ in parallel, or 19 kΩ if you use the minimum-length device.
 
-That number decides how much voltage gain you can get out of one transistor, and it is the
-first thing [$g_m$ and $r_o$](guide/gm-and-ro.md) does with it.
+That number sets how much voltage gain one transistor can give, and it is the first thing
+[Transconductance and output resistance](guide/gm-and-ro.md) uses.
 
-## What to take away
+You'll reproduce every number on this page in Lab 03, Parts 2 and 3.
 
-- $V_{TH}$ is an extracted number, not a property. Always ask by which method.
-- The boundary $V_{DS} = V_{GS} - V_{TH}$ is a *long-channel, low-field* answer. Real
-  saturation starts earlier, and the model will tell you where if you ask it for `vdsat`.
-- Saturation slopes upward. The slope is $g_{ds}$, its reciprocal is $r_o$, and $r_o$ is
-  smaller on shorter devices.
-- Every one of those statements is a number in `results/`, produced by a deck you can read.
+## Check yourself
 
-Next: [Threshold is not a constant](guide/threshold-is-not-a-constant.md) — you extracted a
-$V_{TH}$ and pinned it down. Now watch it move when you touch a terminal you have been
-ignoring.
+1. Method 1 subtracts $V_{DS}/2$ from the tangent's intercept. Where does that term come from?
+2. Why does Method 2 give a lower $V_{TH}$ than Method 1 on this device?
+3. At $V_{GS}$ = 1.5 V, how far is the measured knee below $V_{GS} - V_{TH}$, in percent?
+4. You shorten a device from L = 1 µm to L = 0.15 µm at the same bias. Does `vdsat` go up or down,
+   and does $r_o$ go up or down?
+
+Next: [Lab 03 — MOSFET regions](labs/lab-03-mosfet-regions-overview.md).
