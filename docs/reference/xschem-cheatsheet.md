@@ -41,6 +41,20 @@ Three parts of that window are worth knowing:
 | **`Netlist` / `Simulate` / `Waves`** | the three buttons that replace a terminal. They have no accelerator label; the keys are `n`, `s`, and the `Waves` menu. |
 | **status bar** | `SNAP: 10  GRID: 20  MODE: spice`. `MODE: spice` means the netlister will write SPICE, not Verilog. `SNAP` is the grid your clicks land on, and the most common cause of a wire that looks connected and isn't. |
 
+### Windows that open off screen
+
+- **The status bar is hidden.** On the default 1280×800 desktop, XSchem opens 764 px tall at
+  29 px down, which puts its last 24 px behind the Xfce taskbar. Drag the window's bottom edge up a
+  little, or start the desktop bigger (`VNC_RESOLUTION=1920x1080 ./scripts/start_vnc.sh`).
+- **The symbol chooser (<kbd>Shift</kbd>+<kbd>I</kbd>) opens partly off screen.** It opens
+  positioned relative to the main XSchem window, and because that window is nearly as wide as the
+  screen, on a 1280-wide desktop the chooser lands mostly off the right edge. The library pane,
+  the file list, the Search box and **OK** can all be out of view. Drag it back by the part of the
+  title bar you can see (or Alt-drag anywhere in it). It stays where you put it for the rest of
+  the session. The chooser also remembers the directory you were last in; click **Home** to jump
+  back to the top of the tree.
+- The **Edit Properties** window that <kbd>q</kbd> opens behaves the same way.
+
 ## The eleven keys you need
 
 | Do this | Key |
@@ -296,7 +310,11 @@ its `.lib` lines need.)
 | a net you were sure you drew is missing from the netlist | a wire endpoint one snap step from the pin. Zoom in and look for a hollow square. |
 | ports wired to the wrong nets in a hierarchical cell | the `.sym` pin order does not match the order the `ipin`/`opin`/`iopin` symbols appear in the schematic. |
 | `can't create directory ".../sky130_tests/simulation": permission denied` on **Netlist** | the open schematic is the PDK's own start page, `sky130_tests/top.sch`, which lives inside the read-only PDK. With `local_netlist_dir 1` the netlist goes next to the schematic, and there is nowhere to put it. Open a schematic in your own directory. The AD103 lab `xschemrc` files also set `XSCHEM_START_WINDOW {}` so a bare `xschem &` never lands there. |
-| `file opening for write failed!` on save | same cause: you are editing a file in a read-only directory. **File → Save as** into your own folder. |
+| `file opening for write failed!` on save | same cause: you are editing a file in a read-only directory. Your drawing is still in the window: **File → Save as** into your own folder. |
+| `net1`, `net2`, … in the netlist | a pin that touches nothing. XSchem invents a name for it and exits 0. Lab 01, Part 7 shows what ngspice does with one. Check with `grep 'net[0-9]' simulation/*.spice`. |
+| a blank rectangle with a name instead of a circuit | an unexpanded subcell. Descend into it with <kbd>e</kbd>, come back with <kbd>Ctrl</kbd>+<kbd>E</kbd>. |
+| XSchem opens the wrong start page, or symbols vanish after it worked yesterday | you started it from a different directory, so it read a different `./xschemrc`. |
+| `make mine` says `FAIL - the netlist has no nfet_01v8` right after you drew one | you didn't press **Yes** in the **Ask Save** window, so `make mine` netlisted the last version you saved. |
 
 ## Where files land
 

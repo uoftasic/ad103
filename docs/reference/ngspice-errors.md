@@ -338,11 +338,22 @@ Warning: sky130_fd_pr__diode_pw2nd_05v5: IKR too small - model effect disabled!
 - **`IKR too small - model effect disabled!`** (2): a high-injection knee current that the models
   set to zero. It appears whenever a junction diode is in the deck, which is always, and has
   nothing to do with your circuit.
-- **`Note: No compatibility mode selected!`** prints on every run, including perfect ones.
+- **`Note: No compatibility mode selected!`** prints on every run, including perfect ones. It is
+  ngspice saying it is not pretending to be HSPICE.
 
 **Warnings go to stderr, results go to stdout.** `ngspice -b deck.spice > results.log` gives you a
 clean log and leaves the noise on your terminal. To tell a harmless message from a real problem: a
-real problem says `Error` and is followed by `Simulation interrupted due to error!`.
+real problem says `Error on line …`, followed by `Simulation interrupted due to error!` and then
+`no simulations run!`. If you see numbers after the warnings, the warnings didn't matter.
+
+### `Eta0 is negative`
+
+```
+Warning: Eta0 = -0.0310679 is negative.
+```
+
+SkyWater's model card has a negative fitting parameter, which BSIM allows and mentions. It is
+legal and deliberate, and the run is unaffected.
 
 ## Error messages
 

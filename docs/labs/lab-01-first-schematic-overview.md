@@ -12,8 +12,8 @@ Package: [`labs/lab-01-first-schematic/`](https://github.com/uoftasic/ad103/tree
 - Read [Getting started](guide/getting-started.md).
 - Keep the [XSchem cheat sheet](reference/xschem-cheatsheet.md) open in another tab.
 
-**Time:** about 2 hours, most of it learning XSchem. Each `make` target takes about ten seconds,
-almost all of it ngspice loading the SKY130 models.
+**Time:** about 2 hours, most of it learning XSchem, not counting the optional Part 8. Each `make`
+target takes about ten seconds, almost all of it ngspice loading the SKY130 models.
 
 ## Part 1: Load the course
 
@@ -75,6 +75,8 @@ may not match your window. For problems with the desktop or the container, see I
 
 ## Part 2: Prove the toolchain works
 
+Does your workbench give the reference answer, and what does a SPICE device line say?
+
 1. Run the reference check:
 
    ```bash
@@ -97,9 +99,19 @@ may not match your window. For problems with the desktop or the container, see I
 2. Read the device line before the current. The four node names, `d g 0 0`, are in the order
    **drain, gate, source, body**. You'll find each of them on the drawing in Part 3.
 
-3. Open `results/nmos_op.log` and find `i(vds) = -5.01046e-04`. The sign is negative because
-   ngspice reports current flowing *into* the positive terminal of a source, and this source is
-   pushing current out.
+3. Open `results/nmos_op.log` and find `i(vds) = -5.01046e-04`. The log opens with several
+   `Error opening osdi lib` lines; they are harmless, and
+   [Harmless messages](reference/ngspice-errors.md#harmless-messages) says why.
+
+   The transistor is conducting, so why is the current negative?
+
+   <details>
+   <summary>Answer</summary>
+
+   ngspice reports current flowing *into* the positive terminal of a source, and `Vds` is pushing
+   current out.
+
+   </details>
 
 **You should see** `PASS` and **501.046 µA**. That is a real SKY130 NMOS, one micrometre wide
 and 150 nanometres long, with 1.8 V on both the gate and the drain: half a milliamp through a
@@ -113,6 +125,9 @@ fine and the problem is in your drawing.
 
 ## Part 3: Look around the reference schematic
 
+What does XSchem write when you press **Netlist**, and where does each line come from on the
+drawing?
+
 1. Open the reference schematic from its own folder, so XSchem reads that folder's `xschemrc`:
 
    ```bash
@@ -120,8 +135,9 @@ fine and the problem is in your drawing.
    xschem nmos_probe.sch &
    ```
 
-2. Check the menu bar says **SKY130**. If it says **IHP**, close XSchem, run step 4 of Part 1
-   in this terminal, and launch it again.
+2. Check the menu bar says **SKY130**. If it says **IHP**, close XSchem, run step 2 of Part 1
+   in this terminal, and launch it again. Other XSchem failures, most of which give no error, are
+   listed under [Failures that exit 0](reference/xschem-cheatsheet.md#failures-that-exit-0).
 
 3. Learn the keys you need. XSchem has several hundred bindings; these cover the whole course.
    They come from XSchem's own list: **Help → Keys**, or press `/` for a full-screen poster.
@@ -155,11 +171,9 @@ fine and the problem is in your drawing.
    > Practise on it freely (`u` undoes any number of steps), but don't save over it. If you
    > already did, run `git checkout -- xschem/nmos_probe.sch` from the lab folder to put it back.
 
-   If you can't see the status bar at the bottom of the window: on the default 1280×800 desktop,
-   XSchem opens 764 px tall at 29 px down, which puts its last 24 px behind the Xfce taskbar.
-   Drag the window's bottom edge up a little, or start the desktop bigger
-   (`VNC_RESOLUTION=1920x1080 ./scripts/start_vnc.sh`). The status bar is where XSchem tells you
-   what mode you are in, so it's worth having.
+   The status bar at the bottom of the window is where XSchem tells you what mode you are in. If
+   it is hidden behind the taskbar, see
+   [Windows that open off screen](reference/xschem-cheatsheet.md#windows-that-open-off-screen).
 
 5. Open the **Simulation** menu and check the bullet is on **Use 'simulation' dir in schematic
    dir**. The lab's `xschemrc` sets this. While the menu is open, tick **Show netlist after
@@ -189,6 +203,7 @@ nets on the drawing.
 
 ## Part 4: Draw your own transistor
 
+Can you draw the reference circuit yourself, with a transistor twice as wide?
 `xschem/my_probe.sch` is the same circuit with the transistor left out.
 
 1. Go back to the lab folder and open it:
@@ -215,19 +230,16 @@ nets on the drawing.
 
    Look at the left pane first, because it is a second PDK check. Three paths are listed, and the
    third is `…/sky130A/libs.tech/xschem`. If that line is missing or says `ihp-sg13g2`, close
-   XSchem and go back to Part 1, step 4.
+   XSchem and go back to Part 1, step 2.
 
    The right pane opens on XSchem's built-in **`devices`** library. You need four things from it
    during the course: `vsource.sym` (a voltage source), `gnd.sym` (ground), `lab_pin.sym` (a net
    label), and `capa.sym` (a capacitor).
 
-   > **The chooser may open partly off screen.** It opens positioned relative to the main
-   > XSchem window, and because that window is nearly as wide as the screen, on a 1280-wide
-   > desktop the chooser lands mostly off the right edge. The library pane, the file list, the
-   > Search box and **OK** can all be out of view. Drag it back by the part of the title bar you
-   > can see (or Alt-drag anywhere in it). It stays where you put it for the rest of the session.
-   > The chooser also remembers the directory you were last in; click **Home** to jump back to
-   > the top of the tree. The **Edit Properties** window that `q` opens behaves the same way.
+   On a 1280-wide desktop the chooser opens mostly off the right edge of the screen, with
+   **OK** out of view. Drag it back by the part of the title bar you can see;
+   [Windows that open off screen](reference/xschem-cheatsheet.md#windows-that-open-off-screen)
+   has the details.
 
 3. Click the `sky130A` line on the left, open **`sky130_fd_pr`**, and replace the **Search** text
    with `nfet_01v8*.sym`. That cuts the library's 77 symbols down to five. Search takes a glob,
@@ -287,10 +299,17 @@ nets on the drawing.
    > gives a confident `FAIL - the netlist has no nfet_01v8` that sends you hunting for a
    > placement bug that isn't there. Check the `*` has gone from the tab first.
 
-8. Before you simulate, predict the current. The reference device is $W$ = 1 µm and draws
+**You should see** an `nfet_01v8` in the gap with `W=2` and `L=0.15`, a dot on every junction, and
+no `*` in the tab title.
+
+## Part 5: Simulate your drawing
+
+Does a transistor twice as wide carry twice the current?
+
+1. Predict the current before you simulate. The reference device is $W$ = 1 µm and draws
    501.046 µA. Yours is twice as wide. Write your number down.
 
-9. Netlist, check and simulate your drawing:
+2. Netlist, check and simulate your drawing:
 
    ```bash
    make mine
@@ -314,29 +333,45 @@ nets on the drawing.
          chain every other lab in this course runs on.
    ```
 
-   It then prints a short note comparing your current with twice the reference; step 10 goes
+   It then prints a short note comparing your current with twice the reference; step 3 goes
    through it.
 
    If it says `FAIL`, it names which of five things went wrong (a missing device, a unit suffix
    on `W`, a `net7` where a wire did not land, the source on the wrong node, the body left
    floating) and what to do about each.
 
-10. Compare the result with your prediction. Twice 500.941 µA (the reference current *as the
-    XSchem netlist produces it*) is 1001.882 µA. You measured **1030.42 µA**, which is
-    **2.85 % more**: doubling the width bought slightly more than double the current. That is
-    too small to be a mistake and too large to be noise. It is the first crack in "current is
-    proportional to $W$", and [Lab 04](labs/lab-04-wl-knob-overview.md) is about what is behind
-    it.
+3. Compare the result with your prediction. The note uses 500.941 µA for the reference device,
+   the current *the XSchem netlist* gives for $W$ = 1 µm, so twice the reference is
+   1001.882 µA. How far is your 1030.42 µA from that, and is the difference a mistake?
 
-    > **Two numbers, both correct, 0.02 % apart.** The hand-written deck gives 501.046 µA and the
-    > XSchem netlist gives 500.941 µA for the same device. The symbol computes the source and
-    > drain diffusion areas and resistances from $W$ and writes them onto the device line; the
-    > hand deck leaves them at zero. This is the first time in the course that layout shows up in
-    > an electrical answer, and the effect is the smallest you'll see.
+   <details>
+   <summary>Answer</summary>
+
+   It is **2.85 % more**: doubling the width bought slightly more than double the current. That
+   is too small to be a mistake and too large to be noise. It is the first crack in "current is
+   proportional to $W$", and [Lab 04](labs/lab-04-wl-knob-overview.md) is about what is behind it.
+
+   </details>
+
+4. The hand-written deck in Part 2 gave 501.046 µA for the reference device, and the XSchem
+   netlist gives 500.941 µA. Both are correct. Compare the device line in Part 2's `make` output
+   with the one in `spice/nmos_op.spice`. What makes them differ by 0.02 %?
+
+   <details>
+   <summary>Answer</summary>
+
+   The symbol computes the source and drain diffusion areas and resistances from $W$ (`ad`, `as`,
+   `pd`, `ps`, `nrd`, `nrs`) and writes them onto the device line. The hand deck leaves them at
+   zero. This is the first time in the course that layout shows up in an electrical answer, and
+   the effect is the smallest you'll see.
+
+   </details>
 
 **You should see** `PASS` and **1030.4200 µA** from `make mine`.
 
-## Part 5: The loud failure
+## Part 6: The loud failure
+
+What does ngspice say when `W` and `L` carry a unit suffix?
 
 1. Run the deck with units on `W` and `L`:
 
@@ -357,14 +392,27 @@ nets on the drawing.
    diff spice/nmos_op.spice spice/nmos_op_wrong_units.spice
    ```
 
-**You should see** two characters of difference: `L=0.15u W=1u` instead of `L=0.15 W=1`. The
-message names neither `W` nor units, which is why the habit is to check `W` and `L` first
-rather than to read the error. [Getting started](guide/getting-started.md#w1-never-w1u) explains
-what the `u` does.
+**You should see** two characters of difference: `L=0.15u W=1u` instead of `L=0.15 W=1`.
+[Getting started](guide/getting-started.md#w1-never-w1u) explains what the `u` does.
 
-## Part 6: The quiet failure
+The message names neither `W` nor units. So when you see `could not find a valid modelname`, what
+do you check first?
 
-1. Run the schematic with one short wire:
+<details>
+<summary>Answer</summary>
+
+`W` and `L`, before you try to read the error. The message doesn't point at them, which is why it
+has to be a habit.
+
+</details>
+
+## Part 7: The quiet failure
+
+What does ngspice do with a gate wire that stops short of the pin?
+
+1. Predict: will ngspice stop with an error, as it did in Part 6? Write down your guess.
+
+2. Run the schematic with one short wire:
 
    ```bash
    make unconnected
@@ -386,27 +434,36 @@ what the `u` does.
         v(net1) = 5.017472e-01
    ```
 
-2. Open `xschem/broken_probe.sch` next to `xschem/nmos_probe.sch` (from the `xschem/` folder,
+3. Open `xschem/broken_probe.sch` next to `xschem/nmos_probe.sch` (from the `xschem/` folder,
    `xschem broken_probe.sch &`) and find the difference. It is one wire, ending 20 units short of
    the gate pin: about a millimetre on screen.
 
-3. Compare the current with Part 2. **73.4593 nA**, where the working circuit gives 501.046 µA:
-   wrong by a factor of **6821**, with no error anywhere. `v(net1) = 0.5017472 V` is the gate,
-   floating, settling wherever the solver left it. `Vgs` is still in the circuit and still set
-   to 1.8 V, but it is no longer connected to anything that matters.
+4. Compare the current with Part 2's 501.046 µA. By what factor is it wrong?
 
-4. Search the netlists for invented names:
+5. `v(net1) = 5.017472e-01` is the gate. `Vgs` is still in the circuit and still set to 1.8 V. Why
+   is the gate at 0.50 V?
+
+   <details>
+   <summary>Answer</summary>
+
+   The gate is floating, and settles wherever the solver left it. `Vgs` is no longer connected to
+   anything that matters.
+
+   </details>
+
+6. Search the netlists for invented names:
 
    ```bash
    grep 'net[0-9]' xschem/simulation/*.spice
    ```
 
-**You should see** the `broken_probe` device line with `net1` on it. The only other warning you
-got was three lines of solver complaints that look exactly like the noise you learn to scroll
-past. Run that `grep` after every netlist for the rest of the course. Any hit is a wire you
-believe is connected and is not.
+**You should see** ngspice print an answer, **73.4593 nA**, with no error anywhere: wrong by a
+factor of **6821**. The `grep` finds the `broken_probe` device line with `net1` on it. The only
+other warning you got was three lines of solver complaints that look exactly like the noise you
+learn to scroll past. Run that `grep` after every netlist for the rest of the course. Any hit is a
+wire you believe is connected and is not.
 
-## Part 7 (optional): Which model bin your device landed in
+## Part 8 (optional): Which model bin your device landed in
 
 1. Ask ngspice which model card it chose for `L=0.15 W=1`:
 
@@ -435,69 +492,25 @@ is 16 % shorter than the `L` you drew.
 
 ## Finishing
 
-You're done when:
+**You're done when** `make mine` prints `PASS` and `1030.4200 uA` for the transistor you drew in
+Part 4.
 
-- `make` prints `PASS` and `501.046 uA`
-- `make mine` prints `PASS` and `1030.4200 uA`
+### Questions
 
-and you can do these without looking anything up:
+Answer these without looking anything up. Each one points to where the lab answered it.
 
-- [ ] place an `nfet_01v8` and set `W` and `L` without the `u`
-- [ ] draw a wire that is not diagonal, and land it on a pin
-- [ ] name a net with `Alt-L` and connect two things by name alone
-- [ ] save, netlist, and find the `.spice` file
-- [ ] read the four node names on a device line and spot a `net7`
+1. How do you set `W` and `L` on an `nfet_01v8`, and what goes wrong if you write `W=1u`?
+   (Part 4, step 5, and Part 6.)
+2. How do you draw a wire that isn't diagonal, and make sure it lands on a pin? (Part 4, step 6.)
+3. How do you connect two things by net name alone? (Part 4, step 1: two `lab_pin`s with the same
+   label are one net. `Alt-L` places one.)
+4. Where does XSchem write the netlist when you press **Netlist**? (Part 3, steps 5 to 7.)
+5. What are the four node names on a device line, in order, and what does a `net7` on it mean?
+   (Part 2, step 2, and Part 7.)
 
-There is nothing to submit.
+### Submit
 
-## Harmless messages
-
-On some builds of the workbench image, a deck you run by hand with `ngspice -b` opens with a
-block like this before your circuit is even read:
-
-```
-Error opening osdi lib "/foss/pdks/sky130A/libs.tech/ngspice/osdi/psp103.osdi": No such file or directory!
-Error: Library /foss/pdks/sky130A/libs.tech/ngspice/osdi/psp103.osdi couldn't be loaded!
-...
-Warning: OSDI libs have not been loaded successfully.
-    Any of the following steps may fail, if Verilog A models are involved!.
-```
-
-Several `Error:` lines, on a run that then works perfectly. OSDI is ngspice's plug-in interface
-for compiled Verilog-A models. SKY130's `nfet_01v8`, `pfet_01v8` and diodes are all built-in BSIM
-and diode models, so nothing in this course needs those libraries. The `Makefile` sends ngspice's
-output to a log, so you normally don't see it.
-
-You may also see these two:
-
-```
-Warning: Eta0 = -0.0310679 is negative.
-Note: No compatibility mode selected!
-```
-
-The first is SkyWater's model card having a negative fitting parameter, which BSIM allows and
-mentions. The second is ngspice saying it is not pretending to be HSPICE.
-
-To tell these apart from a real problem: a real failure says `Error on line …`, followed by
-`Simulation interrupted due to error!` and then `no simulations run!`. If you see numbers after
-the warnings, the warnings didn't matter.
-
-## If something goes wrong
-
-| What you see | What it means |
-|---|---|
-| `could not find a valid modelname` | A unit suffix on `W` or `L`. See Part 5. |
-| `*  M1 -  nfet_01v8  IS MISSING !!!!` in the netlist | XSchem could not find the symbol. Nearly always the wrong `PDK`: check the menu bar says SKY130, then `echo $PDK`, then relaunch XSchem. |
-| `net1`, `net2`, … in your netlist | Unconnected pins. See Part 6. |
-| Netlist file nowhere to be found | It went to `~/.xschem/simulations/`. See [Getting started](guide/getting-started.md#the-netlist). |
-| `can't create directory "/foss/pdks/sky130A/libs.tech/xschem/sky130_tests/simulation": permission denied` | You pressed **Netlist** while XSchem was showing the SKY130 PDK's own start page, which lives inside the read-only PDK. Nothing is broken. Open a schematic in your own directory (`xschem nmos_probe.sch &` from `labs/lab-01-first-schematic/xschem/`) and netlist that. |
-| `file opening for write failed!` when you save | Same cause: the schematic you are editing is in a read-only directory, almost always the PDK start page. Your drawing is still in the window, and **File → Save as** into your own folder rescues it. |
-| `Error: incomplete or empty netlist` | ngspice hit an earlier error and gave up. Scroll **up**: the first `Error` line is the real one. |
-| A blank rectangle with a name instead of a circuit | An unexpanded subcell. Descend into it with `e`, come back with `Ctrl-E`. |
-| XSchem opens the wrong start page, or symbols vanish after it worked yesterday | You started it from a different directory, so it read a different `./xschemrc`. |
-| `make mine` says `FAIL - the netlist has no nfet_01v8` right after you drew one | You didn't press **Yes** in the **Ask Save** window. See Part 4, step 7. |
-
-More errors, with the full text of each: [The ngspice survival card](reference/ngspice-errors.md).
+Nothing to submit.
 
 Next on the [Course path](README.md#course-path): read
 [Linearity and superposition](guide/the-straight-line-runs-out.md).
