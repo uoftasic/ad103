@@ -1,4 +1,4 @@
-# Lab 01 — Your first schematic
+# Lab 01: Your first schematic
 
 You'll set up the workbench, draw one transistor in XSchem, watch it become seven lines of SPICE,
 and get a current out of it. Then you'll break the same circuit twice on purpose: once so loudly

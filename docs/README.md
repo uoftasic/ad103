@@ -17,7 +17,7 @@ Labs run inside the shared **workspace** you set up in [IC101](https://uoftasic.
 | **Main tool** | **XSchem**, the schematic editor. You have not used it before, and Lab 01 assumes that. |
 | **Also** | ngspice 47 and the SKY130 device models, both already in the workbench |
 | **Math level** | Algebra, exponentials, logarithms, and one square root. You won't need calculus. |
-| **Time** | 14–18 hours, self-paced |
+| **Time** | About 16.5 hours, self-paced |
 
 ## Course path
 
@@ -25,18 +25,18 @@ Work down this table in order. A **Read** row is one or more guide pages: concep
 worked examples, with nothing to run. A **Do** row is one lab, where you run every command
 yourself. Each lab lists the pages to read before you start it.
 
-| # | Type | What | Time |
+| # | | What | Time |
 |---|---|---|---|
 | 1 | Read | [Getting started](guide/getting-started.md) | 30 min |
-| 2 | Do | [Lab 01 — Your first schematic](labs/lab-01-first-schematic-overview.md) | 2 h |
+| 2 | Do | [Lab 01: Your first schematic](labs/lab-01-first-schematic-overview.md). Draw one NMOS in XSchem, simulate it, and break it twice on purpose. | 2 h |
 | 3 | Read | [Linearity and superposition](guide/the-straight-line-runs-out.md) · [The operating point](guide/the-operating-point.md) · [The diode equation](guide/the-diode-is-an-exponential.md) · [Three diode models](guide/three-models-of-one-diode.md) | 1.5 h |
-| 4 | Do | [Lab 02 — The diode I–V curve](labs/lab-02-diode-iv-overview.md) | 1.5 h |
+| 4 | Do | [Lab 02: The diode I–V curve](labs/lab-02-diode-iv-overview.md). Sweep a SKY130 diode, extract two of its model parameters, and heat it to 100 °C. | 1.75 h |
 | 5 | Read | [How a MOSFET works](guide/a-mosfet-is-a-valve.md) · [The four regions](guide/four-regions-not-three.md) · [Where saturation starts](guide/where-saturation-starts.md) | 1.5 h |
-| 6 | Do | [Lab 03 — MOSFET regions](labs/lab-03-mosfet-regions-overview.md) | 2 h |
+| 6 | Do | [Lab 03: MOSFET regions](labs/lab-03-mosfet-regions-overview.md). Find the four regions on your own NMOS curves, extract its threshold two ways, and add a curve to the deck. | 2.25 h |
 | 7 | Read | [What moves the threshold](guide/threshold-is-not-a-constant.md) · [Transconductance and output resistance](guide/gm-and-ro.md) · [Sizing with W and L](guide/w-and-l-are-a-choice.md) | 1.5 h |
-| 8 | Do | [Lab 04 — Testing the W/L rule](labs/lab-04-wl-knob-overview.md) | 2 h |
+| 8 | Do | [Lab 04: Testing the W/L rule](labs/lab-04-wl-knob-overview.md). Predict six currents from $W/L$, then measure where the rule holds and where it breaks. | 2 h |
 | 9 | Read | [The CMOS inverter](guide/the-inverter-is-an-amplifier.md) · [The current mirror](guide/the-current-mirror.md) | 1 h |
-| 10 | Do | [Capstone — The CMOS inverter](labs/capstone-inverter-overview.md) | 2.5 h |
+| 10 | Do | [Capstone: The CMOS inverter](labs/capstone-inverter-overview.md). Draw and size your own inverter, time it, run it as an amplifier, and measure a current mirror. | 2.5 h |
 
 The times are estimates. Your first lab will probably take longest, because you are learning
 XSchem at the same time.

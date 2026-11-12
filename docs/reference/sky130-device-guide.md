@@ -280,7 +280,7 @@ grep -m1 -A2 'subckt.*sky130_fd_pr__res_high_po ' \
 
 The diode's `area` and `perim` deserve their own warning, because getting them wrong produces
 no error at all. See the deliberate failures in
-[Lab 02 — The diode I–V curve](labs/lab-02-diode-iv-overview.md).
+[Lab 02: The diode I–V curve](labs/lab-02-diode-iv-overview.md).
 
 ## Corners
 

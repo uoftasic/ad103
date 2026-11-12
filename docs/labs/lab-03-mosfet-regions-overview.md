@@ -1,4 +1,4 @@
-# Lab 03 — MOSFET regions
+# Lab 03: MOSFET regions
 
 You'll sweep a real SKY130 `nfet_01v8` and find cutoff, triode, saturation and subthreshold on
 your own curves. You'll extract its threshold voltage two ways and see them disagree by 86 mV,

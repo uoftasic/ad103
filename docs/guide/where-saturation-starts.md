@@ -167,4 +167,4 @@ You'll reproduce every number on this page in Lab 03, Parts 2 and 3.
 4. You shorten a device from L = 1 µm to L = 0.15 µm at the same bias. Does `vdsat` go up or down,
    and does $r_o$ go up or down?
 
-Next: [Lab 03 — MOSFET regions](labs/lab-03-mosfet-regions-overview.md).
+Next: [Lab 03: MOSFET regions](labs/lab-03-mosfet-regions-overview.md).

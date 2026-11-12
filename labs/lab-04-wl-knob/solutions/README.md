@@ -1,4 +1,4 @@
-# Lab 04 — reference answers
+# Lab 04: reference answers
 
 **Don't read this first.** Every number below is one you can measure in under a minute, and
 measuring it yourself is worth more than reading it. This is a list of things to argue about, not a

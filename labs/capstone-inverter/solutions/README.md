@@ -1,4 +1,4 @@
-# Capstone — reference answers
+# Capstone: reference answers
 
 **Don't read this first.** Everything below can be measured in a minute with a copy of a deck you
 already have. This is a list of things to argue about.

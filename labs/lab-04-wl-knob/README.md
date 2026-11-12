@@ -1,4 +1,4 @@
-# Lab 04 — Testing the W/L rule
+# Lab 04: Testing the W/L rule
 
 Writeup: [uoftasic.com/ad103 → Lab 04](https://uoftasic.com/ad103/#/labs/lab-04-wl-knob-overview).
 The steps, expected output and explanations are there; this file is a quick reference.
