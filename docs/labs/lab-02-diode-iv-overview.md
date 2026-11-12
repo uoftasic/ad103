@@ -431,7 +431,7 @@ None of this is graded, and all of it is quick.
 3. **Two in series.** Put two 1 µm² diodes in series across the sweep source. Predict the decade
    slope before you run it.
 
-## Output that looks alarming but is normal
+## Harmless messages
 
 Every `results/*.log` file contains
 

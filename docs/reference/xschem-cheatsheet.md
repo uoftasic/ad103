@@ -41,7 +41,7 @@ Three parts of that window are worth knowing:
 | **`Netlist` / `Simulate` / `Waves`** | the three buttons that replace a terminal. They have no accelerator label; the keys are `n`, `s`, and the `Waves` menu. |
 | **status bar** | `SNAP: 10  GRID: 20  MODE: spice`. `MODE: spice` means the netlister will write SPICE, not Verilog. `SNAP` is the grid your clicks land on, and the most common cause of a wire that looks connected and isn't. |
 
-## The eleven
+## The eleven keys you need
 
 | Do this | Key |
 |---|---|

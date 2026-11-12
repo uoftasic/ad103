@@ -287,7 +287,7 @@ Three rules that each cost people an evening:
 3. A failed `meas` prints ` meas <name> ... failed!` and **ngspice keeps going and exits 0**. Read
    the output; don't trust the exit code.
 
-## Output that looks like trouble and isn't
+## Harmless messages
 
 ### OSDI `Error:` lines
 
