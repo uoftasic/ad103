@@ -131,9 +131,12 @@ $$
     V_out(0.0 V)              1.800000 V
     V_out(1.8 V)          2.131046e-07 V
     switching threshold       0.838029 V
+    gain at V_M               -13.1252
+    noise margins H / L     0.8106 / 0.6376 V
 
 PASS  Wn = Wp = 1 um, and your V_M is 0.838029 V against the
-      reference 0.838027 V.
+      reference 0.838027 V. You drew the same inverter the
+      shipped deck describes, and it behaves identically.
 ```
 
 **0.838029 against 0.838027: two microvolts.** Your drawing and the hand-written deck in

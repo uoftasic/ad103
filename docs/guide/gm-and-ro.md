@@ -20,8 +20,8 @@ two-terminal device's conductance can only turn a voltage into the current throu
 
 ## Measuring $g_m$
 
-$g_m$ is the slope of the $I_D$ vs $V_{GS}$ curve you swept in Lab 03, Part 5. Differentiating that
-sweep gave:
+$g_m$ is the slope of the $I_D$ vs $V_{GS}$ curve you swept in Lab 03. Differentiating that sweep,
+in Lab 03 Part 5, gave:
 
 ```
 == g_m = dI_D/dV_GS   (V_DS = 1.8 V)

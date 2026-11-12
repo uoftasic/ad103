@@ -169,6 +169,8 @@ Cutoff and subthreshold are the same region seen on two different axes, which is
 merge them. Keep them apart in your head: cutoff is what you assume when you do digital logic, and
 subthreshold is what you count when you do a power budget.
 
+You'll draw these plots and read these numbers yourself in Lab 03, Parts 1, 3 and 4.
+
 ## Check yourself
 
 1. A device has $V_{GS}$ = 1.2 V, $V_{TH}$ = 0.6 V and $V_{DS}$ = 0.3 V. Which region is it in?
