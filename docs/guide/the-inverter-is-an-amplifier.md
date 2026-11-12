@@ -21,7 +21,7 @@ You have all the ingredients from earlier pages:
 
 The inverter's behaviour follows from these without any new idea.
 
-## The two halves: a ratio of 2.4959
+## Drive strength of each half
 
 The capstone lab starts by measuring each transistor on its own, both at W = 1 µm, L = 0.15 µm and
 fully on:
@@ -84,7 +84,7 @@ NMOS current and the PMOS current are equal, with both devices in saturation. Be
 2.4959× stronger, the currents balance at an input **below** the midpoint. It takes less gate
 voltage than you'd expect for the pull-down to win.
 
-## Two sizings for two jobs
+## Sizing the PMOS
 
 The obvious fix is to make the PMOS 2.4959× wider so the two are equally strong. It doesn't quite
 work:
@@ -132,7 +132,7 @@ choosing between them depends on whether your concern is timing or noise.
 > **When two reasonable criteria give two different answers,** you've found a trade-off, not a
 > mistake. Name both criteria before you pick.
 
-## A real amplifier: change one number
+## Lengthening the channels
 
 The gain was −13.1253 with $L = 0.15$ µm, the process minimum. [Transconductance and output
 resistance](guide/gm-and-ro.md) showed that gain is $g_m$ times an output resistance, and that $r_o$

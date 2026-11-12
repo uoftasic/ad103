@@ -4,7 +4,7 @@ If you can't use superposition and you can't solve the equation by hand, the num
 from a search. You can run that search yourself on paper in about ninety seconds, and it is worth
 doing once, because it is what every SPICE simulation you launch does underneath.
 
-## A circuit algebra can't solve
+## A resistor and a diode in series
 
 One supply, one resistor, one diode:
 

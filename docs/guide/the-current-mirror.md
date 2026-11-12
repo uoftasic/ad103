@@ -64,7 +64,7 @@ i(vo2) = -5.00878e-05
 **50.0878 µA against a 50 µA reference, a 0.176 % error**, from a circuit with no resistors, no
 feedback and no trimming.
 
-## Limit 1: the copy needs headroom
+## Limit 1: output headroom
 
 A saturated transistor is very nearly a current source; drop it out of saturation and it becomes a
 resistor. Sweeping the output node shows where that happens:
@@ -101,7 +101,7 @@ another $V_{DSAT}$ of compliance.
 > **Before you call a mirror broken, ask what $V_{out}$ was.** Half the current missing is almost
 > always a device in triode, not a wiring error.
 
-## Limit 2: the ratio you draw isn't the ratio you get
+## Limit 2: ratio error
 
 Widen the output device and the copy scales: a mirror is also a *multiplier*. The deck draws 1:1,
 1:2 and 1:4 by width, all from one gate voltage with the outputs at 0.9 V. $W$ = 5, 10 and 20 µm

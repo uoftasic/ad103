@@ -38,7 +38,7 @@ Because it changes only the current shell, you have to load it again in every ne
 The check takes two seconds: `echo $PDK` should print `sky130A`, and XSchem's menu bar should
 say **SKY130**. Lab 01, Part 1 has you do it.
 
-## Where XSchem starts, and why it matters
+## Where XSchem starts
 
 XSchem reads a settings file called `xschemrc` from the directory you launch it in. Each AD103
 lab has one in its `xschem/` folder. It makes the SKY130 symbols resolve and puts your netlists
@@ -52,7 +52,7 @@ somewhere you can find them. Three habits follow from that:
 - **Name the file you want to open**, as in `xschem nmos_probe.sch &`. With no filename, XSchem
   opens whatever its settings call the start page.
 
-### The start page is read-only
+### The PDK start page
 
 Every AD103 lab sets the start page to a blank `untitled.sch` in the lab directory, so inside a
 lab folder a bare `xschem &` is harmless. Anywhere else, such as a scratch folder of your own
