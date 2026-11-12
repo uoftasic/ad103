@@ -1,6 +1,6 @@
 # Lab 01: Your first schematic
 
-You'll set up the workbench, draw one transistor in XSchem, watch it become seven lines of SPICE,
+You'll load the course, draw one transistor in XSchem, watch it become seven lines of SPICE,
 and get a current out of it. Then you'll break the same circuit twice on purpose: once so loudly
 that ngspice refuses to run, and once so quietly that it hands you an answer that is wrong by a
 factor of 6821.
@@ -10,40 +10,21 @@ Package: [`labs/lab-01-first-schematic/`](https://github.com/uoftasic/ad103/tree
 ## Before you start
 
 - Read [Getting started](guide/getting-started.md).
-- Finish [IC101](https://uoftasic.com/ic101/): you need the `workspace` clone and a working
-  `start_vnc` script.
 - Keep the [XSchem cheat sheet](reference/xschem-cheatsheet.md) open in another tab.
 
 **Time:** about 2 hours, most of it learning XSchem. Each `make` target takes about ten seconds,
 almost all of it ngspice loading the SKY130 models.
 
-## Part 1: Start the workbench
+## Part 1: Load the course
 
-1. On your own machine, in your `workspace` clone, start the desktop:
+If you haven't set up the workbench yet, do
+[IC101 Lab 03](https://uoftasic.com/ic101/#/labs/lab-03-launch-the-workbench-overview) first.
 
-   ```bash
-   cd workspace
-   ./scripts/start_vnc.sh          # Windows: scripts\start_vnc.bat
-   ```
+1. Start the desktop from your `workspace` clone (`./scripts/start_vnc.sh`, or
+   `scripts\start_vnc.bat` on Windows), open **http://localhost/**, and open a terminal on that
+   desktop. Every command from here on goes in that terminal, not on your laptop.
 
-2. Open **http://localhost/** in your browser and open a terminal on that desktop. Every command
-   from here on is typed in that terminal, not on your laptop. Ports, passwords, resolution, and
-   what to do when the page is blank are in
-   [IC101 — Launch the noVNC desktop](https://uoftasic.com/ic101/#/guide/launch-novnc).
-
-3. Check the PDK before you load anything:
-
-   ```bash
-   echo $PDK
-   ```
-
-   ```
-   ihp-sg13g2
-   ```
-
-   That is the image's default, and it is the wrong process for this course.
-
-4. Load the course environment. Do this in every new terminal; it does not carry over.
+2. Load the course environment. Do this in every new terminal:
 
    ```bash
    . /foss/designs/common/.designinit
@@ -54,7 +35,10 @@ almost all of it ngspice loading the SKY130 models.
              run 'mod' to list course modules, or 'mod <name>' to enter one.
    ```
 
-5. Get the course files. `mod` is a shell function that `.designinit` defines.
+   Check that it says `PDK=sky130A`. The image's own default is `ihp-sg13g2`, which is the wrong
+   process for this course.
+
+3. Get the course files:
 
    ```bash
    mod add ad103      # first time only: clones github.com/uoftasic/ad103
@@ -70,40 +54,24 @@ almost all of it ngspice loading the SKY130 models.
    cwd: /foss/designs/modules/ad103
    ```
 
-   Everything lands under `/foss/designs/modules/`, which is your `workspace` folder mounted
-   into the container. Your files are on your own disk, so deleting the container does not
-   delete your work.
-
    | What you see | What it means |
    |---|---|
-   | `bash: mod: command not found` | You did not run step 4 in this terminal. Every new tab starts clean. |
+   | `bash: mod: command not found` | You did not run step 2 in this terminal. |
    | `mod: no such module: ad103` | You ran `mod ad103` before `mod add ad103`. |
-   | `fatal: could not read Username for 'https://github.com'` | git is being asked to log in, which means it could not read the repo anonymously. Check the spelling; if it is right, ask in [Discord](https://discord.gg/hrJnP5UsGz). Do not type your password. |
+   | `fatal: could not read Username for 'https://github.com'` | git could not read the repo anonymously. Check the spelling; if it is right, ask in [Discord](https://discord.gg/hrJnP5UsGz). Do not type your password. |
 
-6. Check your tool versions:
+4. Check the tool versions:
 
    ```bash
    xschem --version
    ngspice -v
    ```
 
-   ```
-   XSCHEM V3.4.8RC
-   Copyright (C) 1998-2026 Stefan Schippers
-   ```
-
-   ```
-   ******
-   ** ngspice-47 : Circuit level simulation program
-   ** Compiled with KLU Direct Linear Solver
-   ** The U. C. Berkeley CAD Group
-   ** Copyright 1985-1994, Regents of the University of California.
-   ```
-
-**You should see** `PDK=sky130A` in the `.designinit` banner from step 4, `XSCHEM V3.4.8RC`, and
-`ngspice-47`. XSchem's
-keys and menus have changed between releases, so if your version is different, the screenshots
-in this course may not match your window.
+**You should see** `PDK=sky130A` in the banner from step 2, then `XSCHEM V3.4.8RC` and
+`ngspice-47` at the top of the two version outputs. The course is pinned to these versions.
+XSchem's keys and menus have changed between releases, so with a different version the screenshots
+may not match your window. For problems with the desktop or the container, see IC101's
+[Troubleshooting](https://uoftasic.com/ic101/#/reference/troubleshooting) page.
 
 ## Part 2: Prove the toolchain works
 
