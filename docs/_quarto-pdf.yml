@@ -1,0 +1,52 @@
+# The whole course as one PDF:
+#   quarto render docs --profile pdf --to typst      # writes docs/_book/*.pdf
+# Chapter order follows the sidebar in _quarto.yml.
+
+project:
+  type: book
+  output-dir: _book
+
+book:
+  title: "AD103 — Nonlinear Circuits"
+  subtitle: "The diode and the MOSFET in XSchem"
+  author: "UofT ASIC Team"
+  output-file: ad103-course
+  chapters:
+    - index.md
+    - part: "Start here"
+      chapters:
+        - guide/getting-started.md
+        - labs/lab-01-first-schematic-overview.md
+    - part: "The diode"
+      chapters:
+        - guide/the-straight-line-runs-out.md
+        - guide/the-operating-point.md
+        - guide/the-diode-is-an-exponential.md
+        - guide/three-models-of-one-diode.md
+        - labs/lab-02-diode-iv-overview.md
+    - part: "The MOSFET"
+      chapters:
+        - guide/a-mosfet-is-a-valve.md
+        - guide/four-regions-not-three.md
+        - guide/where-saturation-starts.md
+        - labs/lab-03-mosfet-regions-overview.md
+    - part: "Device parameters"
+      chapters:
+        - guide/threshold-is-not-a-constant.md
+        - guide/gm-and-ro.md
+        - guide/w-and-l-are-a-choice.md
+        - labs/lab-04-wl-knob-overview.md
+    - part: "Capstone"
+      chapters:
+        - guide/the-inverter-is-an-amplifier.md
+        - guide/the-current-mirror.md
+        - labs/capstone-inverter-overview.md
+  appendices:
+    - reference/xschem-cheatsheet.md
+    - reference/ngspice-errors.md
+    - reference/sky130-device-guide.md
+
+format:
+  typst:
+    toc: true
+    toc-depth: 1
