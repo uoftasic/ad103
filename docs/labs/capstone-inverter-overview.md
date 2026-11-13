@@ -116,7 +116,8 @@ Can you draw an inverter that behaves exactly like the shipped deck?
        NMOS   drain -> out    gate -> in    source -> 0      body -> 0
    ```
 
-   The first time, deliberately leave the PMOS **body** on ground. It is the pin everyone forgets.
+   The first time, wire the PMOS **body** to `0` instead of `vdd`, on purpose. It is the pin
+   everyone forgets.
 
 4. Save (`Ctrl-S`, then **Yes**) and check your drawing:
 
@@ -194,9 +195,10 @@ Why does the $W_n = W_p$ inverter switch below $V_{DD}/2$?
 <details>
 <summary>Answer</summary>
 
-The pull-down is the stronger device, so it takes less input voltage than you'd expect to drag the
-output down. $V_M$ isn't the threshold voltage of either device (769.27 mV and 510.03 mV) or their
-average; it is the input at which the two currents are equal. It is the first parameter in this
+The pull-down is the stronger device (Part 4 measures how much: 2.4959×), so it takes less input
+voltage than you'd expect to drag the output down. $V_M$ isn't the threshold voltage of either
+device (769.27 mV for the NMOS, the `vth` Lab 01's `make bins` printed, and 510.03 mV for the PMOS)
+or their average; it is the input at which the two currents are equal. It is the first parameter in this
 course that belongs to a circuit rather than to a transistor.
 
 </details>
@@ -337,7 +339,8 @@ wants every decibel. Same two transistors, different $L$, different job.
 
 How much supply current does an inverter draw, and when?
 
-1. Read block 6 of `make extract`:
+1. Read block 6 of `make extract`, the supply current of the $W_n = W_p$ = 1 µm inverter across its
+   input sweep:
 
    ```
       supply current at V_in = 0 V             0.000002 uA
@@ -445,8 +448,8 @@ How accurately does a mirror copy a current, and what limits it?
 
 2. Work out the 1:1 copy's error at $V_{out}$ = 0.9 V, from `i(vo2)`.
 
-3. In the `part 3` block, find the output voltage below which the copy collapses, and compare it
-   with the reference branch's `vdsat`.
+3. In the `part 3` block (it comes after `part 4` in the output), find the output voltage below
+   which the copy collapses, and compare it with the reference branch's `vdsat`.
 
 4. Work out the actual ratios for the 2× and 4× outputs (`i(vo3)` and `i(vo4)` against `i(vo2)`),
    and the threshold difference between the 5 µm and 10 µm devices.
