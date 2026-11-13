@@ -10,7 +10,7 @@ You have almost certainly never used XSchem. This page explains how it fits toge
 handful of traps that cost new users the most time. Nothing here installs anything: AD103 needs
 one Docker image and a browser, and you already have both from
 [IC101](https://uoftasic.com/ic101/). You'll set up and draw your first schematic in
-[Lab 01](labs/lab-01-first-schematic-overview.md).
+[Lab 01](../labs/lab-01-first-schematic-overview.md).
 
 ## The PDK setting
 
@@ -118,7 +118,7 @@ SKY130 models are **binned**: each `.model` card covers a range of widths and le
 device has to fall inside one of those ranges. A width of a millionth of a micron falls outside
 every bin, so no model matches and ngspice stops. The message names neither `W` nor units, which
 is why the habit to build is "check `W` and `L` first" rather than "read the error".
-[Reading a SKY130 device model](reference/sky130-device-guide.md) has the full explanation.
+[Reading a SKY130 device model](../reference/sky130-device-guide.md) has the full explanation.
 
 You'll cause this error on purpose in Lab 01, Part 6, so you recognise it later.
 
@@ -253,4 +253,4 @@ Answer these on paper before you start Lab 01.
 5. You netlisted a schematic in a folder with no `xschemrc`. Where did the netlist go, and what
    happens to it when the container is removed?
 
-Next: [Lab 01: Your first schematic](labs/lab-01-first-schematic-overview.md).
+Next: [Lab 01: Your first schematic](../labs/lab-01-first-schematic-overview.md).

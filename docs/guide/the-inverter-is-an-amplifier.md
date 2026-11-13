@@ -12,11 +12,11 @@ course it is the smallest thing with gain, and the two descriptions are the same
 You have all the ingredients from earlier pages:
 
 - A MOSFET is **off** below threshold and **on** above it
-  ([How a MOSFET works](guide/a-mosfet-is-a-valve.md)).
+  ([How a MOSFET works](../guide/a-mosfet-is-a-valve.md)).
 - Between those extremes it has four regions, and the interesting one here is saturation
-  ([The four regions](guide/four-regions-not-three.md)).
+  ([The four regions](../guide/four-regions-not-three.md)).
 - In saturation the gate moves the current by $g_m$, and the drain leaks it back through $r_o$
-  ([Transconductance and output resistance](guide/gm-and-ro.md)).
+  ([Transconductance and output resistance](../guide/gm-and-ro.md)).
 - Electrons are more mobile than holes, so the same shape drawn as a PMOS is weaker.
 
 The inverter's behaviour follows from these without any new idea.
@@ -135,7 +135,7 @@ choosing between them depends on whether your concern is timing or noise.
 ## Lengthening the channels
 
 The gain was −13.1253 with $L = 0.15$ µm, the process minimum. [Transconductance and output
-resistance](guide/gm-and-ro.md) showed that gain is $g_m$ times an output resistance, and that $r_o$
+resistance](../guide/gm-and-ro.md) showed that gain is $g_m$ times an output resistance, and that $r_o$
 grows quickly with length. So lengthen both devices and change nothing else:
 
 ```
@@ -165,7 +165,7 @@ is the same schematic your logic library calls `inv_1`.
 > **The bias problem.** To use this as an amplifier you have to hold the input at 0.712 V, on a
 > slope of 116. A 10 mV drift in bias moves the output by 1.16 V and slams it into a rail. Real
 > amplifiers spend most of their transistors on holding the operating point still, and the first
-> tool for that is [the current mirror](guide/the-current-mirror.md), the next page.
+> tool for that is [the current mirror](../guide/the-current-mirror.md), the next page.
 
 ## Current while switching
 
@@ -201,4 +201,4 @@ You'll measure every number on this page in the capstone lab.
 4. Lengthening both devices from 0.15 µm to 0.5 µm raised the gain from 13 to 116. Which quantity
    in $A_v = -(g_{mn} + g_{mp})(r_{on} \parallel r_{op})$ changed most?
 
-Next: [The current mirror](guide/the-current-mirror.md).
+Next: [The current mirror](../guide/the-current-mirror.md).

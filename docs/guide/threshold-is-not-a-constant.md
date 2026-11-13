@@ -168,4 +168,4 @@ You'll run `vth_body.spice` and `vth_vs_l.spice` yourself in Lab 04, Part 2.
 4. At this overdrive, the drain current falls when the device heats up even though $V_{TH}$ falls.
    Which effect wins, and would the answer be the same just above threshold?
 
-Next: [Transconductance and output resistance](guide/gm-and-ro.md).
+Next: [Transconductance and output resistance](../guide/gm-and-ro.md).

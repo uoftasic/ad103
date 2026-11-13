@@ -9,10 +9,10 @@ Package: [`labs/lab-03-mosfet-regions/`](https://github.com/uoftasic/ad103/tree/
 
 ## Before you start
 
-- Finish [Lab 02](labs/lab-02-diode-iv-overview.md).
-- Read [How a MOSFET works](guide/a-mosfet-is-a-valve.md),
-  [The four regions](guide/four-regions-not-three.md) and
-  [Where saturation starts](guide/where-saturation-starts.md).
+- Finish [Lab 02](../labs/lab-02-diode-iv-overview.md).
+- Read [How a MOSFET works](../guide/a-mosfet-is-a-valve.md),
+  [The four regions](../guide/four-regions-not-three.md) and
+  [Where saturation starts](../guide/where-saturation-starts.md).
 - Open a terminal in the workbench and go to the lab folder:
 
   ```bash
@@ -137,7 +137,7 @@ None of them is wrong. $V_{TH}$ is defined by its extraction method, and the met
 because the square law they both rely on isn't exactly true for this device. Linear extrapolation
 relies on it only very near threshold and lands 2.07 % from the model; $\sqrt{I_D}$ extrapolation
 relies on it across a whole volt of overdrive and is 12.49 % out.
-[Where saturation starts](guide/where-saturation-starts.md#two-methods-86-mv-apart) has the
+[Where saturation starts](../guide/where-saturation-starts.md#two-methods-86-mv-apart) has the
 details.
 
 </details>
@@ -175,7 +175,7 @@ Velocity saturation. The square law assumes carrier speed keeps rising with fiel
 roughly $10^4$ V/cm the carriers stop speeding up. Once they are moving as fast as they can, more
 drain voltage adds nothing, so the current stops responding before $V_{DS}$ reaches $V_{ov}$. The
 harder you drive the gate, the bigger the error. See
-[Where saturation starts](guide/where-saturation-starts.md#velocity-saturation).
+[Where saturation starts](../guide/where-saturation-starts.md#velocity-saturation).
 
 </details>
 
@@ -184,7 +184,7 @@ harder you drive the gate, the bigger the error. See
 Is a transistor below threshold really off?
 
 1. Write down what you predicted for $I_D$ at $V_{GS}$ = 0.30 V when you read
-   [The four regions](guide/four-regions-not-three.md).
+   [The four regions](../guide/four-regions-not-three.md).
    If you skipped the prediction, make one now.
 
 2. Read the `below threshold` block of `make extract`, and open
@@ -236,7 +236,7 @@ What does $g_m/I_D$ measure, and what does its trend say about where to bias an 
 
 $g_m/I_D$ is transconductance per unit of current burned, a measure of efficiency. It is highest
 near threshold and worst wide open, the opposite of where a beginner tends to bias an amplifier.
-[Transconductance and output resistance](guide/gm-and-ro.md), which you'll read before Lab 04,
+[Transconductance and output resistance](../guide/gm-and-ro.md), which you'll read before Lab 04,
 picks this up.
 
 </details>
@@ -265,7 +265,7 @@ The `W/L is a knob` block puts four devices at $V_{GS} = V_{DS}$ = 1.8 V:
 
 **You should see** width behave honestly (B is within **0.20 %** of 2×), doubling $L$ give 9.4 %
 more current than $1/L$ predicts, and the minimum-length device D deliver **501.046 µA** against a
-predicted 928.367 µA, only **54 %**. [Sizing with W and L](guide/w-and-l-are-a-choice.md), which
+predicted 928.367 µA, only **54 %**. [Sizing with W and L](../guide/w-and-l-are-a-choice.md), which
 you'll read before Lab 04, closes that gap in two steps.
 
 ## Part 7: Units on `W` and `L`
@@ -408,7 +408,7 @@ keeps its simulation commands next to its circuit.*
    and a plain left-click on it only selects it: no netlist, no simulation, no message. **Click the
    arrow once to select it, then press `Ctrl-H`** to fire it. (Ctrl-click on the arrow also works,
    but it misses if your hand drifts between press and release. The
-   [XSchem cheat sheet](reference/xschem-cheatsheet.md#netlist-and-simulate) has the same note.)
+   [XSchem cheat sheet](../reference/xschem-cheatsheet.md#netlist-and-simulate) has the same note.)
 
 4. Back in the lab folder, rerun the checker on the data the schematic wrote:
 
@@ -456,7 +456,7 @@ Try them before you open it.
    lab is about *n*-channel devices specifically.
 2. **Lengthen the short device.** Set device D in `spice/wl_sweep.spice` to `L=0.5`, rerun
    `make extract`, and watch `vth`, `vdsat` and $I_D$ move together. Check whether the two-step
-   arithmetic in [Sizing with W and L](guide/w-and-l-are-a-choice.md) still closes.
+   arithmetic in [Sizing with W and L](../guide/w-and-l-are-a-choice.md) still closes.
 
-Next on the [Course path](README.md#course-path): read
-[What moves the threshold](guide/threshold-is-not-a-constant.md).
+Next on the [Course path](../index.md#course-path): read
+[What moves the threshold](../guide/threshold-is-not-a-constant.md).

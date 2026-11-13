@@ -9,8 +9,8 @@ Package: [`labs/lab-01-first-schematic/`](https://github.com/uoftasic/ad103/tree
 
 ## Before you start
 
-- Read [Getting started](guide/getting-started.md).
-- Keep the [XSchem cheat sheet](reference/xschem-cheatsheet.md) open in another tab.
+- Read [Getting started](../guide/getting-started.md).
+- Keep the [XSchem cheat sheet](../reference/xschem-cheatsheet.md) open in another tab.
 
 **Time:** about 2 hours, most of it learning XSchem, not counting the optional Part 8. Each `make`
 target takes about ten seconds, almost all of it ngspice loading the SKY130 models.
@@ -103,7 +103,7 @@ Does your workbench give the reference answer, and what does a SPICE device line
 
 3. Open `results/nmos_op.log` and find `i(vds) = -5.01046e-04`. The log opens with several
    `Error opening osdi lib` lines; they are harmless, and
-   [Harmless messages](reference/ngspice-errors.md#harmless-messages) says why.
+   [Harmless messages](../reference/ngspice-errors.md#harmless-messages) says why.
 
    The transistor is conducting, so why is the current negative?
 
@@ -139,7 +139,7 @@ drawing?
 
 2. Check the menu bar says **SKY130**. If it says **IHP**, close XSchem, run step 2 of Part 1
    in this terminal, and launch it again. Other XSchem failures, most of which give no error, are
-   listed under [Failures that exit 0](reference/xschem-cheatsheet.md#failures-that-exit-0).
+   listed under [Failures that exit 0](../reference/xschem-cheatsheet.md#failures-that-exit-0).
 
 3. Learn the keys you need. XSchem has several hundred bindings; these cover the whole course.
    They come from XSchem's own list: **Help → Keys**, or press `/` for a full-screen poster.
@@ -163,11 +163,11 @@ drawing?
    Three of these will catch you out, because your text editor uses the same keys for something
    else: **`c` duplicates** the selection (plain `Ctrl-C` is a different, less useful copy),
    **`u` is undo** (`Ctrl-Z` is zoom out), and **`q` opens properties** (it does not quit). The
-   full list, with menu equivalents, is in the [XSchem cheat sheet](reference/xschem-cheatsheet.md).
+   full list, with menu equivalents, is in the [XSchem cheat sheet](../reference/xschem-cheatsheet.md).
 
 4. Pan and zoom around `nmos_probe.sch` until it stops looking random. Find the two supplies,
    the nets `g` and `d`, and the junction dot where the source and body wires meet. Compare it
-   with the picture in [Getting started](guide/getting-started.md#how-wires-connect).
+   with the picture in [Getting started](../guide/getting-started.md#how-wires-connect).
 
    > **Warning:** `nmos_probe.sch` is the lab's reference, and `make` checks against it.
    > Practise on it freely (`u` undoes any number of steps), but don't save over it. If you
@@ -175,7 +175,7 @@ drawing?
 
    The status bar at the bottom of the window is where XSchem tells you what mode you are in. If
    it is hidden behind the taskbar, see
-   [Windows that open off screen](reference/xschem-cheatsheet.md#windows-that-open-off-screen).
+   [Windows that open off screen](../reference/xschem-cheatsheet.md#windows-that-open-off-screen).
 
 5. Open the **Simulation** menu and check the bullet is on **Use 'simulation' dir in schematic
    dir**. The lab's `xschemrc` sets this. While the menu is open, tick **Show netlist after
@@ -240,7 +240,7 @@ Can you draw the reference circuit yourself, with a transistor twice as wide?
 
    On a 1280-wide desktop the chooser opens mostly off the right edge of the screen, with
    **OK** out of view. Drag it back by the part of the title bar you can see;
-   [Windows that open off screen](reference/xschem-cheatsheet.md#windows-that-open-off-screen)
+   [Windows that open off screen](../reference/xschem-cheatsheet.md#windows-that-open-off-screen)
    has the details.
 
 3. Click the `sky130A` line on the left, open **`sky130_fd_pr`**, and replace the **Search** text
@@ -256,7 +256,7 @@ Can you draw the reference circuit yourself, with a transistor twice as wide?
    The three symbols you'll use in this course are **`nfet_01v8.sym`** (the 1.8 V n-channel
    MOSFET, the workhorse of this process), **`pfet_01v8.sym`** (its p-channel twin) and
    **`diode.sym`** (Lab 02's subject). The other seventy-odd devices are described in
-   [Reading a SKY130 device model](reference/sky130-device-guide.md).
+   [Reading a SKY130 device model](../reference/sky130-device-guide.md).
 
 4. Pick `nfet_01v8.sym`, press **OK**, and click to drop it in the gap.
 
@@ -353,7 +353,7 @@ Does a transistor twice as wide carry twice the current?
 
    Doubling the width bought slightly more than double the current. That is too small to be a
    mistake and too large to be noise. It is the first crack in "current is proportional to $W$",
-   and [Lab 04](labs/lab-04-wl-knob-overview.md) is about what is behind it.
+   and [Lab 04](../labs/lab-04-wl-knob-overview.md) is about what is behind it.
 
    </details>
 
@@ -397,7 +397,7 @@ What does ngspice say when `W` and `L` carry a unit suffix?
    ```
 
 **You should see** two characters of difference: `L=0.15u W=1u` instead of `L=0.15 W=1`.
-[Getting started](guide/getting-started.md#w1-never-w1u) explains what the `u` does.
+[Getting started](../guide/getting-started.md#w1-never-w1u) explains what the `u` does.
 
 The message names neither `W` nor units. So when you see `could not find a valid modelname`, what
 do you check first?
@@ -499,7 +499,7 @@ wire you believe is connected and is not.
 
 **You should see** two `model` headers. Everything above the second one is the **bin**, and
 everything below it is **your device**. [Reading a SKY130 device
-model](reference/sky130-device-guide.md#what-a-bin-is) explains each line, including why `leff`
+model](../reference/sky130-device-guide.md#what-a-bin-is) explains each line, including why `leff`
 is 16 % shorter than the `L` you drew.
 
 ## Finishing
@@ -524,5 +524,5 @@ Answer these without looking anything up. Each one points to where the lab answe
 
 Nothing to submit.
 
-Next on the [Course path](README.md#course-path): read
-[Linearity and superposition](guide/the-straight-line-runs-out.md).
+Next on the [Course path](../index.md#course-path): read
+[Linearity and superposition](../guide/the-straight-line-runs-out.md).

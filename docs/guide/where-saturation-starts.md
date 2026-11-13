@@ -137,7 +137,7 @@ Two consequences you'll use constantly:
 The right-hand end of the $V_{GS} = 1.8$ V curve isn't horizontal. It rises from **682.502 µA** at
 $V_{DS} = 1.2$ V to **696.275 µA** at 1.8 V: 2.0 % more current for 0.6 V more drain.
 
-The reason is in panel 4 of the [channel cross-section](guide/a-mosfet-is-a-valve.md#the-channel-at-four-bias-points).
+The reason is in panel 4 of the [channel cross-section](../guide/a-mosfet-is-a-valve.md#the-channel-at-four-bias-points).
 As $V_{DS}$ grows, the pinch-off point moves further from the drain, so the conducting part of the
 channel gets slightly **shorter**, and a shorter channel carries more current. This is
 **channel-length modulation**, and it is what the $(1 + \lambda V_{DS})$ factor in your textbook
@@ -155,7 +155,7 @@ Both are from `spice/op_params.spice`. A saturated transistor is not an ideal cu
 a current source with 64 kΩ in parallel, or 19 kΩ if you use the minimum-length device.
 
 That number sets how much voltage gain one transistor can give, and it is the first thing
-[Transconductance and output resistance](guide/gm-and-ro.md) uses.
+[Transconductance and output resistance](../guide/gm-and-ro.md) uses.
 
 You'll reproduce every number on this page in Lab 03, Parts 2 and 3.
 
@@ -167,4 +167,4 @@ You'll reproduce every number on this page in Lab 03, Parts 2 and 3.
 4. You shorten a device from L = 1 µm to L = 0.15 µm at the same bias. Does `vdsat` go up or down,
    and does $r_o$ go up or down?
 
-Next: [Lab 03: MOSFET regions](labs/lab-03-mosfet-regions-overview.md).
+Next: [Lab 03: MOSFET regions](../labs/lab-03-mosfet-regions-overview.md).

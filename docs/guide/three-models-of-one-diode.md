@@ -32,13 +32,13 @@ than a quarter of a volt looks, from far enough away, like a battery. Model 2 is
 *$I = I_0\left(e^{V/nV_T}-1\right)$, solved together with the rest of the circuit.*
 
 This one is exact, and it can't be solved by rearrangement, so it always comes with a numerical
-method: either your own [three lines of iteration](guide/the-operating-point.md) or SPICE's.
+method: either your own [three lines of iteration](../guide/the-operating-point.md) or SPICE's.
 
 ## What each model costs
 
 Take one resistor from 1.8 V into one 1 µm² diode. Model 1 says the current is $1.8/R$. Model 2
 says $(1.8-0.7)/R$. Model 3 is ngspice's operating point, from
-[The operating point](guide/the-operating-point.md).
+[The operating point](../guide/the-operating-point.md).
 
 | $R$ | Model 1: switch | Model 2: 0.7 V | Model 3: ngspice | Model 1 error | Model 2 error |
 |---|---|---|---|---|---|
@@ -52,7 +52,7 @@ Three things to notice, and none of them is "Model 2 is good".
 is simply where this junction happens to sit at a few microamps. Above that current the real
 voltage is higher; below it, lower. The constant-drop model is a tangent point, not a bound. For a
 diode running at 100 µA, 0.7 V is a bad guess; for one at 1 nA it is a terrible one, because the
-[decade table](guide/the-diode-is-an-exponential.md#what-the-sky130-diode-measures) puts that
+[decade table](../guide/the-diode-is-an-exponential.md#what-the-sky130-diode-measures) puts that
 diode at 0.419503 V.
 
 **Model 2 is worst at the largest current.** There, the series resistance (979.1 Ω) adds its own
@@ -79,7 +79,7 @@ There is a fourth model, and it is the most useful of all: replace the diode wit
 value is the slope of the curve at the operating point. That is the **small-signal model**. It is
 valid only for changes small enough that the curve looks straight, and it is how every amplifier
 in this course is analysed. You've already seen one: 30.3 kΩ at the 1 MΩ operating point, on
-[The operating point](guide/the-operating-point.md#small-signal-resistance).
+[The operating point](../guide/the-operating-point.md#small-signal-resistance).
 
 ## What junction area buys
 
@@ -145,4 +145,4 @@ Part 7.
 3. You need to lower a diode's voltage by 77 mV at fixed current. Roughly how much bigger must the
    junction be, if area alone set the current? Why is the real answer bigger still?
 
-Next: [Lab 02: The diode I–V curve](labs/lab-02-diode-iv-overview.md).
+Next: [Lab 02: The diode I–V curve](../labs/lab-02-diode-iv-overview.md).

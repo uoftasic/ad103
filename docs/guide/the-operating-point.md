@@ -22,7 +22,7 @@ $$
 $$
 
 The left side is a straight line in $v$. The right side is the diode's curve, which
-[the next page](guide/the-diode-is-an-exponential.md) shows is an exponential in $v$. So the
+[the next page](../guide/the-diode-is-an-exponential.md) shows is an exponential in $v$. So the
 equation is
 
 $$
@@ -57,7 +57,7 @@ Two things follow from the picture:
   the current for less than a tenth of a volt.
 - The diode's curve is so steep near 0.7 V that a large change in the load line produces a small
   change in voltage. That is where the "a diode drops 0.7 V" rule of thumb comes from, and
-  [Three diode models](guide/three-models-of-one-diode.md) puts a number on how good it is.
+  [Three diode models](../guide/three-models-of-one-diode.md) puts a number on how good it is.
 
 ## Worked example: guess, correct, repeat
 
@@ -91,7 +91,7 @@ three lines of arithmetic and one measured anchor.
 The 0.60 % comes from a real property of the device. You used a constant 77.04 mV per decade, and
 above about 0.7 V the diode's curve has already started to bend away from that straight line.
 Lab 02 measures where the bend starts, **0.699 V**, and [the next
-page](guide/the-diode-is-an-exponential.md) explains why it happens. If you redo the three steps
+page](../guide/the-diode-is-an-exponential.md) explains why it happens. If you redo the three steps
 with 86 mV per decade instead (the measured local value up there), you land on **0.7373 V and
 10.627 µA**: 2.6 mV and 0.24 % out, less than half the error.
 
@@ -111,8 +111,8 @@ comparison in Lab 02, Part 5.
 
 Every amplifier, current mirror and logic gate is designed by first choosing an operating point
 and then arranging for the circuit to sit there. The back half of this course
-([transconductance](guide/gm-and-ro.md), [the CMOS inverter](guide/the-inverter-is-an-amplifier.md),
-[the current mirror](guide/the-current-mirror.md)) is about picking that point on purpose instead
+([transconductance](../guide/gm-and-ro.md), [the CMOS inverter](../guide/the-inverter-is-an-amplifier.md),
+[the current mirror](../guide/the-current-mirror.md)) is about picking that point on purpose instead
 of discovering it afterwards.
 
 ## Small-signal resistance
@@ -140,4 +140,4 @@ smaller, because the current there is ten times larger.
 3. The small-signal resistance is 30.3 kΩ at the 1 MΩ point and 4.12 kΩ at the 100 kΩ point. What
    does that tell you about how the slope of the curve changes with current?
 
-Next: [The diode equation](guide/the-diode-is-an-exponential.md).
+Next: [The diode equation](../guide/the-diode-is-an-exponential.md).

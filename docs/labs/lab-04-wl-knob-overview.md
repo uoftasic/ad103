@@ -17,11 +17,11 @@ plus three targets in [`labs/lab-03-mosfet-regions/`](https://github.com/uoftasi
 
 ## Before you start
 
-- Finish [Lab 03](labs/lab-03-mosfet-regions-overview.md). This lab uses its reference device,
+- Finish [Lab 03](../labs/lab-03-mosfet-regions-overview.md). This lab uses its reference device,
   $W$ = 5 µm, $L$ = 1 µm at **696.2755 µA**, as the anchor for every prediction.
-- Read [What moves the threshold](guide/threshold-is-not-a-constant.md),
-  [Transconductance and output resistance](guide/gm-and-ro.md) and
-  [Sizing with W and L](guide/w-and-l-are-a-choice.md).
+- Read [What moves the threshold](../guide/threshold-is-not-a-constant.md),
+  [Transconductance and output resistance](../guide/gm-and-ro.md) and
+  [Sizing with W and L](../guide/w-and-l-are-a-choice.md).
 - Open a terminal in the workbench. Both `Makefile`s set `PDK=sky130A` themselves, so no other
   setup is needed.
 
@@ -94,7 +94,7 @@ Lab 03 package.
    ```
 
    The rows marked `...` are in your terminal (the 27 °C row among them), and tabulated on
-   [What moves the threshold](guide/threshold-is-not-a-constant.md#body-effect).
+   [What moves the threshold](../guide/threshold-is-not-a-constant.md#body-effect).
 
 2. Work out the threshold shift at each $V_{SB}$, relative to $V_{SB}$ = 0, and the drop in drain
    current at $V_{SB}$ = 1.2 V. Check one row against the body-effect formula with
@@ -126,7 +126,7 @@ Lab 03 package.
 **You should see** a shift of **+232.791 mV** at $V_{SB}$ = 1.2 V with **22.2 %** less current, the
 formula within a fraction of a millivolt of the measurement, a slope of about **−0.9 mV/°C** with
 the hot device carrying **32.1 % less** current, and a threshold that *rises* by **171.44 mV** as
-the length shrinks from 4 µm to 0.15 µm. [What moves the threshold](guide/threshold-is-not-a-constant.md)
+the length shrinks from 4 µm to 0.15 µm. [What moves the threshold](../guide/threshold-is-not-a-constant.md)
 explains each of these.
 
 ## Part 3: Efficiency and intrinsic gain
@@ -156,7 +156,7 @@ How much voltage gain can one transistor give, and how does that depend on $L$?
 3. For each length, compute $r_o = 1/g_{ds}$ and the intrinsic gain $g_m r_o = g_m/g_{ds}$.
 
 4. In the second block, compute $g_m/I_D$ at $V_{GS}$ = 0.7 V and at 1.8 V. Compare both with the
-   ceiling of 26.9 /V from [Transconductance and output resistance](guide/gm-and-ro.md).
+   ceiling of 26.9 /V from [Transconductance and output resistance](../guide/gm-and-ro.md).
 
 **You should see** an intrinsic gain of **8.86** at L = 0.15 µm rising to **106.11** at L = 4 µm,
 even though $g_m$ falls by a factor of nine over the same range, and $g_m/I_D$ of **13.50 /V** at
@@ -202,7 +202,7 @@ Which of your six predictions land, and is there a pattern in the misses?
    ```
 
    Every run also leaves a three-line `bsim4v5.out` in the lab folder. It is harmless; see
-   [Eta0 is negative](reference/ngspice-errors.md#eta0-is-negative) on the ngspice survival card.
+   [Eta0 is negative](../reference/ngspice-errors.md#eta0-is-negative) on the ngspice survival card.
 
 2. Score your predictions:
 
@@ -505,5 +505,5 @@ then run, then read, in that order.
    what breaks $1/L$, the short-channel error should shrink, and it does, from +75.5 % to +29.5 %.
    Then look at what happens at the long end.
 
-Next on the [Course path](README.md#course-path): read
-[The CMOS inverter](guide/the-inverter-is-an-amplifier.md).
+Next on the [Course path](../index.md#course-path): read
+[The CMOS inverter](../guide/the-inverter-is-an-amplifier.md).
