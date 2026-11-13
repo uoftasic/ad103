@@ -59,10 +59,10 @@ This course is pinned to the workbench image **`hpretl/iic-osic-tools:2026.08`**
 > message. [Getting started](guide/getting-started.md) explains what to look for, and Lab 01
 > has you check it.
 
-The warning is about starting XSchem yourself. The lab `make` targets don't depend on it: every
-lab package pins its own PDK and model paths, so if loading the course environment in Lab 01,
-Part 1 fails, `make` in a lab folder still runs to completion in a bare container, and each one
-ends in `PASS` or `FAIL` with a reason.
+The warning is about starting XSchem yourself. The lab `make` targets don't depend on it, because
+every lab package pins its own PDK and model paths. Even if Lab 01, Part 1 can't load the course
+environment for you, `make` in a lab folder still runs to completion in a bare container, and each
+lab ends in `PASS` or `FAIL` with a reason.
 
 ## What this course is about
 
