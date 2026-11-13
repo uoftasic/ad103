@@ -24,8 +24,9 @@ Package: [`labs/lab-02-diode-iv/`](https://github.com/uoftasic/ad103/tree/main/l
   This lab needs no environment setup: no `.designinit`, no `mod`, no `PDK`. The decks find the
   models through `PDK_ROOT`, which the image already sets to `/foss/pdks`, and the `Makefile`
   sets it anyway. You don't need XSchem in this lab, but if you open the bench in `xschem/`, it
-  needs `PDK=sky130A` to find its symbols, so `xschem/xschemrc` sets that itself. (On the image's default IHP process, this bench netlists to
-  `D1 - diode IS MISSING !!!!`, simulates without a single error, and writes a column of zeros.)
+  needs `PDK=sky130A` to find its symbols, so `xschem/xschemrc` sets that itself. (On the
+  image's default IHP process, this bench netlists to `D1 - diode IS MISSING !!!!`, simulates
+  without a single error, and writes a column of zeros.)
 
 **Time:** about 1.75 hours. `make` takes about 25 seconds; each of the other targets takes about
 ten. Wall times depend on your machine. Every other number on this page is fixed: same image, same
@@ -166,7 +167,29 @@ What does the curve look like on linear and on log axes, and what slope does the
    ```
 
    Then read the `local slope, measured over a 20 mV window` table further down the output, which
-   gives the slope at every 50 mV from 0.050 V to 0.850 V.
+   gives the slope at every 50 mV from 0.050 V to 0.850 V:
+
+   ```
+     local slope, measured over a 20 mV window:
+        V        I(A)         mV/decade
+      0.050  6.2317e-14       96.11
+      0.100  1.6726e-13      123.18
+      0.150  4.6233e-13      101.91
+      0.200  1.6055e-12       85.75
+      0.250  6.5318e-12       79.61
+      0.300  2.8333e-11       77.72
+      0.350  1.2541e-10       77.19
+      0.400  5.5825e-10       77.05
+      0.450  2.4887e-09       77.01
+      0.500  1.1097e-08       77.02
+      0.550  4.9442e-08       77.11
+      0.600  2.1945e-07       77.50
+      0.650  9.5789e-07       79.19
+      0.700  3.9174e-06       85.92
+      0.750  1.3278e-05      107.03
+      0.800  3.3105e-05      151.64
+      0.850  6.2443e-05      217.80
+   ```
 
 **You should see** about 77 mV per decade everywhere between about 0.30 V and 0.65 V. The four
 middle rows of the decade table agree to better than 1 %.
@@ -469,7 +492,7 @@ Which checks does a 5 % scaling error trip, and which does it leave alone?
 4. Run `make` again to get back to a clean `PASS`.
 
 **You should see** the slope still at `77.0349` against a reference of `77.0367`, and $n$ still at
-`1.29348`. The three decade voltages each moved by about 1.63 mV.
+`1.29348` against `1.29351`. The three decade voltages each moved by about 1.63 mV.
 
 Why didn't the slope change, and what does that tell you about reading a wrong curve?
 
@@ -525,7 +548,12 @@ What does 100 °C do to the slope, to $n$ and to $I_0$?
        thermal voltage : 25.8649 mV  (27 degC)
        ideality n      : 1.6058
        I0 (V=0 intercept): 8067.1022 fA
+       leaves the line : 0.000 V, 0.0000 uA (line says 0.0000 uA)
    ```
+
+   Ignore the `leaves the line` row for this run. The script reports the first forward point
+   that falls 10 % below the fitted line, and at 100 °C that is the very bottom of the curve,
+   not the bend near the top that Part 4 looked at.
 
 4. The script still divides by the 27 °C thermal voltage, so its `ideality n` line is wrong for
    this run. Work out $V_T$ at 373.15 K and your own $n$ from the slope.
