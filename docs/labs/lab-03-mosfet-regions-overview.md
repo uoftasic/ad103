@@ -200,7 +200,8 @@ Is a transistor below threshold really off?
 **5.96 decades** tall with a slope of **85.6 mV/decade**. Ten million transistors at 2.1853 pA each
 is 21.9 µA of leakage; the same ten million with a threshold 0.3 V lower is **13.6 mA**.
 
-What does that factor of 624 say about how a process has to treat its threshold voltage?
+The two leakage totals are a factor of 624 apart. What does that say about how a process has to
+treat its threshold voltage?
 
 <details>
 <summary>Answer</summary>
@@ -355,7 +356,9 @@ $V_{GS}$ = 1.05 V, which sits between the 0.9 V and 1.2 V curves. It takes four 
    make extract
    ```
 
-   The first table of `make extract` now has six rows:
+   The first table of `make extract` now has six rows. The `gate voltages read` line lists the
+   gates in your `wrdata` order, so yours may differ from this one, which had `id_vgs105` second;
+   the table under it is sorted either way:
 
    ```
    == I_D vs V_DS   (W=5, L=1)
