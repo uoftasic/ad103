@@ -285,14 +285,23 @@ Is current proportional to $W$, and is "twice as wide" the same as "two of them"
 
 **You should see** current per micron of width climb 9.7 % from $W$ = 1 to $W$ = 10 and then fall
 3.1 % by $W$ = 50, while the model's `vth` falls at every step of the ladder, by 58.6438 mV in all.
-Over a hundredfold range of width, "current is proportional to $W$" is wrong by less than 10 %, so
-use it. The direction of the `vth` trend makes sense (a wider device has a lower threshold, so it
-turns on harder), but a cause that only ever moves one way can't on its own produce a rise and
-then a fall. Something else moves the other way past $W$ = 10 µm, and this course doesn't claim to
-know what.
-
 In block 2, C and D match **1392.5510** to every digit: two 5 µm transistors in parallel carry
-exactly twice one of them, and so does `m=2`. Now work out what each of the other rows says.
+exactly twice one of them, and so does `m=2`.
+
+Over this hundredfold range of width, is "current is proportional to $W$" good enough to use? And
+can the falling `vth` explain both the rise and the fall in current per micron?
+
+<details>
+<summary>Answer</summary>
+
+Yes, use it: it is wrong by less than 10 % over the whole ladder. The direction of the `vth` trend
+makes sense (a wider device has a lower threshold, so it turns on harder), but a cause that only
+ever moves one way can't on its own produce a rise and then a fall. Something else moves the other
+way past $W$ = 10 µm, and this course doesn't claim to know what.
+
+</details>
+
+Now work out what each of the other rows in block 2 says.
 
 - B is 2.0040× A, not 2.0000×. Why isn't one 10 µm device the same as two 5 µm ones?
 
