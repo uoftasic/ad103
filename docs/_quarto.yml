@@ -94,8 +94,8 @@ answers-in-pdf: end
 format:
   html:
     theme:
-      light: cosmo
-      dark: darkly
+      light: [cosmo, _light.scss]
+      dark: [darkly, _dark.scss]
     css: _styles.css
     # Keeps old Docsify links (.../ad103/#/labs/...) working.
     include-in-header: _docsify-redirect.html
