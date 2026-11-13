@@ -27,10 +27,11 @@ docker run --rm --user "$(id -u):$(id -g)" -v "$PWD:/work" -w /work \
   bash -c 'cd /work/labs/lab-01-first-schematic && make'
 ```
 
-Docs preview (requires Node.js):
+Docs preview (requires [Quarto](https://quarto.org/docs/get-started/) 1.11):
 
 ```bash
-npx docsify-cli serve docs      # -> http://localhost:3000
+quarto preview docs                            # -> http://localhost:4200
+quarto render docs --profile pdf --to typst    # whole course as one PDF in docs/_book/
 ```
 
 Students run the labs in the team workbench set up in [IC101](https://uoftasic.com/ic101/); Lab 01, Part 1 loads the course into it. The `docker run` line above is for checking a package without the workbench.
@@ -39,7 +40,7 @@ Students run the labs in the team workbench set up in [IC101](https://uoftasic.c
 
 | Path | On Pages? | Purpose |
 |------|-----------|---------|
-| `docs/` | **Yes** | Human-facing Docsify site |
+| `docs/` | **Yes** | Human-facing Quarto site (`docs/_quarto.yml`) |
 | `docs/guide/` | Yes | Guide pages: reading only |
 | `docs/labs/` | Yes | Lab *writeups*: where students run things |
 | `labs/` | No | Runnable packages (HDL, Python, data, graders) |
@@ -51,11 +52,9 @@ Students run the labs in the team workbench set up in [IC101](https://uoftasic.c
 
 | Setting | Value |
 |---------|--------|
-| Source | Deploy from a branch |
-| Branch | `main` |
-| Folder | `/docs` |
+| Source | GitHub Actions |
 
-No Actions deploy step is required for the baseline Docsify site.
+`.github/workflows/site.yml` renders `docs/` with Quarto on every push to `main` and deploys `docs/_site`, which includes a PDF of every page.
 
 ## Contributing
 

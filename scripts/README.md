@@ -8,6 +8,7 @@ Utilities for **AD103 — Nonlinear Circuits** under the UofT ASIC org (`uoftasi
 |--------|---------|
 | `hello.py` | Smoke-check that Python runs in this clone |
 | `init-template.py` | Fill `ad103` / title / description after using the template |
+| `check_site.py` | After `quarto render docs`, check that every local link, image and `#anchor` in `docs/_site` resolves: `python3 scripts/check_site.py docs/_site` |
 
 ## Usage
 
