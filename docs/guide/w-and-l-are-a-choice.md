@@ -60,7 +60,7 @@ step. You'll meet it properly in AD104 when you draw one of these devices.
 Predicted 348.138 µA, measured **380.728 µA**. The long device carries 9.4 % *more* than $1/L$ says
 it should.
 
-The direction is the clue. From [Where saturation starts](guide/where-saturation-starts.md#velocity-saturation):
+The direction is the clue. From [Where saturation starts](../guide/where-saturation-starts.md#velocity-saturation):
 a longer channel with the same voltage across it has a **lower field**, so its carriers are further
 from their speed limit. Halving the current by doubling $L$ assumes carrier velocity doesn't depend
 on the field, and it does.
@@ -88,7 +88,7 @@ The gap closes in two steps.
 | **D** | **0.15 µm** | **0.7693 V** |
 
 The minimum-length device's threshold is **180 mV higher**. That is the reverse short-channel
-effect from [What moves the threshold](guide/threshold-is-not-a-constant.md#threshold-and-drawn-length),
+effect from [What moves the threshold](../guide/threshold-is-not-a-constant.md#threshold-and-drawn-length),
 which showed the same trend over nine lengths at low drain voltage: 171 mV, rising at every step.
 The halo implants that cause it are a small fraction of a long channel and most of a 0.15 µm one,
 which is why `nfet_01v8` at minimum length is deliberately harder to turn on.
@@ -114,7 +114,7 @@ This is the most common failure in a first analog design: a hand calculation say
 works, a simulation says it doesn't, and a minimum-length device sits in the middle. Analog
 designers usually pick $L$ **two to four times the minimum**, for three reasons you can now see at
 once: the square law still roughly holds, $V_{TH}$ is closer to nominal, and $r_o$ is larger
-(64.13 kΩ against 19.45 kΩ, 3.3×, from [Where saturation starts](guide/where-saturation-starts.md)).
+(64.13 kΩ against 19.45 kΩ, 3.3×, from [Where saturation starts](../guide/where-saturation-starts.md)).
 Digital designers use minimum length for the opposite reason: they want the smallest, fastest
 switch, and they don't care about $r_o$.
 
@@ -137,7 +137,7 @@ the area** (5 µm² against 0.1125 µm²).
 Area is money. A wafer costs what it costs, and you are billed for the square millimetres you
 occupy, so every micron of $W$ you spend buying current is a micron you can't spend on something
 else. Area isn't the only cost: gate capacitance also scales with $W \times L$. The 30.56 fF from
-[How a MOSFET works](guide/a-mosfet-is-a-valve.md) is for device A, and every femtofarad of gate
+[How a MOSFET works](../guide/a-mosfet-is-a-valve.md) is for device A, and every femtofarad of gate
 has to be charged by whatever drives it, which costs time and energy elsewhere in the circuit.
 
 That trade (more current, more area and more capacitance, against less of all three) is what
@@ -155,4 +155,4 @@ arithmetic above still closes for a longer device.
 4. Two designs have $W/L$ = 5, one at minimum length and one at L = 1 µm. Name one property the
    long one wins on and one it loses on.
 
-Next: [Lab 04: Testing the W/L rule](labs/lab-04-wl-knob-overview.md).
+Next: [Lab 04: Testing the W/L rule](../labs/lab-04-wl-knob-overview.md).

@@ -43,7 +43,7 @@ That line loads the typical-typical (`tt`) corner of SKY130. Two things about it
   and a terminal that stays silent for ten seconds is not hung.
 - **`$PDK_ROOT` is already set** to `/foss/pdks` inside the image, so the line works with no setup.
   `$PDK` is *not* set to what you want (see
-  [the XSchem cheat sheet](reference/xschem-cheatsheet.md#wrong-pdk)), but this line
+  [the XSchem cheat sheet](../reference/xschem-cheatsheet.md#wrong-pdk)), but this line
   doesn't use it.
 
 ## 1. `.op`: one bias point
@@ -371,14 +371,14 @@ this file whenever a model card carries a value it wants to comment on, here `nf
 
 | ngspice says | You did |
 |---|---|
-| `could not find a valid modelname` | put a `u` on `W` or `L`, or asked for a size no bin covers. Full explanation: [Reading a SKY130 device model](reference/sky130-device-guide.md). |
+| `could not find a valid modelname` | put a `u` on `W` or `L`, or asked for a size no bin covers. Full explanation: [Reading a SKY130 device model](../reference/sky130-device-guide.md). |
 | `Error: no such vector as -i(vds).` | put an expression where `print`/`meas` wanted a vector. `let id = -i(Vds)` first. |
 | `Error: unknown subckt: xr6 f 0 sky130_fd_pr__res_generic_l1 w=1 l=1` | started the line with `X` for a device that is a plain `.model`, not a `.subckt`. `res_generic_l1` and the metal resistors are `R` lines: `r6 f 0 sky130_fd_pr__res_generic_l1 w=1 l=1`. |
 | `warning, can't find model 'sky130_fd_pr__nfet_01v8' from line` | started the line with `M` for a device that *is* a `.subckt`. Transistors are `X` lines. |
 | `Too many parameters for subcircuit type "sky130_fd_pr__res_generic_po" (instance: xxr1)` | passed `mult=1` to a device whose subcircuit has no `mult`. Not every resistor takes the same parameters. |
 | `Too few parameters for subcircuit type "sky130_fd_pr__cap_var_lvt" (instance: xxcv)` | gave the wrong number of *nodes*. The varactor has three terminals, not two. |
 | `Error: incomplete or empty netlist` / `no simulations run!` | nothing by itself. It is the second message; the real error is a few lines above it. |
-| `Error: Library …/osdi/psp103.osdi couldn't be loaded!` | nothing at all. Some image builds print several of these at the start of every run; see [above](reference/ngspice-errors.md#osdi-error-lines). |
+| `Error: Library …/osdi/psp103.osdi couldn't be loaded!` | nothing at all. Some image builds print several of these at the start of every run; see [above](../reference/ngspice-errors.md#osdi-error-lines). |
 | `Error: unknown subckt: xd1 a 0 sky130_fd_pr__diode_pw2nd_05v5 area=1 perim=4`, then `Error: incomplete or empty netlist` | one of two things: there is **no `.lib` line**, or the **model name is misspelled**. The error quotes your device line, not the cause. Check the `.lib` line first; it is the more common one. |
 | `make: ngspice: No such file or directory` | ran `make` on your own machine, not in the workbench container. The labs need `hpretl/iic-osic-tools:2026.08`. |
 
@@ -414,5 +414,5 @@ script of yours should do the same.
 
 ---
 
-Next: [Reading a SKY130 device model](reference/sky130-device-guide.md), where
+Next: [Reading a SKY130 device model](../reference/sky130-device-guide.md), where
 `could not find a valid modelname` gets its full explanation.

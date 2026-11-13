@@ -71,7 +71,7 @@ is no longer a property of the part.
 The flat stretch is not zero current. At −1.000 V the sweep reads **−1.003559 pA**, and at +0.350 V
 it reads **125.4090 pA**: 125 times more current, and on this plot both are indistinguishable from
 the axis. Linear axes hide the part of the curve that carries most of the physics.
-[The diode equation](guide/the-diode-is-an-exponential.md) shows it on a better axis.
+[The diode equation](../guide/the-diode-is-an-exponential.md) shows it on a better axis.
 
 ## What still works
 
@@ -110,4 +110,4 @@ of closing in on it.
    additivity one?
 3. Why can't you combine a diode in series with a resistor into one equivalent resistance?
 
-Next: [The operating point](guide/the-operating-point.md).
+Next: [The operating point](../guide/the-operating-point.md).

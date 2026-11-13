@@ -306,7 +306,7 @@ its `.lib` lines need.)
 | Symptom | Cause |
 |---|---|
 | `IS MISSING !!!!` and no devices in the netlist | XSchem cannot find the symbol. Wrong `$PDK`, or the symbol is not on `XSCHEM_LIBRARY_PATH`. |
-| netlist looks right, ngspice says `could not find a valid modelname` | a `u` suffix on `W` or `L`. See [Reading a SKY130 device model](reference/sky130-device-guide.md). |
+| netlist looks right, ngspice says `could not find a valid modelname` | a `u` suffix on `W` or `L`. See [Reading a SKY130 device model](../reference/sky130-device-guide.md). |
 | a net you were sure you drew is missing from the netlist | a wire endpoint one snap step from the pin. Zoom in and look for a hollow square. |
 | ports wired to the wrong nets in a hierarchical cell | the `.sym` pin order does not match the order the `ipin`/`opin`/`iopin` symbols appear in the schematic. |
 | `can't create directory ".../sky130_tests/simulation": permission denied` on **Netlist** | the open schematic is the PDK's own start page, `sky130_tests/top.sch`, which lives inside the read-only PDK. With `local_netlist_dir 1` the netlist goes next to the schematic, and there is nowhere to put it. Open a schematic in your own directory. The AD103 lab `xschemrc` files also set `XSCHEM_START_WINDOW {}` so a bare `xschem &` never lands there. |
@@ -332,5 +332,5 @@ There is no `XSCHEMRC` environment variable: the string does not appear once in 
 
 ---
 
-Next, the other half of the loop: [The ngspice survival card](reference/ngspice-errors.md),
+Next, the other half of the loop: [The ngspice survival card](../reference/ngspice-errors.md),
 which is what happens after you press <kbd>n</kbd>.

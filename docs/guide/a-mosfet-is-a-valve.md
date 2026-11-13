@@ -38,7 +38,7 @@ this one fact.
 
 > **The body is a terminal too.** In this course the body is wired to the source on every NMOS,
 > which makes the four-terminal device behave like the three-terminal one in your textbook.
-> [What moves the threshold](guide/threshold-is-not-a-constant.md) is about what happens when
+> [What moves the threshold](../guide/threshold-is-not-a-constant.md) is about what happens when
 > the two are at different voltages.
 
 ## The channel at four bias points
@@ -74,11 +74,11 @@ equation says so.
      dist/MosfetChannel.web.mp4 from tooling/manim/scenes/ad103_mosfet_channel.py;
      deploy copies it here alongside its poster frame. -->
 <video controls loop muted playsinline preload="none"
-       poster="assets/img/ad103-mosfet-channel.poster.png"
+       poster="../assets/img/ad103-mosfet-channel.poster.png"
        style="width:100%;max-width:820px;border-radius:8px">
-  <source src="assets/img/ad103-mosfet-channel.web.mp4" type="video/mp4">
+  <source src="../assets/img/ad103-mosfet-channel.web.mp4" type="video/mp4">
   Your browser will not play embedded video —
-  <a href="assets/img/ad103-mosfet-channel.web.mp4">download the clip</a>.
+  <a href="../assets/img/ad103-mosfet-channel.web.mp4">download the clip</a>.
 </video>
 
 *The four panels above, animated: $V_{GS}$ and $V_{DS}$ move continuously while the $I_D$–$V_{DS}$
@@ -116,7 +116,7 @@ measures
 ```
 
 **2.19 picoamps**: 320 million times less than the 696 µA it passes wide open, and still not zero.
-[The four regions](guide/four-regions-not-three.md) is largely about that number.
+[The four regions](../guide/four-regions-not-three.md) is largely about that number.
 
 Both numbers matter, for different reasons. The 737 Ω is why a digital gate can charge the next
 gate's input in picoseconds, which sets your clock speed. The 2.19 pA is why a phone's battery
@@ -131,7 +131,7 @@ You'll produce this table in Lab 03, Part 3.
 
 ## Units: `W=5`, never `W=5u`
 
-The units trap from [Getting started](guide/getting-started.md#w1-never-w1u) applies to every
+The units trap from [Getting started](../guide/getting-started.md#w1-never-w1u) applies to every
 deck from here on. In SKY130, **`W` and `L` are plain micron numbers with no unit suffix.** `W=5`
 means five micrometres. `W=5u` falls outside every model bin, and ngspice stops with
 `could not find a valid modelname`, a message that names neither `W` nor units. Lab 03, Part 7
@@ -147,10 +147,10 @@ The regions map onto two jobs:
 - **Amplifying.** Park the gate somewhere in the middle, keep the drain high enough that the
   channel stays pinched off, and wiggle the gate. You are using saturation, and you care about how
   much the current moves per volt of wiggle. That number is called $g_m$, the subject of
-  [Transconductance and output resistance](guide/gm-and-ro.md).
+  [Transconductance and output resistance](../guide/gm-and-ro.md).
 
 An amplifier and a logic gate are the same device biased in different regions. That is why
-[The CMOS inverter](guide/the-inverter-is-an-amplifier.md) treats a logic gate as an amplifier
+[The CMOS inverter](../guide/the-inverter-is-an-amplifier.md) treats a logic gate as an amplifier
 later in this course.
 
 ## Check yourself
@@ -161,4 +161,4 @@ later in this course.
    compare with the value at 1.8 V?
 4. Is a transistor used as a digital switch mainly in saturation, or in cutoff and triode?
 
-Next: [The four regions](guide/four-regions-not-three.md).
+Next: [The four regions](../guide/four-regions-not-three.md).

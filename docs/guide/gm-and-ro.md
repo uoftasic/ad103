@@ -49,7 +49,7 @@ $$I_D = \tfrac{1}{2}\mu_n C_{ox}\tfrac{W}{L}V_{ov}^2 \quad\Longrightarrow\quad
 g_m = \frac{2 I_D}{V_{ov}}$$
 
 At $V_{GS} = 1.8$ V, with $V_{TH} = 0.6016$ V from
-[Where saturation starts](guide/where-saturation-starts.md), the overdrive is 1.1984 V and $I_D$ is
+[Where saturation starts](../guide/where-saturation-starts.md), the overdrive is 1.1984 V and $I_D$ is
 696.275 µA:
 
 $$g_m = \frac{2 \times 696.275\ \mu\text{A}}{1.1984\ \text{V}} = 1162.0\ \mu\text{S}$$
@@ -124,7 +124,7 @@ amplifier, 5 for something that has to be fast) and let the geometry follow from
 $g_m$ tells you how much signal current you get. To turn current back into voltage you have to
 push it through a resistance, and the largest one available is the transistor's own $r_o$: the
 slope of the "flat" saturation region that
-[Where saturation starts](guide/where-saturation-starts.md#channel-length-modulation)
+[Where saturation starts](../guide/where-saturation-starts.md#channel-length-modulation)
 showed isn't flat.
 
 Multiply the two and the current cancels:
@@ -167,12 +167,12 @@ you have two transconductances driving one node, loaded by two output resistance
 $$A_v = -\left(g_{mn} + g_{mp}\right)\left(r_{on} \parallel r_{op}\right)$$
 
 Both devices push, so their $g_m$ values add. That is why
-[the CMOS inverter](guide/the-inverter-is-an-amplifier.md) measures a gain of **−116.0341** at
+[the CMOS inverter](../guide/the-inverter-is-an-amplifier.md) measures a gain of **−116.0341** at
 L = 0.5 µm, well above the 35.07 a single L = 0.5 µm device could manage alone.
 
 **The mirror.** A saturated transistor is very nearly a current source, and $r_o$ measures how
 nearly. An L = 1 µm device holding 50 µA changes its current by **1.46 %** when its drain moves from
-0.9 V to 1.2 V. That is [the current mirror](guide/the-current-mirror.md), and its error budget is
+0.9 V to 1.2 V. That is [the current mirror](../guide/the-current-mirror.md), and its error budget is
 this page's $r_o$ column.
 
 ## Check yourself
@@ -185,4 +185,4 @@ this page's $r_o$ column.
 4. Going from L = 0.15 µm to L = 4 µm, $g_m$ falls and $g_m r_o$ rises. Explain both with one
    sentence each.
 
-Next: [Sizing with W and L](guide/w-and-l-are-a-choice.md).
+Next: [Sizing with W and L](../guide/w-and-l-are-a-choice.md).

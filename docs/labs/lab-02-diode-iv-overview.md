@@ -9,12 +9,12 @@ Package: [`labs/lab-02-diode-iv/`](https://github.com/uoftasic/ad103/tree/main/l
 
 ## Before you start
 
-- Finish [Lab 01](labs/lab-01-first-schematic-overview.md): `make` in
+- Finish [Lab 01](../labs/lab-01-first-schematic-overview.md): `make` in
   `labs/lab-01-first-schematic` prints `PASS` and **501.046 µA**.
-- Read [Linearity and superposition](guide/the-straight-line-runs-out.md),
-  [The operating point](guide/the-operating-point.md),
-  [The diode equation](guide/the-diode-is-an-exponential.md) and
-  [Three diode models](guide/three-models-of-one-diode.md).
+- Read [Linearity and superposition](../guide/the-straight-line-runs-out.md),
+  [The operating point](../guide/the-operating-point.md),
+  [The diode equation](../guide/the-diode-is-an-exponential.md) and
+  [Three diode models](../guide/three-models-of-one-diode.md).
 - Open a terminal in the workbench and go to the lab folder:
 
   ```bash
@@ -81,8 +81,8 @@ Does your workbench reproduce the reference sweep?
 
 **You should see** `PASS  every number matches the reference run`. Every `results/*.log` file
 also contains `IKR too small - model effect disabled!`, on every run; that one is harmless, and
-the [ngspice survival card](reference/ngspice-errors.md#harmless-messages) explains it. If
-something else goes wrong, the card's [Error messages](reference/ngspice-errors.md#error-messages)
+the [ngspice survival card](../reference/ngspice-errors.md#harmless-messages) explains it. If
+something else goes wrong, the card's [Error messages](../reference/ngspice-errors.md#error-messages)
 table has the diode errors.
 
 ## Part 2: Test superposition
@@ -211,7 +211,7 @@ What are the ideality factor and series resistance of this diode, and does SkyWa
 
    Divide the slope by the ideal 59.556 mV/decade: $77.037 / 59.556 = 1.2935$. That is the
    **ideality factor**. The `leaves the line` row is where the curve starts to bend away from the
-   straight line, at 0.699 V; [The diode equation](guide/the-diode-is-an-exponential.md#where-the-straight-line-ends)
+   straight line, at 0.699 V; [The diode equation](../guide/the-diode-is-an-exponential.md#where-the-straight-line-ends)
    explains the bend.
 
 2. Find the series-resistance block and check its arithmetic: 95.989 mV dropped outside the
@@ -268,7 +268,7 @@ Where does one resistor and one diode in series settle, and how close was the ha
    ```
 
 2. Compare `v(n2)` and `i_100k` with the hand iteration on
-   [The operating point](guide/the-operating-point.md#worked-example-guess-correct-repeat)
+   [The operating point](../guide/the-operating-point.md#worked-example-guess-correct-repeat)
    (0.7335 V and 10.665 µA). How far off was the hand answer: the voltage in mV, and the current
    in percent?
 
@@ -277,7 +277,7 @@ Where does one resistor and one diode in series settle, and how close was the ha
 
    **6.3 mV** and **0.60 %**. The hand iteration used a constant 77.04 mV per decade, and above
    about 0.7 V the curve has already started to bend away from that straight line.
-   [The operating point](guide/the-operating-point.md#what-ngspice-gets) works it through.
+   [The operating point](../guide/the-operating-point.md#what-ngspice-gets) works it through.
 
    </details>
 
@@ -368,7 +368,7 @@ reporting?
 <summary>Answer</summary>
 
 ngspice's default GMIN, not the silicon: $10^{-12}$ S across 1 V is 1 pA.
-[The diode equation](guide/the-diode-is-an-exponential.md#the-bottom-of-the-curve-gmin) works
+[The diode equation](../guide/the-diode-is-an-exponential.md#the-bottom-of-the-curve-gmin) works
 through the rest of the arithmetic.
 
 </details>
@@ -394,7 +394,7 @@ What does a bigger junction buy, and what happens when the size is written wrong
 
 2. Predict, before you calculate: if current were proportional to area, what would `i_100um`
    divided by `i_1um` be? Write it down, then do the division. Then repeat the face-and-edge fit
-   from [Three diode models](guide/three-models-of-one-diode.md#what-junction-area-buys) using only
+   from [Three diode models](../guide/three-models-of-one-diode.md#what-junction-area-buys) using only
    the first and last rows, and check it predicts the middle two. The four junctions are squares,
    1×1, 2×2, 4×4 and 10×10 µm, so their perimeters are 4, 8, 16 and 40 µm. That page has the
    numbers to check your fit against.
@@ -579,7 +579,7 @@ What does 100 °C do to the slope, to $n$ and to $I_0$?
 
    The change in slope is all $V_T$, because $n$ stayed put. $I_0$ moves much harder: from
    3.5864 fA to 8067.1 fA, about 2,250 times larger. $I_0$ is carried by the minority carriers that
-   thermal energy knocks loose, and [The diode equation](guide/the-diode-is-an-exponential.md)
+   thermal energy knocks loose, and [The diode equation](../guide/the-diode-is-an-exponential.md)
    says their supply is set by temperature alone.
 
    </details>
@@ -621,7 +621,7 @@ comes out at 1.2916, and `make` prints `PASS` again after you take the line out.
    (Part 4.)
 2. Why is the reverse current at −1 V not the saturation current $I_0$? (Part 6.)
 3. Why did a hundred times the area give only 60.19 times the current? (Part 7, step 2: the
-   face-and-edge fit from [Three diode models](guide/three-models-of-one-diode.md#what-junction-area-buys).)
+   face-and-edge fit from [Three diode models](../guide/three-models-of-one-diode.md#what-junction-area-buys).)
 
 ### Submit
 
@@ -640,5 +640,5 @@ None of this is graded.
 Stuck? Ask in the [team Discord](https://discord.gg/hrJnP5UsGz); quote the exact line and say
 which `make` target you ran.
 
-Next on the [Course path](README.md#course-path): read
-[How a MOSFET works](guide/a-mosfet-is-a-valve.md).
+Next on the [Course path](../index.md#course-path): read
+[How a MOSFET works](../guide/a-mosfet-is-a-valve.md).

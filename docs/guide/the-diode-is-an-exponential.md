@@ -125,7 +125,7 @@ back to it.
 *Produced by `src/plot_iv.py` in the Lab 02 package.*
 
 These are the same 1901 rows as the flat-and-a-wall plot in [Linearity and
-superposition](guide/the-straight-line-runs-out.md). Only the vertical axis changed.
+superposition](../guide/the-straight-line-runs-out.md). Only the vertical axis changed.
 
 A **log axis** labels equal distances with equal **ratios**, not equal differences. The distance
 from $10^{-9}$ to $10^{-8}$ is the same as from $10^{-8}$ to $10^{-7}$, even though the second gap
@@ -168,7 +168,7 @@ of a measurement. You'll find the card yourself in Lab 02, Part 4.
 
 > **Any straight run on a log-current plot gives you an ideality factor.** Its slope in mV/decade
 > divided by 59.6 is $n$, and a value between 1 and 2 means "this is a junction". You'll use the
-> same check on a MOSFET in [The four regions](guide/four-regions-not-three.md), where the line
+> same check on a MOSFET in [The four regions](../guide/four-regions-not-three.md), where the line
 > comes out at 85.6 mV/decade. The number landing in the same range is not a coincidence.
 
 ## Where the straight line ends
@@ -288,4 +288,4 @@ be right.
 4. The local slope is 77.01 mV/decade at 0.450 V and 151.64 mV/decade at 0.800 V. Which effect is
    responsible for the change?
 
-Next: [Three diode models](guide/three-models-of-one-diode.md).
+Next: [Three diode models](../guide/three-models-of-one-diode.md).

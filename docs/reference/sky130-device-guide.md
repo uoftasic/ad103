@@ -180,7 +180,7 @@ Four separate things are in that block.
   direction and a different model card, with different fitted parameters, takes over.
 - `vth0 = 0.411231` is the model card's threshold parameter; `vth = 0.769267` is what this
   device actually has at this bias. They are not the same number and they are not supposed to
-  be; see [What moves the threshold](guide/threshold-is-not-a-constant.md).
+  be; see [What moves the threshold](../guide/threshold-is-not-a-constant.md).
 - `weff = 9.56282e-07`, `leff = 1.26136e-07`. **You drew 1 µm and got 0.956 µm; you drew
   0.15 µm and got 0.126 µm.** The gate is 16 % shorter than the mask, because the source and
   drain diffuse sideways underneath it. Nothing comes out the size you drew.
@@ -280,7 +280,7 @@ grep -m1 -A2 'subckt.*sky130_fd_pr__res_high_po ' \
 
 The diode's `area` and `perim` deserve their own warning, because getting them wrong produces
 no error at all. See the deliberate failures in
-[Lab 02: The diode I–V curve](labs/lab-02-diode-iv-overview.md).
+[Lab 02: The diode I–V curve](../labs/lab-02-diode-iv-overview.md).
 
 ## Corners
 
@@ -312,6 +312,6 @@ that second word.
 
 ---
 
-Next: [W and L are a choice](guide/w-and-l-are-a-choice.md), which is what to do with the two
+Next: [W and L are a choice](../guide/w-and-l-are-a-choice.md), which is what to do with the two
 numbers now that you know what happens to them. For the passive side of the same PDK, AD102's
 [SKY130 passive quick-reference](https://uoftasic.com/ad102/#/reference/sky130-passive-catalogue).

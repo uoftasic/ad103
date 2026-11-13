@@ -1,6 +1,6 @@
 # The current mirror
 
-[The CMOS inverter](guide/the-inverter-is-an-amplifier.md) works as an amplifier only if its input
+[The CMOS inverter](../guide/the-inverter-is-an-amplifier.md) works as an amplifier only if its input
 is held at 0.712 V, on a slope with a gain of 116. This page is about what holds a bias point like
 that in place: not a voltage, but a **current**.
 
@@ -23,7 +23,7 @@ numbers from earlier pages:
 A gate voltage that is 100 mV wrong, on a device with $g_m$ = 334 µS, gives a current **33 µA**
 wrong. The plan doesn't survive a real die.
 
-But AD102's Lab 04 and [Sizing with W and L](guide/w-and-l-are-a-choice.md) reached the same
+But AD102's Lab 04 and [Sizing with W and L](../guide/w-and-l-are-a-choice.md) reached the same
 conclusion: **absolute values wander; ratios hold.** Two devices side by side on the same die are
 at the same temperature, in the same corner, with the same threshold. Whatever moved one moved the
 other.
@@ -89,7 +89,7 @@ why a 1.8 V supply feels tight: every current source in a stack uses up a quarte
 work.
 
 **Above that, the copy drifts upward by about 1.6 % per 0.3 V.** That is $r_o$, the
-[finite slope of saturation](guide/gm-and-ro.md). From the two clean rows:
+[finite slope of saturation](../guide/gm-and-ro.md). From the two clean rows:
 
 $$r_o \approx \frac{1.8 - 0.6}{(52.0797 - 49.1572)\ \mu\text{A}} = 410.6\ \text{k}\Omega$$
 
@@ -193,4 +193,4 @@ this course come back there.
 3. Using $r_o$ = 410.6 kΩ, how much would the copied current change if $V_{out}$ moved by 0.5 V?
 4. Why do two W = 5 µm devices in parallel copy a current more accurately than one W = 10 µm device?
 
-Next: [Capstone: The CMOS inverter](labs/capstone-inverter-overview.md).
+Next: [Capstone: The CMOS inverter](../labs/capstone-inverter-overview.md).

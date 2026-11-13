@@ -11,9 +11,9 @@ Package: [`labs/capstone-inverter/`](https://github.com/uoftasic/ad103/tree/main
 
 ## Before you start
 
-- Finish [Lab 04](labs/lab-04-wl-knob-overview.md).
-- Read [The CMOS inverter](guide/the-inverter-is-an-amplifier.md) and
-  [The current mirror](guide/the-current-mirror.md).
+- Finish [Lab 04](../labs/lab-04-wl-knob-overview.md).
+- Read [The CMOS inverter](../guide/the-inverter-is-an-amplifier.md) and
+  [The current mirror](../guide/the-current-mirror.md).
 - Open a terminal in the workbench, load the environment (you'll use XSchem in Part 2), and go to
   the lab folder:
 
@@ -214,7 +214,7 @@ If you widen the PMOS by the drive ratio, does $V_M$ land at 0.9 V?
       NMOS / PMOS                              2.4959
    ```
 
-   501.0462 µA is the number [Lab 01](labs/lab-01-first-schematic-overview.md) gave you for exactly
+   501.0462 µA is the number [Lab 01](../labs/lab-01-first-schematic-overview.md) gave you for exactly
    this device at exactly this bias.
 
 2. The PMOS is weaker, so widen it to match. Using the ratio, predict $V_M$ for $W_p$ = 2.5 µm.
@@ -469,7 +469,7 @@ copy collapse below 0.2336 V?
 The wide device's threshold is 12.835 mV lower, so at the same gate voltage it carries more than
 its width alone would give. The two unit devices are each the same 5 µm device as the reference. Below about
 0.2336 V, the reference branch's `vdsat`, the output device leaves saturation.
-[The current mirror](guide/the-current-mirror.md) works through each of these.
+[The current mirror](../guide/the-current-mirror.md) works through each of these.
 
 </details>
 
@@ -554,5 +554,5 @@ Three things from AD103 come back in AD104:
 Stuck, or want to argue about any of this? Ask in the [team Discord](https://discord.gg/hrJnP5UsGz),
 and bring the number you got and the number you expected.
 
-Next on the [Course path](README.md#course-path): you've finished AD103. The next course is
+Next on the [Course path](../index.md#course-path): you've finished AD103. The next course is
 [AD104: Layout](https://uoftasic.com/ad104/), and it starts from your `xschem/my_inverter.sch`.

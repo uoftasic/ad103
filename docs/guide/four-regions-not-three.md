@@ -3,7 +3,7 @@
 Your textbook gives you cutoff, triode and saturation. This page draws the boundaries between
 them on measured curves, shows how to tell which region a device is in, and then adds a fourth
 region that most textbooks leave out. The regions are the channel pictures from
-[How a MOSFET works](guide/a-mosfet-is-a-valve.md), seen on a graph.
+[How a MOSFET works](../guide/a-mosfet-is-a-valve.md), seen on a graph.
 
 ## The output curves
 
@@ -91,7 +91,7 @@ The two conditions above meet where $V_{DS} = V_{GS} - V_{TH}$. That quantity is
 It is the drain voltage at which the device changes character, and so it is the headroom the
 device needs before it will behave as a current source.
 
-[Where saturation starts](guide/where-saturation-starts.md) shows where the boundary really sits
+[Where saturation starts](../guide/where-saturation-starts.md) shows where the boundary really sits
 on these curves, and why at high gate voltage the measured knee is 26 % lower than $V_{ov}$.
 
 ## 4. Subthreshold: the region most textbooks skip
@@ -124,13 +124,13 @@ voltage. On the linear plot this whole region is a flat line on the axis. On the
 This is **subthreshold conduction**, also called **weak inversion**. The gate hasn't formed a
 proper channel, but it has lowered the barrier enough that some electrons get across by thermal
 energy, and the number that do is exponential in the barrier height, exactly as in the diode from
-[Lab 02](labs/lab-02-diode-iv-overview.md). It is the same physics: below threshold, a MOSFET
+[Lab 02](../labs/lab-02-diode-iv-overview.md). It is the same physics: below threshold, a MOSFET
 behaves like a diode.
 
 The slope of that line is the parameter everyone quotes, the **subthreshold slope**: **85.6 mV per
 decade** on this device. It takes 85.6 mV of gate voltage to change the drain current by a factor
 of ten. At room temperature no conventional MOSFET can do better than about 60 mV/decade, the same
-$kT/q \ln 10 = 59.6$ mV you met on [the diode page](guide/the-diode-is-an-exponential.md), and real
+$kT/q \ln 10 = 59.6$ mV you met on [the diode page](../guide/the-diode-is-an-exponential.md), and real
 devices land above it.
 
 ### Why leakage matters
@@ -179,4 +179,4 @@ You'll draw these plots and read these numbers yourself in Lab 03, Parts 1, 3 an
    $V_{GS}$ goes from 0.30 V to 0.39 V?
 3. Why does a lower threshold voltage make a chip faster and leakier at the same time?
 
-Next: [Where saturation starts](guide/where-saturation-starts.md).
+Next: [Where saturation starts](../guide/where-saturation-starts.md).
