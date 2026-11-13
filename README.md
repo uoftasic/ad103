@@ -33,7 +33,7 @@ Docs preview (requires Node.js):
 npx docsify-cli serve docs      # -> http://localhost:3000
 ```
 
-Students run the labs in the team workbench set up in [IC101](https://uoftasic.com/ic101/); Lab 01 walks through it. The `docker run` line above is for checking a package without the workbench.
+Students run the labs in the team workbench set up in [IC101](https://uoftasic.com/ic101/); Lab 01, Part 1 loads the course into it. The `docker run` line above is for checking a package without the workbench.
 
 ## Layout
 
