@@ -1,0 +1,121 @@
+# Quarto build of the AD103 docs (pilot, replacing Docsify's index.html,
+# _sidebar.md and _navbar.md).
+#
+#   quarto preview docs          # live site at http://localhost:4200
+#   quarto render docs           # site in docs/_site, with a PDF of every page
+#   quarto render docs --profile pdf --to typst
+#                                # the whole course as one PDF in docs/_book
+#
+# The sidebar follows the Course path order on the home page.
+
+project:
+  type: website
+  output-dir: _site
+  resources:
+    - assets/img/*.mp4
+
+website:
+  title: "AD103 — Nonlinear Circuits"
+  description: "The diode and the MOSFET in XSchem: regions of operation, and what the parameters mean."
+  site-url: https://uoftasic.com/ad103/
+  repo-url: https://github.com/uoftasic/ad103
+  repo-subdir: docs
+  repo-actions: [issue]
+  search: true
+  page-navigation: true
+  navbar:
+    left:
+      - text: Guide
+        href: guide/getting-started.md
+      - text: Labs
+        href: labs/lab-01-first-schematic-overview.md
+    right:
+      - text: Course PDF
+        icon: file-pdf
+        href: ad103-course.pdf
+      - icon: discord
+        href: https://discord.gg/hrJnP5UsGz
+        aria-label: Discord
+      - icon: github
+        href: https://github.com/uoftasic/ad103
+        aria-label: GitHub
+  sidebar:
+    style: docked
+    contents:
+      - text: Home
+        href: index.md
+      - section: Start here
+        contents:
+          - guide/getting-started.md
+          - labs/lab-01-first-schematic-overview.md
+      - section: The diode
+        contents:
+          - guide/the-straight-line-runs-out.md
+          - guide/the-operating-point.md
+          - guide/the-diode-is-an-exponential.md
+          - guide/three-models-of-one-diode.md
+          - labs/lab-02-diode-iv-overview.md
+      - section: The MOSFET
+        contents:
+          - guide/a-mosfet-is-a-valve.md
+          - guide/four-regions-not-three.md
+          - guide/where-saturation-starts.md
+          - labs/lab-03-mosfet-regions-overview.md
+      - section: Device parameters
+        contents:
+          - guide/threshold-is-not-a-constant.md
+          - guide/gm-and-ro.md
+          - guide/w-and-l-are-a-choice.md
+          - labs/lab-04-wl-knob-overview.md
+      - section: Capstone
+        contents:
+          - guide/the-inverter-is-an-amplifier.md
+          - guide/the-current-mirror.md
+          - labs/capstone-inverter-overview.md
+      - section: Reference
+        contents:
+          - reference/xschem-cheatsheet.md
+          - reference/ngspice-errors.md
+          - reference/sky130-device-guide.md
+      - section: Repo
+        contents:
+          - text: Lab packages
+            href: https://github.com/uoftasic/ad103/tree/main/labs
+          - text: Scripts
+            href: https://github.com/uoftasic/ad103/tree/main/scripts
+
+filters:
+  - _filters/course.lua
+
+# Collapsed answers move to the end of each page in PDFs; set this to
+# "inline" to print them where they sit instead.
+answers-in-pdf: end
+
+format:
+  html:
+    theme:
+      light: cosmo
+      dark: darkly
+    css: _styles.css
+    # Keeps old Docsify links (.../ad103/#/labs/...) working.
+    include-in-header: _docsify-redirect.html
+    toc: true
+    toc-depth: 3
+    code-copy: true
+    lightbox: auto
+    html-math-method:
+      method: mathjax
+      url: "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml-full.js"
+    # Listing html first stops Quarto adding a second "Typst" link.
+    format-links:
+      - html
+      - format: typst
+        text: PDF
+        icon: file-pdf
+  typst:
+    papersize: us-letter
+    margin:
+      x: 0.9in
+      y: 0.9in
+    fontsize: 10.5pt
+    toc: false
