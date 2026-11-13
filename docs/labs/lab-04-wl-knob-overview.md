@@ -8,8 +8,9 @@ $$
 
 You'll test that claim on seventeen transistors at one bias point, after writing six predictions
 down. Two of them land. Four miss, by up to 91 %, in a pattern you can read off the sign column,
-and five devices whose $W/L$ is exactly 5 carry five different currents. First you'll use the
-Lab 03 package to watch the threshold move and to measure how much gain one transistor can give.
+and five devices whose $W/L$ is exactly 5 carry five different currents. Between writing the
+predictions and scoring them, you'll use the Lab 03 package to watch the threshold move and to
+measure how much gain one transistor can give.
 
 Package: [`labs/lab-04-wl-knob/`](https://github.com/uoftasic/ad103/tree/main/labs/lab-04-wl-knob),
 plus three targets in [`labs/lab-03-mosfet-regions/`](https://github.com/uoftasic/ad103/tree/main/labs/lab-03-mosfet-regions)
@@ -33,7 +34,7 @@ fixed, and the checker enforces it.
 What does the $W/L$ rule predict for six devices? Do this before you run anything. It takes ninety
 seconds, and it is the only part of the lab you can't redo afterwards.
 
-1. Go to the lab folder and open `predictions.txt` in a text editor:
+1. Go to the lab folder, then open `predictions.txt` in a text editor:
 
    ```bash
    cd /foss/designs/modules/ad103/labs/lab-04-wl-knob
@@ -43,7 +44,8 @@ seconds, and it is the only part of the lab you can't redo afterwards.
    $V_{GS} = V_{DS}$ = 1.8 V, $I_D$ = 696.2755 µA.
 
 3. For each of the six devices, write the current the $W/L$ rule predicts, in microamps, to one
-   decimal place. Don't run anything first, and don't go back and change a prediction once you've
+   decimal place, after the `=`. Write the number only: `make predict` doesn't read a line that
+   ends in `uA`. Don't run anything first, and don't go back and change a prediction once you've
    seen the answer.
 
    ```
@@ -91,7 +93,7 @@ Lab 03 package.
    i(vds) = -4.50650e-05
    ```
 
-   The rows marked `...` are in your terminal, and tabulated on
+   The rows marked `...` are in your terminal (the 27 °C row among them), and tabulated on
    [What moves the threshold](guide/threshold-is-not-a-constant.md#body-effect).
 
 2. Work out the threshold shift at each $V_{SB}$, relative to $V_{SB}$ = 0, and the drop in drain
@@ -219,8 +221,9 @@ Which of your six predictions land, and is there a pattern in the misses?
      W=20   L=4       5.00     696.275 uA    798.0193 uA    -12.7 %           --         --
    ```
 
-   Your own numbers appear in the last two columns. (If `make predict` says `predictions.txt
-   still has 6 blank(s)`, you didn't save the file in Part 1.)
+   That sample is from an empty `predictions.txt`, so its last two columns are `--`. With yours
+   filled in, your numbers appear there. (If `make predict` says `predictions.txt still has 6
+   blank(s)`, you didn't save the file in Part 1.)
 
 3. Cover the last two columns and read only `rule err`, top to bottom.
 

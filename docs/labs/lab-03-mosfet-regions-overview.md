@@ -265,7 +265,7 @@ The `W/L is a knob` block puts four devices at $V_{GS} = V_{DS}$ = 1.8 V:
 **You should see** width behave honestly (B is within **0.20 %** of 2×), doubling $L$ give 9.4 %
 more current than $1/L$ predicts, and the minimum-length device D deliver **501.046 µA** against a
 predicted 928.367 µA, only **54 %**. [Sizing with W and L](guide/w-and-l-are-a-choice.md), which
-you'll read before Lab 04, closes that 54 % gap in two steps.
+you'll read before Lab 04, closes that gap in two steps.
 
 ## Part 7: Units on `W` and `L`
 
@@ -320,8 +320,8 @@ $V_{GS}$ = 1.05 V, which sits between the 0.9 V and 1.2 V curves. It takes four 
    first `make extract` table. Write it down.
 
 2. Open `spice/id_vds.spice` in a text editor and add `1.05` to the `foreach` line as the second
-   entry, right after `0.6`. (Appending it at the end also works, and then the existing `let`
-   lines keep their numbers. Putting it second is what makes step 3 worth doing.)
+   entry, right after `0.6`. Put it there rather than at the end: at the end, the existing `let`
+   lines would keep their numbers, and step 3 is the part worth practising.
 
 3. Each `dc` command makes its own plot, named `dc1`, `dc2`, … in the order the sweeps ran. Add a
    `let` line for the new curve (call it `id_vgs105`), and fix the `dcN` numbers on the other
@@ -386,7 +386,8 @@ keeps its simulation commands next to its circuit.*
 1. Do this part after you've finished Part 8 and checked its line in Finishing, because this step
    throws your Part 8 edit away. The schematic writes five columns, and `check.py` reads the gate
    list from the deck, so with your six-curve deck in place it reports `the results file is stale`.
-   Put `spice/id_vds.spice` back to five curves:
+   Put `spice/id_vds.spice` back to five curves (your course folder is the git clone from
+   Lab 01's `mod add`):
 
    ```bash
    git checkout -- spice/id_vds.spice
