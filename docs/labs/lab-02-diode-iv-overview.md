@@ -123,7 +123,7 @@ input B (0.35 V), and with A+B (0.70 V).
 4. Work out how far off superposition is for the diode, as a factor.
 
 **You should see** the resistor's sum match to every digit (7.000000 µA), and the diode's
-prediction of 250.8180 pA against a measured 3.917437 µA: a factor of **15,618**. The checker's
+prediction of 250.8180 pA against a measured 3.917437 µA: a factor of **15,618.6**. The checker's
 lines near the end of `make` report the same thing:
 `resistor: superposition off by 0.0000 %` and `diode   : superposition off by a factor of 15,618.6`.
 
@@ -287,8 +287,8 @@ Where does one resistor and one diode in series settle, and how close was the ha
    ![The diode curve with two resistor load lines and their crossings marked](../assets/img/ad103-diode-load-line.png)
 
 4. Now find the same operating point a completely different way: from the DC sweep, which has no
-   resistor in it at all. This script walks the sweep until the diode's current crosses the
-   100 kΩ load line, then interpolates:
+   resistor in it at all. This script reads `results/diode_iv.txt`, the sweep from Part 1, walks
+   it until the diode's current crosses the 100 kΩ load line, then interpolates:
 
    ```bash
    python3 -c "
@@ -314,8 +314,8 @@ Where does one resistor and one diode in series settle, and how close was the ha
 `v(n3)`, and the sweep crossing agreeing with `op`'s 7.398473e-01 V and 1.060153e-05 A to within
 one in the sixth digit.
 
-The plot was drawn from the sweep, and `op` solved a different circuit. Why do they agree that
-closely?
+The script's crossing came from the sweep of a lone diode, and `op` solved a different circuit, a
+resistor and a diode together. Why do the two agree that closely?
 
 <details>
 <summary>Answer</summary>
@@ -392,11 +392,12 @@ What does a bigger junction buy, and what happens when the size is written wrong
    i_100um = 6.679656e-07
    ```
 
-2. Predict, before you calculate: a hundred times the area ought to be a hundred times the
-   current. Divide `i_100um` by `i_1um`. Then repeat the face-and-edge fit from
-   [Three diode models](guide/three-models-of-one-diode.md#what-junction-area-buys) using only the
-   first and last rows, and check it predicts the middle two. That page has the numbers to check
-   your fit against.
+2. Predict, before you calculate: if current were proportional to area, what would `i_100um`
+   divided by `i_1um` be? Write it down, then do the division. Then repeat the face-and-edge fit
+   from [Three diode models](guide/three-models-of-one-diode.md#what-junction-area-buys) using only
+   the first and last rows, and check it predicts the middle two. The four junctions are squares,
+   1×1, 2×2, 4×4 and 10×10 µm, so their perimeters are 4, 8, 16 and 40 µm. That page has the
+   numbers to check your fit against.
 
 3. Read the second half of the same output. (The `Part 1` and `Part 2` in it are the deck's own
    sections.) All four of these currents are meant to come from a 1 µm² junction:
@@ -486,8 +487,9 @@ Which checks does a 5 % scaling error trip, and which does it leave alone?
      - I0 is 3.7644 fA, reference is 3.5864 fA - the whole curve is scaled wrong, which usually means the junction is not the size you think it is
    ```
 
-3. Look at what did **not** fail. Scroll up to the checker's lines above `FAIL` and find the slope
-   and $n$.
+3. Look at what did **not** fail. Scroll up to the checker's lines above `FAIL` and find the
+   `slope` and `ideality n` lines. The checker tests the slope; it prints $n$ as a note and
+   doesn't test it.
 
 4. Run `make` again to get back to a clean `PASS`.
 
@@ -539,8 +541,8 @@ What does 100 °C do to the slope, to $n$ and to $I_0$?
    make sweep plots
    ```
 
-   The fit block now reads (191 points instead of 154, because two decades now span 191 mV of the
-   1 mV sweep):
+   The `plots` step prints the fit block, which now reads (191 points instead of 154, because two
+   decades now span 191 mV of the 1 mV sweep):
 
    ```
      fit over 191 points from 1e-09 A to 1e-07 A:
@@ -552,8 +554,10 @@ What does 100 °C do to the slope, to $n$ and to $I_0$?
    ```
 
    Ignore the `leaves the line` row for this run. The script reports the first forward point
-   that falls 10 % below the fitted line, and at 100 °C that is the very bottom of the curve,
-   not the bend near the top that Part 4 looked at.
+   that falls 10 % below the fitted line, skipping points where the line itself is below 1 pA.
+   At 27 °C that skips the bottom of the curve, where $I_0$ is only 3.5864 fA. At 100 °C $I_0$ is
+   above 1 pA, so the very bottom of the curve is reported instead of the bend near the top that
+   Part 4 looked at.
 
 4. The script still divides by the 27 °C thermal voltage, so its `ideality n` line is wrong for
    this run. Work out $V_T$ at 373.15 K and your own $n$ from the slope.
@@ -592,8 +596,8 @@ What does 100 °C do to the slope, to $n$ and to $I_0$?
    <details>
    <summary>Answer</summary>
 
-   It objects to every diode current and voltage, the reverse current (−9.1362 pA), the slope and
-   $I_0$. It doesn't object to the two superposition lines, which come from
+   It objects to the three forward currents, the reverse current (−9.1362 pA), the three decade
+   voltages, the slope and $I_0$. It doesn't object to the two superposition lines, which come from
    `spice/straight_line.spice` and still ran at 27 °C, or to `ideality n`, which it prints as a
    note and doesn't check.
 
