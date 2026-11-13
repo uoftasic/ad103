@@ -240,7 +240,7 @@ picks this up.
 
 </details>
 
-## Part 6: Four shapes at one bias
+## Part 6: Four device geometries at one bias
 
 Does current scale with $W/L$?
 

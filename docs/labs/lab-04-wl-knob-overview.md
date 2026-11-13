@@ -389,7 +389,7 @@ speed limit. This is where hand calculation stops and the simulator takes over.
 
 </details>
 
-## Part 7: Five devices, one ratio
+## Part 7: Five devices with $W/L$ = 5
 
 Five devices with $W/L$ = 5: what does the extra area buy?
 

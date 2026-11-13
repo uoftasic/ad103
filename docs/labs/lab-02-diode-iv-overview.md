@@ -597,7 +597,7 @@ Nothing to submit.
 
 ## Going further
 
-None of this is graded, and all of it is quick.
+None of this is graded.
 
 1. **Sweep the other diode.** `sky130_fd_pr__diode_pd2nw_05v5` is the p-diffusion-into-n-well
    junction, the same idea built the other way up. Change the model name in the deck and see
