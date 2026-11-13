@@ -1,9 +1,8 @@
 # Capstone: The CMOS inverter
 
-You'll draw a CMOS inverter, measure the voltage at which it switches, find that it isn't the
-number you predicted, fix it, find that your fix is also off, and then see that both answers were
-correct, to two different questions. You'll also run the same circuit as an amplifier, and finish
-with the current mirror that would bias it.
+You'll draw a CMOS inverter, measure the voltage at which it switches, and size its PMOS two
+different ways for two different goals. You'll also run the same circuit as an amplifier, and
+finish with the current mirror that would bias it.
 
 At the end you'll have a schematic of a real logic gate, sized by you and verified against a
 simulation. That is the file **AD104** asks you to draw as geometry.
@@ -362,7 +361,7 @@ a processor gets hot when it computes and cool when it idles.
 
 </details>
 
-## Part 8: A silent wiring mistake
+## Part 8: The PMOS source on the wrong node
 
 What happens when the PMOS source and body go to the wrong node?
 
@@ -518,7 +517,7 @@ Three, with reference answers in
 cross-section, is worth one more visit: draw an NMOS in it, sweep the gate, and watch the channel
 you've been calculating about appear under the oxide.
 
-### What AD104 does with your inverter
+### Your inverter in AD104
 
 You now have a schematic of a real logic gate, sized by you against a criterion you chose and
 verified against a simulation to six digits. **AD104: Layout** takes this file and asks you to draw

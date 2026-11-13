@@ -275,7 +275,7 @@ Can you draw the reference circuit yourself, with a transistor twice as wide?
    pointer was parked to your first click, and nothing between the two places you clicked. Each
    wire is one straight segment; for an L-shape, draw two.
 
-   Two things cost everyone their first half hour:
+   Two things often cost a first half hour:
 
    - **Your wires may come out diagonal.** XSchem's routing mode has an oblique setting, and it
      is not always off. Press `Space` while a wire is in progress to cycle between
@@ -373,7 +373,7 @@ Does a transistor twice as wide carry twice the current?
 
 **You should see** `PASS` and **1030.4200 µA** from `make mine`.
 
-## Part 6: The loud failure
+## Part 6: Units on `W` and `L`
 
 What does ngspice say when `W` and `L` carry a unit suffix?
 
@@ -410,7 +410,7 @@ has to be a habit.
 
 </details>
 
-## Part 7: The quiet failure
+## Part 7: A gate wire that stops short
 
 What does ngspice do with a gate wire that stops short of the pin?
 
@@ -475,7 +475,7 @@ other warning you got was three lines of solver complaints that look exactly lik
 learn to scroll past. Run that `grep` after every netlist for the rest of the course. Any hit is a
 wire you believe is connected and is not.
 
-## Part 8 (optional): Which model bin your device landed in
+## Part 8 (optional): Your device's model bin
 
 1. Ask ngspice which model card it chose for `L=0.15 W=1`:
 
