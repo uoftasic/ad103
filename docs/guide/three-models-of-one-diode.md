@@ -83,7 +83,8 @@ way.
 ## The small-signal model
 
 There's also a fourth model, and it's the most useful of all. You replace the diode with a
-resistor whose value is the slope of the curve at the operating point, and that resistor is the
+resistor whose value is $\Delta V/\Delta I$ at the operating point (the slope of $V$ against $I$,
+which is the reciprocal of the slope of the usual I–V plot), and that resistor is the
 **small-signal model**. It's valid only for changes small enough that the curve looks straight
 over them, and it's how every amplifier in this course is analysed. You've already met one of
 these resistors: 30.3 kΩ at the 1 MΩ operating point, on
