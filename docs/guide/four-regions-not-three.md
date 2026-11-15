@@ -115,7 +115,8 @@ Now put the same device on a log axis:
 
 ![I_D vs V_GS on a log axis, showing six decades of current below threshold](../assets/img/ad103-subthreshold.png)
 
-*From `spice/id_vgs_log.spice`. Same device, same $V_{DS} = 1.8$ V; the only change is the y-axis.*
+*From `spice/id_vgs_log.spice`. The same device with the drain at 1.8 V, but this time the gate
+voltage is swept instead of the drain voltage, and the current is on a log axis.*
 
 ```
 == below threshold   (V_DS = 1.8 V)
