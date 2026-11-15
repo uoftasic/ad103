@@ -132,7 +132,7 @@ There are two consequences you'll use constantly:
 - **A short device saturates earlier**, because the same overdrive across a shorter channel makes
   a higher field. At $V_{GS} = 1.8$ V, `spice/op_params.spice` gives `vdsat = 0.912` V for
   L = 2 µm and **`vdsat = 0.362` V** for L = 0.15 µm. The minimum-length device pinches off at
-  less than a third of the drain voltage the long one needs.
+  40 % of the drain voltage the long one needs.
 - **The square law drifts toward a straight line.** When the device is fully velocity-saturated,
   $I_D$ becomes proportional to $V_{ov}$ rather than $V_{ov}^2$. That is why Method 2 under-read
   the threshold by 12 %: it fitted a square root to a curve that was drifting toward linear.
