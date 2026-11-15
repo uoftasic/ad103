@@ -207,10 +207,11 @@ however far apart they are drawn. AD103's testbenches use this for supplies and 
 | Annotate DC operating point onto the schematic | **Waves → Op Annotate** |
 | Fire a launcher (one of the green arrows on a testbench) | click it once, then <kbd>Ctrl</kbd>+<kbd>H</kbd> |
 
-XSchem documents launchers as Ctrl-click, but Ctrl-click misses most of the time, because the
-launcher fires only if the selection is exactly one object *and* the pointer did not move between
-press and release. If the pointer drifts by three pixels, nothing happens and XSchem gives no
-message. Instead, click the arrow to select it, then press <kbd>Ctrl</kbd>+<kbd>H</kbd>.
+XSchem documents launchers as Ctrl-click, and Ctrl-click does work, but it misses if your hand
+drifts, because the launcher fires only if the selection is exactly one object *and* the pointer
+did not move between press and release. If the pointer drifts by three pixels, nothing happens and
+XSchem gives no message. Clicking the arrow to select it and then pressing
+<kbd>Ctrl</kbd>+<kbd>H</kbd> doesn't depend on a steady hand, so that's the way we use.
 
 ## Netlisting from a terminal
 
