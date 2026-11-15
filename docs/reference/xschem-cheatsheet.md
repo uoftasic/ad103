@@ -211,7 +211,7 @@ XSchem documents launchers as Ctrl-click, and Ctrl-click does work, but it misse
 drifts, because the launcher fires only if the selection is exactly one object *and* the pointer
 did not move between press and release. If the pointer drifts by three pixels, nothing happens and
 XSchem gives no message. Clicking the arrow to select it and then pressing
-<kbd>Ctrl</kbd>+<kbd>H</kbd> doesn't depend on a steady hand, so that's the way we use.
+<kbd>Ctrl</kbd>+<kbd>H</kbd> doesn't depend on a steady hand, so the labs use that instead.
 
 ## Netlisting from a terminal
 

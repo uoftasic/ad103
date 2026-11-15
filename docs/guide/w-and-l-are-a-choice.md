@@ -65,7 +65,7 @@ So current is proportional to $W$, and that's a rule you can trust in hand calcu
 For C the prediction was 348.138 µA and the simulation measured **380.728 µA**, so the long device
 carries 9.4 % *more* current than $1/L$ says it should. Two effects add current here.
 
-**The threshold.** `spice/op_params.spice` gives C a `vth` of 0.5495 V against A's 0.5895 V (the
+**The threshold.** `spice/op_params.spice` gives C a model `vth` of 0.5495 V against A's 0.5895 V (the
 table under Device D below lists both), so at the same gate voltage C has 40 mV more overdrive.
 That's the same trend [What moves the threshold](../guide/threshold-is-not-a-constant.md#threshold-and-drawn-length)
 measured over nine lengths, seen from the long end. If you put each device's own threshold into the
