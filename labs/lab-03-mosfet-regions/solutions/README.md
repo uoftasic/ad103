@@ -4,7 +4,8 @@
 and works, and the value of each exercise is in those few lines. Try it, run it, notice what
 surprises you, and then come here.
 
-This is not a diff. It is a list of things worth arguing about once your version runs.
+So rather than a diff to copy, each section below gives the answer and then the things worth
+arguing about once your version runs.
 
 Run any of them from the lab folder:
 
@@ -25,7 +26,8 @@ edits in `spice/id_vds.spice` itself, which is what the exercise asks, then `mak
 the sixth curve up on its own and puts the 1.05 V row in gate-voltage order, because it reads the
 gate list out of the deck instead of assuming five. `make check` follows too.
 
-**The thing to argue about is not the current.** Look at what happened to the plot names. In the
+The current is the least interesting part; what's worth arguing about is what happened to the
+plot names. In the
 shipped deck, `foreach vg 0.6 0.9 1.2 1.5 1.8` produces plots `dc1`…`dc5` **in the order the sweeps
 ran**, and the `let` lines below assume that order. Insert `1.05` in its natural place, second, and
 every plot after it shifts by one:
@@ -72,8 +74,8 @@ that with the square law,
 
 $$\left(\frac{1.8-0.5895}{1.8-1.0219}\right)^2 = 2.421$$
 
-and $6.685 / 2.421 = \mathbf{2.76}$ is left over. *That* is the mobility ratio, the two-to-three you
-were taught. The rest was the threshold.
+and $6.685 / 2.421 = \mathbf{2.76}$ is left over. That factor is the mobility ratio, the
+two-to-three you were taught, and the rest of the gap came from the threshold.
 
 *The PMOS threshold really is that high.* `pfet_01v8` with 1.8 V on it has 0.78 V of overdrive
 against the NMOS's 1.21 V. Any circuit that wants matched pull-up and pull-down strength has to buy
@@ -124,7 +126,8 @@ is a large part of being an analog designer.
 
 ## What none of these change
 
-The extraction code. `src/mosfit.py` never mentions a device, a width or a threshold value; it takes
-two columns of numbers and does arithmetic. That is deliberate. Point it at the PMOS sweep, or at a
-sweep of something you draw in AD104, and it still works. Parameter extraction is a skill you
-own, not a script that belongs to this lab.
+None of the three exercises touches the extraction code. `src/mosfit.py` never mentions a device,
+a width or a threshold value, because it only takes two columns of numbers and does arithmetic on
+them. We wrote it that way on purpose: point it at the PMOS sweep, or at a sweep of something you
+draw in AD104, and it still works, so parameter extraction is a skill you take with you rather
+than something tied to this lab's script.

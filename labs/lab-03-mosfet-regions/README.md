@@ -1,7 +1,8 @@
 # Lab 03: MOSFET regions
 
 Writeup: [uoftasic.com/ad103 → Lab 03](https://uoftasic.com/ad103/labs/lab-03-mosfet-regions-overview.html).
-The steps, expected output and explanations are there; this file is a quick reference.
+The writeup has the steps, the expected output and the explanations; this file is a quick
+reference.
 
 Five ngspice sweeps of a SKY130 `nfet_01v8`, a plotting script, and extractions that turn those
 sweeps into $V_{TH}$, $g_m$, a subthreshold slope and a knee voltage. Lab 04 also runs three of the
@@ -14,8 +15,9 @@ cd labs/lab-03-mosfet-regions
 make
 ```
 
-No environment setup is needed. The `Makefile` sets `PDK=sky130A` itself, so this runs in a bare
-container even if `.designinit` failed. It takes about 50 seconds and ends with:
+You don't need any environment setup first, because the `Makefile` sets `PDK=sky130A` itself, so
+this runs in a bare container even if `.designinit` failed. It takes about 50 seconds and ends
+with:
 
 ```
 PASS  all nine extracted parameters match the reference run
@@ -68,8 +70,8 @@ cd xschem
 PDK=sky130A xschem nmos_curves.sch &
 ```
 
-Select the green **Netlist & Simulate** launcher arrow with one click, then press `Ctrl-H`. Then
-run `python3 src/check.py` from the lab folder; it should still say `PASS`.
+Select the green **Netlist & Simulate** launcher arrow with one click and press `Ctrl-H`. After
+that, run `python3 src/check.py` from the lab folder; it should still say `PASS`.
 
 The schematic's device line comes out as
 
@@ -78,15 +80,16 @@ XM1 d g 0 0 sky130_fd_pr__nfet_01v8 L=1 W=5 nf=1 ad=1.45 as=1.45 pd=10.58 ps=10.
 ```
 
 while `spice/id_vds.spice` says only `L=1 W=5 nf=1 m=1`. The XSchem symbol computes the
-source/drain diffusion geometry from `W`; `nrd` and `nrs` are diffusion resistances in squares, and
-they add a little series resistance. The result is **696.226 µA** from the schematic against
-**696.275 µA** from the hand deck, 0.007 % apart and well inside `check.py`'s tolerance.
+source/drain diffusion geometry from `W`, and `nrd` and `nrs` are diffusion resistances in
+squares, so the drawn version has a little extra series resistance. It gives **696.226 µA**
+against **696.275 µA** from the hand deck, which is 0.007 % apart and well inside `check.py`'s
+tolerance.
 
 ## Reference number
 
 **696.275 µA**: a SKY130 `nfet_01v8`, W = 5 µm, L = 1 µm, with $V_{GS} = V_{DS} = 1.8$ V. The
 MOSFET pages check their predictions against it. The row directly above it in `make extract`'s
 first table, **436.080 µA**, is the same device with the gate at 1.5 V. If you ever see 436.080 µA
-printed under a **1.80 V** label, the label is wrong, not the current: some tool has paired a
-hard-coded list of gate voltages with a column count that changed. Nothing here does that;
-`extract.py` reads its labels from `spice/id_vds.spice`.
+printed under a **1.80 V** label, the current is right and the label is wrong: some tool has
+paired a hard-coded list of gate voltages with a column count that changed. The scripts in this
+lab can't make that mistake, because `extract.py` reads its labels from `spice/id_vds.spice`.
