@@ -63,15 +63,28 @@ So current is proportional to $W$, and that's a rule you can trust in hand calcu
 ## Device C: length
 
 For C the prediction was 348.138 µA and the simulation measured **380.728 µA**, so the long device
-carries 9.4 % *more* current than $1/L$ says it should.
+carries 9.4 % *more* current than $1/L$ says it should. Two effects add current here.
 
-The direction of the error points to the cause. As
+**The threshold.** `spice/op_params.spice` gives C a `vth` of 0.5495 V against A's 0.5895 V (the
+table under Device D below lists both), so at the same gate voltage C has 40 mV more overdrive.
+That's the same trend [What moves the threshold](../guide/threshold-is-not-a-constant.md#threshold-and-drawn-length)
+measured over nine lengths, seen from the long end. If you put each device's own threshold into the
+square law, you get
+
+$$\frac{I_D(\mathrm{C})}{I_D(\mathrm{A})} = \frac{(W/L)_\mathrm{C}\,(1.8-0.5495)^2}{(W/L)_\mathrm{A}\,(1.8-0.5895)^2} = \frac{2.5 \times 1.5638}{5 \times 1.4654} = 0.5336$$
+
+$$696.275\ \mu\mathrm{A} \times 0.5336 = 371.5\ \mu\mathrm{A}$$
+
+which closes about 72 % of the gap between the 348 µA prediction and the measured 381 µA.
+
+**The field.** As
 [Where saturation starts](../guide/where-saturation-starts.md#velocity-saturation) explained, a
 longer channel with the same voltage across it has a **lower field**, so its carriers are further
 from their speed limit. Expecting the current to halve when you double $L$ assumes that carrier
 velocity is proportional to the field without limit, so that half the field gives half the speed.
 Carriers near their speed limit don't slow down in proportion when the field drops, so doubling
-$L$ costs less than half the current.
+$L$ costs less than half the current. The measured current is 380.728 / 371.5 = 1.025 times the
+corrected prediction, and that remaining 2.5 % is this effect.
 
 The model's own numbers agree. `vdsat` is **0.912 V** for the L = 2 µm device and **0.779 V** for
 L = 1 µm, which means the longer device needs more drain voltage before its carriers stop
