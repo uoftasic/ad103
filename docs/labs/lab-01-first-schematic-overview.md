@@ -1,9 +1,9 @@
 # Lab 01: Your first schematic
 
 You'll load the course, draw one transistor in XSchem, watch it become seven lines of SPICE,
-and get a current out of it. Then you'll break the same circuit twice on purpose: once so loudly
-that ngspice refuses to run, and once so quietly that it hands you a wrong answer without any
-error.
+and get a current out of it. Then you'll break the same circuit twice on purpose. The first
+mistake is loud enough that ngspice refuses to run, and the second is so quiet that ngspice hands
+you a wrong answer without any error.
 
 Package: [`labs/lab-01-first-schematic/`](https://github.com/uoftasic/ad103/tree/main/labs/lab-01-first-schematic)
 
@@ -13,7 +13,7 @@ Package: [`labs/lab-01-first-schematic/`](https://github.com/uoftasic/ad103/tree
 - Keep the [XSchem cheat sheet](../reference/xschem-cheatsheet.md) open in another tab.
 
 **Time:** about 2 hours, most of it learning XSchem, not counting the optional Part 8. Each `make`
-target takes about ten seconds, almost all of it ngspice loading the SKY130 models.
+target takes about ten seconds, and almost all of that is ngspice loading the SKY130 models.
 
 ## Part 1: Load the course
 
@@ -35,8 +35,9 @@ If you haven't set up the workbench yet, do
              run 'mod' to list course modules, or 'mod <name>' to enter one.
    ```
 
-   Check that it says `PDK=sky130A`; `echo $PDK` prints the same. The image's own default is
-   `ihp-sg13g2`, which is the wrong process for this course.
+   Check that the banner says `PDK=sky130A` (`echo $PDK` prints the same thing). The image's own
+   default is `ihp-sg13g2`, which is the wrong process for this course, so this is the line that
+   tells you the script worked.
 
 3. Get the course files:
 
@@ -58,7 +59,7 @@ If you haven't set up the workbench yet, do
    |---|---|
    | `bash: mod: command not found` | You did not run step 2 in this terminal. |
    | `mod: no such module: ad103` | You ran `mod ad103` before `mod add ad103`. |
-   | `fatal: could not read Username for 'https://github.com'` | git could not read the repo anonymously. Check the spelling; if it is right, ask in [Discord](https://discord.gg/hrJnP5UsGz). Do not type your password. |
+   | `fatal: could not read Username for 'https://github.com'` | git couldn't read the repository without logging in. Check the spelling of the module name, and if it's right, ask in [Discord](https://discord.gg/hrJnP5UsGz). Don't type your password. |
 
 4. Check the tool versions:
 
@@ -68,9 +69,9 @@ If you haven't set up the workbench yet, do
    ```
 
 **You should see** `PDK=sky130A` in the banner from step 2, then `XSCHEM V3.4.8RC` and
-`ngspice-47` at the top of the two version outputs. The course is pinned to these versions.
-XSchem's keys and menus have changed between releases, so with a different version the screenshots
-may not match your window. For problems with the desktop or the container, see IC101's
+`ngspice-47` at the top of the two version outputs. The course is pinned to these versions
+because XSchem's keys and menus have changed between releases, and with a different version the
+screenshots may not match your window. For problems with the desktop or the container, see IC101's
 [Troubleshooting](https://uoftasic.com/ic101/reference/troubleshooting.html) page.
 
 ## Part 2: Prove the toolchain works
@@ -96,10 +97,11 @@ Does your workbench give the reference answer, and what does a SPICE device line
    PASS  netlist and operating point match the reference run
    ```
 
-2. Read the device line before the current. `make` netlists `xschem/nmos_probe.sch` and prints
-   the device line from that netlist; the drain current comes from simulating the hand-written
-   deck `spice/nmos_op.spice`. The four node names, `d g 0 0`, are in the order **drain, gate,
-   source, body**. You'll find each of them on the drawing in Part 3.
+2. Read the device line first, before you look at the current. `make` netlists
+   `xschem/nmos_probe.sch` and prints the device line from that netlist, but the drain current
+   comes from simulating a separate, hand-written deck, `spice/nmos_op.spice`. The four node
+   names, `d g 0 0`, are in the order **drain, gate, source, body**, and you'll find each of them
+   on the drawing in Part 3.
 
 3. Open `results/nmos_op.log` and find `i(vds) = -5.01046e-04`. The log opens with several
    `Error opening osdi lib` lines; they are harmless, and
@@ -110,20 +112,20 @@ Does your workbench give the reference answer, and what does a SPICE device line
    <details>
    <summary>Answer</summary>
 
-   ngspice reports current flowing *into* the positive terminal of a source, and `Vds` is pushing
-   current out.
+   ngspice reports the current flowing *into* the positive terminal of a source. `Vds` is pushing
+   current out of that terminal, so the number comes out negative.
 
    </details>
 
 **You should see** `PASS` and **501.046 µA**. That is a real SKY130 NMOS, one micrometre wide
 and 150 nanometres long, with 1.8 V on both the gate and the drain: half a milliamp through a
 device you could fit two thousand of across the width of a human hair. Lab 03 explains why it
-carries that current and not some other.
+carries that particular current.
 
-`make` needs no environment setup at all. The `Makefile` sets `PDK=sky130A` itself, so this
-works in a bare container even if Part 1 went wrong. From now on, if a page in this course seems
-to disagree with your screen, come back here and run `make`. A `PASS` means your toolchain is
-fine and the problem is in your drawing.
+`make` doesn't need any environment setup, because the `Makefile` sets `PDK=sky130A` itself, so
+it works in a bare container even if Part 1 went wrong. That makes it a useful check for the rest
+of the course: if a page seems to disagree with your screen, come back here and run `make`. If it
+prints `PASS`, your toolchain is fine and the problem is in your drawing.
 
 ## Part 3: Look around the reference schematic
 
@@ -138,11 +140,12 @@ drawing?
    ```
 
 2. Check the menu bar says **SKY130**. If it says **IHP**, close XSchem, run step 2 of Part 1
-   in this terminal, and launch it again. Other XSchem failures, most of which give no error, are
-   listed under [Failures that exit 0](../reference/xschem-cheatsheet.md#failures-that-exit-0).
+   in this terminal, and launch it again. Other ways XSchem can fail, most of them without any
+   error, are listed under [Failures that exit 0](../reference/xschem-cheatsheet.md#failures-that-exit-0).
 
-3. Learn the keys you need. XSchem has several hundred bindings; these cover the whole course.
-   They come from XSchem's own list: **Help → Keys**, or press `/` for a full-screen poster.
+3. Learn the keys you need. XSchem has several hundred key bindings, but the ones in this table
+   cover everything in the course. They're taken from XSchem's own list, which you can open with
+   **Help → Keys**, or with `/` for a full-screen poster.
 
    | Do this | Key |
    |---|---|
@@ -161,9 +164,9 @@ drawing?
    | Help | `?` |
 
    Three of these will catch you out, because your text editor uses the same keys for something
-   else: **`c` duplicates** the selection (plain `Ctrl-C` is a different, less useful copy),
-   **`u` is undo** (`Ctrl-Z` is zoom out), and **`q` opens properties** (it does not quit). The
-   full list, with menu equivalents, is in the [XSchem cheat sheet](../reference/xschem-cheatsheet.md).
+   else. `c` duplicates the selection (plain `Ctrl-C` is a different, less useful copy), `u` is
+   undo (`Ctrl-Z` zooms out), and `q` opens the properties editor rather than quitting. The full
+   list, with menu equivalents, is in the [XSchem cheat sheet](../reference/xschem-cheatsheet.md).
 
 4. Pan and zoom around `nmos_probe.sch` until it stops looking random. Find the two supplies,
    the nets `g` and `d`, and the junction dot where the source and body wires meet. Compare it
@@ -173,15 +176,15 @@ drawing?
    > Practise on it freely (`u` undoes any number of steps), but don't save over it. If you
    > already did, run `git checkout -- xschem/nmos_probe.sch` from the lab folder to put it back.
 
-   The status bar at the bottom of the window is where XSchem tells you what mode you are in. If
-   it is hidden behind the taskbar, see
+   The status bar at the bottom of the window is where XSchem tells you what mode you're in. If
+   it's hidden behind the taskbar, see
    [Windows that open off screen](../reference/xschem-cheatsheet.md#windows-that-open-off-screen).
 
 5. Open the **Simulation** menu and check the bullet is on **Use 'simulation' dir in schematic
-   dir**. The lab's `xschemrc` sets this. While the menu is open, tick **Show netlist after
-   netlist command** (`Shift-A`).
+   dir**. The lab's `xschemrc` sets this, so it should already be on. While the menu is open,
+   tick **Show netlist after netlist command** (`Shift-A`).
 
-6. Click **Netlist** in the menu bar. It is the grey button to the right of `SKY130`. The netlist
+6. Click **Netlist** in the menu bar; it's the grey button to the right of `SKY130`. The netlist
    pops up in its own window.
 
 7. In the terminal, still in the `xschem/` folder, print the file XSchem wrote:
@@ -205,8 +208,8 @@ nets on the drawing.
 
 ## Part 4: Draw your own transistor
 
-Can you draw the reference circuit yourself, with a transistor twice as wide?
-`xschem/my_probe.sch` is the same circuit with the transistor left out.
+Can you draw the reference circuit yourself, with a transistor twice as wide? You start from
+`xschem/my_probe.sch`, which is the same circuit with the transistor left out.
 
 1. Go back to the lab folder and open it:
 
@@ -217,41 +220,43 @@ Can you draw the reference circuit yourself, with a transistor twice as wide?
 
    ![xschem/my_probe.sch — the two supplies, the two nets, and a gap where the transistor goes](../assets/img/ad103-xschem-my-probe.png)
 
-   *Everything but the transistor is placed and wired. `Vgs` and `Vds` are 1.8 V, connected by
-   net name rather than by wire: two `lab_pin`s with the same label are the same net, wherever
-   they sit on the page. The status bar reads `SNAP: 10  GRID: 20  MODE: spice`.*
+   *Everything except the transistor is already placed and wired. `Vgs` and `Vds` are both
+   1.8 V, and they're connected by net name rather than by wire: any two `lab_pin`s with the same
+   label are the same net, wherever they sit on the page. The status bar reads
+   `SNAP: 10  GRID: 20  MODE: spice`.*
 
 2. Press `Shift-I`. The symbol chooser opens:
 
    ![XSchem's symbol chooser, opened with Shift-I](../assets/img/xschem-insert-symbol.png)
 
-   *Left pane: the symbol libraries XSchem knows about. Right pane: the current directory.
-   **Search** filters by pattern. Pick a file (`vsource.sym` here) and the pane underneath draws
-   the symbol, so you can check you have the right one before you place it. Press **OK**, or
-   double-click the file, and the symbol attaches to your cursor; click to drop it.*
+   *The left pane lists the symbol libraries XSchem knows about, and the right pane shows the
+   current directory. **Search** filters the file list by a pattern. When you pick a file
+   (`vsource.sym` here), the pane underneath draws the symbol, so you can check you have the right
+   one before you place it. Press **OK**, or double-click the file, and the symbol attaches to
+   your cursor; click to drop it.*
 
-   Look at the left pane first, because it is a second PDK check. Three paths are listed, and the
-   third is `…/sky130A/libs.tech/xschem`. If that line is missing or says `ihp-sg13g2`, close
-   XSchem and go back to Part 1, step 2.
+   Look at the left pane first, because it gives you a second check on the PDK. Three paths are
+   listed, and the third is `…/sky130A/libs.tech/xschem`. If that line is missing or says
+   `ihp-sg13g2`, close XSchem and go back to Part 1, step 2.
 
    The right pane opens on XSchem's built-in **`devices`** library. You need four things from it
    during the course: `vsource.sym` (a voltage source), `gnd.sym` (ground), `lab_pin.sym` (a net
    label), and `capa.sym` (a capacitor).
 
-   On a 1280-wide desktop the chooser opens mostly off the right edge of the screen, with
+   On a desktop 1280 pixels wide, the chooser opens mostly off the right edge of the screen, with
    **OK** out of view. Drag it back by the part of the title bar you can see;
    [Windows that open off screen](../reference/xschem-cheatsheet.md#windows-that-open-off-screen)
    has the details.
 
 3. Click the `sky130A` line on the left, open **`sky130_fd_pr`**, and replace the **Search** text
-   with `nfet_01v8*.sym`. That cuts the library's 77 symbols down to five. Search takes a glob,
-   not a substring, so `nfet` on its own matches nothing.
+   with `nfet_01v8*.sym`. That cuts the library's 77 symbols down to five. Search takes a glob
+   pattern rather than a substring, so `nfet` on its own matches nothing.
 
    ![The symbol chooser in sky130_fd_pr with the Search box reading nfet_01v8*.sym and five files listed](../assets/img/xschem-symbol-sky130.png)
 
-   *The whole `sky130_fd_pr` library cut down to five files. The preview shows the symbol with
-   its attributes still as placeholders (`@name`, `@model`, `@mult x @W / @L`), because they are
-   filled in per instance.*
+   *The search has cut the whole `sky130_fd_pr` library down to five files. The preview shows the
+   symbol with its attributes still as placeholders (`@name`, `@model`, `@mult x @W / @L`),
+   because they're filled in separately for each instance.*
 
    The three symbols you'll use in this course are **`nfet_01v8.sym`** (the 1.8 V n-channel
    MOSFET, the workhorse of this process), **`pfet_01v8.sym`** (its p-channel twin) and
@@ -264,42 +269,43 @@ Can you draw the reference circuit yourself, with a transistor twice as wide?
 
    ![The XSchem property editor on an nfet_01v8 instance](../assets/img/xschem-edit-properties.png)
 
-   *One attribute per line. `W=1` and `L=0.15` are the only two you will normally change. `nf`,
-   `mult`, `model` and `spiceprefix` come from the symbol, so leave them alone.*
+   *The editor shows one attribute per line. `W=1` and `L=0.15` are the only two you'll normally
+   change; `nf`, `mult`, `model` and `spiceprefix` come from the symbol, so leave them alone.*
 
-   Set **`W=2`** and **`L=0.15`**. Plain numbers, no `u`.
+   Set **`W=2`** and **`L=0.15`**, as plain numbers with no `u` after them.
 
 6. Wire the four pins: drain to `d`, gate to `g`, source and body to ground. To draw a wire, put
-   the pointer on the first end, press `w`, move to the second end, and click. The key anchors
-   the start, so pressing `w` and *then* clicking two places draws a wire from wherever the
-   pointer was parked to your first click, and nothing between the two places you clicked. Each
-   wire is one straight segment; for an L-shape, draw two.
+   the pointer on the first end, press `w`, move to the second end, and click. It's the key, not
+   a click, that sets the start of the wire. So if you press `w` and *then* click in two places,
+   you get a wire from wherever the pointer was sitting when you pressed `w` to your first click,
+   and nothing between the two places you clicked. Each wire is one straight segment, so for an
+   L-shape you draw two.
 
-   Two things often cost a first half hour:
+   Two things often cost new users their first half hour:
 
    - **Your wires may come out diagonal.** XSchem's routing mode has an oblique setting, and it
-     is not always off. Press `Space` while a wire is in progress to cycle between
+     isn't always switched off. Press `Space` while a wire is in progress to cycle between
      horizontal-then-vertical, vertical-then-horizontal, and straight diagonal. `Escape` throws
      away a wire you started by mistake.
    - **A wire end can miss a pin by one grid step.** If you're not sure a wire will land on a
      pin, use `Shift-W` instead of `w`, and hold `Shift` down for the closing click as well.
      `Shift-W` snaps the end you *start* from onto the nearest pin or net endpoint, however far
      away it is. The click that finishes the wire is an ordinary click, which lands on the snap
-     grid; it only pulls onto a pin that is already within about one snap step, which is why the
-     mistake comes and goes. Measured on a pin 28 units away: a plain closing click landed on
-     the grid 28 units short, and with `Shift` held it landed exactly on the pin.
+     grid and only pulls onto a pin that's already within about one snap step of it, which is
+     why the mistake comes and goes. We measured it on a pin 28 units away: a plain closing click
+     landed on the grid 28 units short of the pin, and with `Shift` held it landed exactly on it.
 
    Zoom in on every junction and check for the dot.
 
-7. Save with `Ctrl-S`. XSchem always raises a small window titled **Ask Save** reading
-   `save file?`, with **Yes / Cancel / No**, placed wherever the pointer happens to be. Nothing
-   reaches disk until you press **Yes** (or `Return`), and the tab title keeps its `*` until you
-   do. XSchem has no autosave, so save often.
+7. Save with `Ctrl-S`. XSchem always answers with a small window titled **Ask Save**, which asks
+   `save file?` and offers **Yes / Cancel / No**, and it puts that window wherever the pointer
+   happens to be. Nothing reaches the disk until you press **Yes** (or `Return`), and the tab
+   title keeps its `*` until you do. XSchem has no autosave, so save often.
 
    > **Warning:** if you press `Ctrl-S`, miss the **Ask Save** window, and run `make mine`, you
-   > check the *last* version you saved. That's usually the one with no transistor in it, and it
-   > gives a confident `FAIL - the netlist has no nfet_01v8` that sends you hunting for a
-   > placement bug that isn't there. Check the `*` has gone from the tab first.
+   > check the *last* version you saved, which is usually the one with no transistor in it. That
+   > gives you a confident `FAIL - the netlist has no nfet_01v8`, which sends you hunting for a
+   > placement bug that isn't there. Check that the `*` has gone from the tab before you run `make mine`.
 
 **You should see** an `nfet_01v8` in the gap with `W=2` and `L=0.15`, no hollow square on any wire
 end or pin, a dot where the source and body wires meet, and no `*` in the tab title.
@@ -308,8 +314,8 @@ end or pin, a dot where the source and body wires meet, and no `*` in the tab ti
 
 Does a transistor twice as wide carry twice the current?
 
-1. Predict the current before you simulate. The reference device is $W$ = 1 µm and draws
-   501.046 µA. Yours is twice as wide. Write your number down.
+1. Predict the current before you simulate. The reference device has $W$ = 1 µm and draws
+   501.046 µA, and yours is twice as wide. Write your number down.
 
 2. Netlist, check and simulate your drawing:
 
@@ -340,9 +346,9 @@ Does a transistor twice as wide carry twice the current?
      Small, and not zero, and not noise. Lab 04 is entirely about that gap.
    ```
 
-   If it says `FAIL`, it names which of five things went wrong (a missing device, a unit suffix
-   on `W`, a `net7` where a wire did not land, the source on the wrong node, the body left
-   floating) and what to do about each.
+   If it says `FAIL`, it tells you which of five things went wrong (a missing device, a unit
+   suffix on `W`, a `net7` where a wire didn't land, the source on the wrong node, or the body
+   left floating) and what to do about it.
 
 3. Compare the result with your prediction. The note at the end compares your current with twice
    the reference schematic's 500.9410 µA. What does the +2.85 % say about the rule "current is
@@ -351,9 +357,10 @@ Does a transistor twice as wide carry twice the current?
    <details>
    <summary>Answer</summary>
 
-   Doubling the width bought slightly more than double the current. That is too small to be a
-   mistake and too large to be noise. It is the first crack in "current is proportional to $W$",
-   and [Lab 04](../labs/lab-04-wl-knob-overview.md) is about what is behind it.
+   Doubling the width gave slightly more than double the current. The difference is too small to
+   be a mistake and too large to be noise, so the rule holds only approximately. This is the
+   first crack in "current is proportional to $W$", and
+   [Lab 04](../labs/lab-04-wl-knob-overview.md) is about what's behind it.
 
    </details>
 
@@ -365,9 +372,9 @@ Does a transistor twice as wide carry twice the current?
    <summary>Answer</summary>
 
    The symbol computes the source and drain diffusion areas and resistances from $W$ (`ad`, `as`,
-   `pd`, `ps`, `nrd`, `nrs`) and writes them onto the device line. The hand deck leaves them at
-   zero. This is the first time in the course that layout shows up in an electrical answer, and
-   the effect is the smallest you'll see.
+   `pd`, `ps`, `nrd`, `nrs`) and writes them onto the device line, while the hand-written deck
+   leaves them at zero. This is the first time in the course that layout shows up in an
+   electrical answer, and the effect is the smallest you'll see.
 
    </details>
 
@@ -396,17 +403,18 @@ What does ngspice say when `W` and `L` carry a unit suffix?
    diff spice/nmos_op.spice spice/nmos_op_wrong_units.spice
    ```
 
-**You should see** two characters of difference: `L=0.15u W=1u` instead of `L=0.15 W=1`.
-[Getting started](../guide/getting-started.md#units-on-w-and-l) explains what the `u` does.
+**You should see** that the two decks differ by two characters: `L=0.15u W=1u` instead of
+`L=0.15 W=1`. [Getting started](../guide/getting-started.md#units-on-w-and-l) explains what the
+`u` does.
 
-The message names neither `W` nor units. So when you see `could not find a valid modelname`, what
-do you check first?
+The error message doesn't mention `W` or units. So when you see
+`could not find a valid modelname`, what should you check first?
 
 <details>
 <summary>Answer</summary>
 
-`W` and `L`, before you try to read the error. The message doesn't point at them, which is why it
-has to be a habit.
+Check `W` and `L` first, before you try to make sense of the error. The message doesn't point at
+them, so checking them has to become a habit.
 
 </details>
 
@@ -446,8 +454,8 @@ What does ngspice do with a gate wire that stops short of the pin?
    xschem broken_probe.sch &
    ```
 
-   Find the difference. It is one wire, ending 20 units short of the gate pin: about a millimetre
-   on screen.
+   Find the difference. It's a single wire that ends 20 units short of the gate pin, which is
+   about a millimetre on screen.
 
 4. Compare the current with Part 2's 501.046 µA. By what factor is it wrong?
 
@@ -457,8 +465,9 @@ What does ngspice do with a gate wire that stops short of the pin?
    <details>
    <summary>Answer</summary>
 
-   The gate is floating, and settles wherever the solver left it. `Vgs` is no longer connected to
-   anything that matters.
+   Because the wire stops short, the gate is floating, so its voltage settles wherever the solver
+   happened to leave it. `Vgs` is still there, but it's no longer connected to anything that
+   matters.
 
    </details>
 
@@ -469,11 +478,12 @@ What does ngspice do with a gate wire that stops short of the pin?
    grep 'net[0-9]' xschem/simulation/*.spice
    ```
 
-**You should see** ngspice print an answer, **73.4593 nA**, with no error anywhere: wrong by a
-factor of **6821**. The `grep` finds the `broken_probe` device line with `net1` on it. The only
-other warning you got was three lines of solver complaints that look exactly like the noise you
-learn to scroll past. Run that `grep` after every netlist for the rest of the course. Any hit is a
-wire you believe is connected and is not.
+**You should see** ngspice print an answer, **73.4593 nA**, with no error anywhere, even though
+the answer is wrong by a factor of **6821**. The `grep` finds the `broken_probe` device line with
+`net1` on it. Apart from that, the only warning you got was three lines of solver complaints,
+which look exactly like the noise you learn to scroll past. That's why we ask you to run that
+`grep` after every netlist for the rest of the course: any match is a wire you believe is
+connected but isn't.
 
 ## Part 8 (optional): Your device's model bin
 
