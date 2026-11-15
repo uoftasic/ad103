@@ -4,7 +4,7 @@
 # setup: it pins PDK itself, because the image ships with PDK=ihp-sg13g2 and
 # every sky130 model silently disappears if you leave it that way.
 #
-#   make            run the four sweeps and print a verdict   (about 9 s)
+#   make            run the four sweeps and print a verdict   (about 40 s)
 #   make sweeps     just the four ngspice runs
 #   make predict    score the predictions you wrote in predictions.txt
 #   make extract    every number this lab teaches, with its working

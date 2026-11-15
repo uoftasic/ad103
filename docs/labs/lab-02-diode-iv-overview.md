@@ -72,7 +72,7 @@ Does your workbench reproduce the reference sweep?
 
    ```
    == DC sweep: 1901 points, -1.000 V to +0.900 V
-      (about 2 s, model library included)
+      (about 10 s, nearly all of it loading the model library)
       wrote results/diode_iv.txt
    == additivity test: a resistor and a diode, driven three ways
    ...
