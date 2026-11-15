@@ -90,7 +90,7 @@ Does your workbench reproduce the reference sweeps?
    make figures
    ```
 
-   It writes six PNGs and the channel cross-section figure. Open them as you go through the parts
+   It writes six PNGs plus the channel cross-section figure. Open them as you go through the parts
    below.
 
 3. Print every extracted parameter with its working. You'll read this output block by block in
@@ -125,20 +125,21 @@ What is $V_{TH}$ for this device?
    output.
 
 **You should see** **0.6016 V** by linear extrapolation, **0.5159 V** by $\sqrt{I_D}$
-extrapolation and **0.5895 V** from the model: three answers for one device, 86 mV apart. Use
-0.6016 V as $V_{TH}$ for the rest of this lab.
+extrapolation and **0.5895 V** from the model. That's three different answers for one device,
+spread over 86 mV. Use 0.6016 V as $V_{TH}$ for the rest of this lab.
 
 Which of the three is the right threshold, and why do they disagree?
 
 <details>
 <summary>Answer</summary>
 
-None of them is wrong. $V_{TH}$ is defined by its extraction method, and the methods disagree
-because the square law they both rely on isn't exactly true for this device. Linear extrapolation
-relies on it only very near threshold and lands 2.07 % from the model; $\sqrt{I_D}$ extrapolation
-relies on it across a whole volt of overdrive and is 12.49 % out.
-[Where saturation starts](../guide/where-saturation-starts.md#two-methods-86-mv-apart) has the
-details.
+None of them is wrong, because $V_{TH}$ is defined by the method you use to extract it. The two
+extraction methods disagree because both rely on the square law, and the square law isn't
+exactly true for this device. Linear extrapolation relies on it only very near threshold, so it
+lands 2.07 % from the model. $\sqrt{I_D}$ extrapolation relies on it across a whole volt of
+overdrive, so it ends up 12.49 % out.
+[Where saturation starts](../guide/where-saturation-starts.md#two-methods-86-mv-apart) goes
+through this in more detail.
 
 </details>
 
@@ -150,8 +151,8 @@ Where does each output curve knee, and does it land at $V_{GS} - V_{TH}$?
 
    ![I_D vs V_DS for five gate voltages, with the regions shaded](../assets/img/ad103-id-vds-family.png)
 
-2. Read the first block of `make extract`, `I_D vs V_DS`. Look at the `channel R at V_DS=10 mV`
-   column first: the channel's resistance at each gate voltage.
+2. Read the first block of `make extract`, `I_D vs V_DS`. Look first at the
+   `channel R at V_DS=10 mV` column, which gives the channel's resistance at each gate voltage.
 
 3. Work out $V_{GS} - V_{TH}$ for the 0.9 V to 1.8 V curves, using your $V_{TH}$ of 0.6016 V, and
    compare it with the `knee V_DS` column. Then find the `knee of each curve vs the model's vdsat` table
@@ -161,20 +162,21 @@ Where does each output curve knee, and does it land at $V_{GS} - V_{TH}$?
    drain.
 
 **You should see** the channel resistance fall from **26.6 kΩ** to **737 Ω** as $V_{GS}$ goes from
-0.6 V to 1.8 V. At $V_{GS}$ = 0.9 V the knee lands at **0.29 V** against a predicted 0.298 V, a
-hit; at 1.8 V it lands at **0.89 V** against a predicted 1.198 V, so the prediction is 34 % high. The model's `vdsat` is
-below $V_{GS} - V_{TH}$ at every gate voltage. With the gate at 0 V the device still passes
-**2.1853 pA**.
+0.6 V to 1.8 V. At $V_{GS}$ = 0.9 V the knee lands at **0.29 V** against a predicted 0.298 V,
+which is close, but at 1.8 V it lands at **0.89 V** against a predicted 1.198 V, so there the
+prediction is 34 % high. The model's `vdsat` is below $V_{GS} - V_{TH}$ at every gate voltage.
+Even with the gate at 0 V, the device still passes **2.1853 pA**.
 
 Why does the 1.8 V curve knee so far below $V_{GS} - V_{TH}$?
 
 <details>
 <summary>Answer</summary>
 
-Velocity saturation. The square law assumes carrier speed keeps rising with field, but above
-roughly $10^4$ V/cm the carriers stop speeding up. Once they are moving as fast as they can, more
-drain voltage adds nothing, so the current stops responding before $V_{DS}$ reaches $V_{ov}$. The
-harder you drive the gate, the bigger the error. See
+The cause is velocity saturation. The square law assumes that carrier speed keeps rising with the
+electric field, but above roughly $10^4$ V/cm the carriers stop speeding up. Once they're moving
+as fast as they can, more drain voltage adds nothing, so the current stops responding before
+$V_{DS}$ reaches $V_{ov}$. The harder you drive the gate, the bigger the error, which is why the
+0.9 V curve lands close to its prediction and the 1.8 V curve doesn't. See
 [Where saturation starts](../guide/where-saturation-starts.md#velocity-saturation).
 
 </details>
@@ -196,9 +198,10 @@ Is a transistor below threshold really off?
    $V_{GS}$ = 0.30 V current, which is what a device with a threshold 0.3 V lower would carry with
    its gate at ground.
 
-**You should see** **1.3645 nA** at $V_{GS}$ = 0.30 V: not zero, and part of a straight line
-**5.96 decades** tall with a slope of **85.6 mV/decade**. Ten million transistors at 2.1853 pA each
-is 21.9 µA of leakage; the same ten million with a threshold 0.3 V lower is **13.6 mA**.
+**You should see** **1.3645 nA** at $V_{GS}$ = 0.30 V, which is small but not zero. On the log
+plot it sits on a straight line **5.96 decades** tall, with a slope of **85.6 mV/decade**. Ten
+million transistors at 2.1853 pA each add up to 21.9 µA of leakage, and the same ten million with
+a threshold 0.3 V lower draw **13.6 mA**.
 
 The two leakage totals are a factor of 624 apart. What does that say about how a process has to
 treat its threshold voltage?
@@ -207,7 +210,8 @@ treat its threshold voltage?
 <summary>Answer</summary>
 
 A threshold 0.3 V lower multiplies the leakage of those ten million transistors by 624, from
-21.9 µA to 13.6 mA. That is why threshold control is a discipline of its own.
+21.9 µA to 13.6 mA. Because a shift that small changes a chip's leakage that much, a process has
+to hold its threshold voltage tightly, and threshold control is a discipline of its own.
 
 </details>
 
@@ -220,22 +224,24 @@ Does the slope of your sweep agree with the $g_m$ the model reports?
    ![g_m from the sweep, with ngspice's own g_m overlaid](../assets/img/ad103-gm.png)
 
    The green curve is `numpy.gradient` applied to your sweep. The circles are the $g_m$ that
-   ngspice's model reports at five bias points. They are computed by completely different means.
+   ngspice's model reports at five bias points. The two are computed by completely different
+   means, so each is an independent check on the other.
 
 2. Read the `g_m = dI_D/dV_GS` block of `make extract`, and the `g_m` line in the
    `your number vs the model's own number` block.
 
 **You should see** **914.650 µS** from the slope of your sweep against **915.312 µS** from the
-model at $V_{GS}$ = 1.8 V, **0.07 %** apart. In the `g_m/I_D` column, 5.90 /V at $V_{GS}$ = 0.9 V
-falls to 1.31 /V at 1.8 V.
+model at $V_{GS}$ = 1.8 V, **0.07 %** apart. In the `g_m/I_D` column, the value falls from
+5.90 /V at $V_{GS}$ = 0.9 V to 1.31 /V at 1.8 V.
 
 What does $g_m/I_D$ measure, and what does its trend say about where to bias an amplifier?
 
 <details>
 <summary>Answer</summary>
 
-$g_m/I_D$ is transconductance per unit of current burned, a measure of efficiency. It is highest
-near threshold and worst wide open, the opposite of where a beginner tends to bias an amplifier.
+$g_m/I_D$ is the transconductance you get for each unit of current you burn, so it measures how
+efficiently the device uses its bias current. It's highest near threshold and lowest with the
+gate wide open, which is the opposite of where a beginner tends to bias an amplifier.
 [Transconductance and output resistance](../guide/gm-and-ro.md), which you'll read before Lab 04,
 picks this up.
 
@@ -263,16 +269,17 @@ The `W/L is a knob` block puts four devices at $V_{GS} = V_{DS}$ = 1.8 V:
 
 3. For each device, work out how far the measurement is from your prediction, in percent.
 
-**You should see** width behave honestly (B is within **0.20 %** of 2×), doubling $L$ give 9.4 %
-more current than $1/L$ predicts, and the minimum-length device D deliver **501.046 µA** against a
-predicted 928.367 µA, only **54 %**. [Sizing with W and L](../guide/w-and-l-are-a-choice.md), which
+**You should see** B within **0.20 %** of twice A's current, so width scales the way $W/L$ says
+it should. Doubling $L$ gives 9.4 % more current than $1/L$ predicts, and the minimum-length
+device D delivers **501.046 µA** against a predicted 928.367 µA, only **54 %** of the
+prediction. [Sizing with W and L](../guide/w-and-l-are-a-choice.md), which
 you'll read before Lab 04, closes that gap in two steps.
 
 ## Part 7: Units on `W` and `L`
 
 What does a unit suffix on `W` do to this deck?
 
-1. Predict what ngspice will print. You caused the same mistake in Lab 01, Part 6.
+1. Predict what ngspice will print. You made the same mistake on purpose in Lab 01, Part 6.
 
 2. Run the deck with units on `W` and `L`:
 
@@ -297,16 +304,17 @@ What does a unit suffix on `W` do to this deck?
    diff spice/id_vds.spice spice/id_vds_wrong_units.spice
    ```
 
-**You should see** two characters of difference: `L=1u W=5u` instead of `L=1 W=5`, and a message
-that names neither `W` nor units.
+**You should see** that the two decks differ by two characters, the two `u`s in `L=1u W=5u` where
+the working deck has `L=1 W=5`, and that the error message names neither `W` nor units.
 
 Why does a `u` make ngspice stop here, when the same `u` on a diode in Lab 02 ran silently?
 
 <details>
 <summary>Answer</summary>
 
-SKY130's MOSFET models are binned in microns, so a width with a `u` on it matches no bin, and
-ngspice stops. Diode models aren't binned.
+SKY130's MOSFET models are binned in microns: each model covers a range of widths and lengths, so
+a width with a `u` on it matches no bin, and ngspice stops. The diode models aren't binned, so
+there's no range for a wrong size to fall outside, and the diode deck runs without complaint.
 
 </details>
 
@@ -321,8 +329,9 @@ $V_{GS}$ = 1.05 V, which sits between the 0.9 V and 1.2 V curves. It takes four 
    first `make extract` table. Write it down.
 
 2. Open `spice/id_vds.spice` in a text editor and add `1.05` to the `foreach` line as the second
-   entry, right after `0.6`. Put it there rather than at the end: at the end, the existing `let`
-   lines would keep their numbers, and step 3 is the part worth practising.
+   entry, right after `0.6`. We have you put it there rather than at the end on purpose: at the
+   end, the existing `let` lines would keep their numbers, and renumbering them in step 3 is the
+   part worth practising.
 
 3. Each `dc` command makes its own plot, named `dc1`, `dc2`, … in the order the sweeps ran. Add a
    `let` line for the new curve (call it `id_vgs105`), and fix the `dcN` numbers on the other
@@ -342,12 +351,13 @@ $V_{GS}$ = 1.05 V, which sits between the 0.9 V and 1.2 V curves. It takes four 
    let id_vgs18 = -dc6.i(vds)
    ```
 
-   `dcN` is a run counter, not a bias label.
+   The `N` in `dcN` counts sweeps in the order they ran, and has nothing to do with the gate
+   voltage.
 
    </details>
 
 4. Add `id_vgs105` to the `wrdata` line, and save the file. Its position in that list doesn't
-   matter: `extract.py` matches each column to its gate voltage through the vector's name.
+   matter, because `extract.py` matches each column to its gate voltage through the vector's name.
 
 5. Run the lab and print the extraction again:
 
@@ -357,8 +367,8 @@ $V_{GS}$ = 1.05 V, which sits between the 0.9 V and 1.2 V curves. It takes four 
    ```
 
    The first table of `make extract` now has six rows. The `gate voltages read` line lists the
-   gates in your `wrdata` order, so yours may differ from this one, which had `id_vgs105` second;
-   the table under it is sorted either way:
+   gates in the order of your `wrdata` line, so yours may differ from the one below, which had
+   `id_vgs105` second. The table under it is sorted by gate voltage either way:
 
    ```
    == I_D vs V_DS   (W=5, L=1)
@@ -373,8 +383,8 @@ $V_{GS}$ = 1.05 V, which sits between the 0.9 V and 1.2 V curves. It takes four 
    ```
 
 **You should see** a sixth row, **131.053 µA at $V_{GS}$ = 1.05 V**, sorted into gate-voltage
-order, and `make` still printing `PASS`. Nothing in `src/` assumes five curves: `extract.py` reads
-the gate list back out of the deck. The reference deck is `solutions/id_vds_six.spice`, and
+order, and `make` still printing `PASS`. That works because nothing in `src/` assumes five
+curves; `extract.py` reads the gate list back out of the deck. The reference deck is `solutions/id_vds_six.spice`, and
 [`solutions/README.md`](https://github.com/uoftasic/ad103/tree/main/labs/lab-03-mosfet-regions/solutions)
 discusses it.
 
@@ -383,7 +393,7 @@ discusses it.
 ![The Lab 03 curve tracer open in XSchem](../assets/img/ad103-xschem-curve-tracer.png)
 
 *`xschem/nmos_curves.sch`: the same circuit as the shipped `spice/id_vds.spice`, drawn. The `.lib`
-line and the `.control` block ride along in two `code_shown` symbols, which is how a testbench
+line and the `.control` block are carried in two `code_shown` symbols, which is how a testbench
 keeps its simulation commands next to its circuit.*
 
 1. Do this part after you've finished Part 8 and checked its line in Finishing, because this step
@@ -405,7 +415,8 @@ keeps its simulation commands next to its circuit.*
    ```
 
 3. Find the green **Netlist & Simulate** launcher arrow on the canvas. It isn't a toolbar button,
-   and a plain left-click on it only selects it: no netlist, no simulation, no message. **Click the
+   and a plain left-click on it only selects it, without netlisting, simulating or printing any
+   message. **Click the
    arrow once to select it, then press `Ctrl-H`** to fire it. (Ctrl-click on the arrow also works,
    but it misses if your hand drifts between press and release. The
    [XSchem cheat sheet](../reference/xschem-cheatsheet.md#netlist-and-simulate) has the same note.)
@@ -419,8 +430,9 @@ keeps its simulation commands next to its circuit.*
 
 **You should see** `PASS` again, because the schematic writes the same `results/id_vds.txt`. The
 drawn device carries **696.226 µA** rather than 696.275 µA, because the XSchem symbol adds the
-diffusion resistances `nrd` and `nrs` that the hand-written deck leaves out. That 50 nA is layout
-showing up in an electrical answer.
+diffusion resistances `nrd` and `nrs` that the hand-written deck leaves out. Those resistances
+come from how the device is laid out, so the 50 nA difference is layout showing up in an
+electrical answer.
 
 ## Finishing
 
@@ -450,7 +462,7 @@ Nothing to submit.
 
 Two more changes to the decks, with reference answers in
 [`labs/lab-03-mosfet-regions/solutions/`](https://github.com/uoftasic/ad103/tree/main/labs/lab-03-mosfet-regions/solutions).
-Try them before you open it.
+Try them before you open that folder.
 
 1. **Repeat it for a PMOS.** Do the same measurements for `pfet_01v8` and find out how much of this
    lab is about *n*-channel devices specifically.
