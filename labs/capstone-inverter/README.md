@@ -1,11 +1,12 @@
 # Capstone: The CMOS inverter
 
 Writeup: [uoftasic.com/ad103 → Capstone](https://uoftasic.com/ad103/labs/capstone-inverter-overview.html).
-The steps, expected output and explanations are there; this file is a quick reference.
+That page has the steps, the expected output and the explanations, and this file is a quick
+reference.
 
-Two transistors and one wire between them. You draw the inverter in XSchem, measure its transfer
-curve, size it two ways, time it, run it as an amplifier, and finish with the current mirror that
-would bias it.
+The inverter is two transistors and one wire between them. You draw it in XSchem, measure its
+transfer curve, size it two ways, time it, run it as an amplifier, and finish with the current
+mirror that would bias it.
 
 ## Run it
 
@@ -14,8 +15,8 @@ cd labs/capstone-inverter
 make
 ```
 
-No environment setup is needed. The `Makefile` sets `PDK=sky130A` itself, so this runs in a bare
-container even if `.designinit` failed. It takes about 55 seconds and ends with:
+You don't need to set up the environment first. The `Makefile` sets `PDK=sky130A` itself, so this
+runs in a bare container even if `.designinit` failed. It takes about 55 seconds and ends with:
 
 ```
 PASS  all twelve measured values match the reference run
@@ -28,7 +29,7 @@ make edit      # opens xschem/my_inverter.sch
 make mine      # netlists it, says what is wrong, and if nothing is, simulates it
 ```
 
-`xschem/inverter.sch` is the finished version. Open it only after yours works.
+`xschem/inverter.sch` is the finished version, so open it only after yours works.
 
 ## Targets
 
@@ -41,7 +42,7 @@ make mine      # netlists it, says what is wrong, and if nothing is, simulates i
 | `make mine` | netlist and check **your** schematic |
 | `make edit` | open `xschem/my_inverter.sch` in XSchem |
 | `make mirror` | the current mirror: a 50 µA reference copied four ways |
-| `make broken` | an inverter with the PMOS source on the wrong node; **fails deliberately, and silently** |
+| `make broken` | an inverter with the PMOS source on the wrong node; it fails on purpose, and without any error message |
 | `make clean` | delete `results/` and `xschem/simulation/` |
 
 ## Files
