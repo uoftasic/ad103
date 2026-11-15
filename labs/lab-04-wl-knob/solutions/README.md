@@ -1,8 +1,8 @@
 # Lab 04: reference answers
 
-**Don't read this first.** Every number below is one you can measure in under a minute, and
-measuring it yourself is worth more than reading it. This is a list of things to argue about, not a
-diff.
+**Don't read this first.** Every number below is one you can measure in under a minute, and you'll
+learn more from measuring it than from reading it here. Treat what follows as a list of things to
+argue about rather than a diff to copy.
 
 ---
 
@@ -23,9 +23,9 @@ For comparison, the rest of the ladder in µA per micron of width:
 |---|---|---|---|---|---|---|---|
 | $I_D/W$ (µA/µm) | 127.147 | 134.702 | 139.255 | 139.532 | 137.008 | 135.243 | 134.612 |
 
-A single broad hump. Widen a narrow device and it gets better per micron; widen a wide one and it
-gets slowly worse. Neither end is dramatic: over a hundredfold range of width the per-micron current
-moves by 9.7 %.
+The curve is a single broad hump. If you widen a narrow device it gets better per micron, and if you
+widen a wide one it gets slowly worse. Neither change is large: over a hundredfold range of width
+the per-micron current moves by 9.7 %.
 
 `W=200` doesn't work:
 
@@ -34,19 +34,18 @@ could not find a valid modelname
     Simulation interrupted due to error!
 ```
 
-**That is the same error message as the `W=1u` trap**, and this time your units are correct. The
-SKY130 models are *binned*: each `.model` card covers a range of widths and lengths, and no bin in
-`nfet_01v8` reaches 200 µm. A width outside every bin matches no model, so ngspice stops, exactly as
-it does for a width with a `u` on it, which is also outside every bin.
+That is the same error message as the `W=1u` trap, even though this time your units are correct.
+The SKY130 models are *binned*: each `.model` card covers a range of widths and lengths, and no bin
+in `nfet_01v8` reaches 200 µm. A width outside every bin matches no model, so ngspice stops, exactly
+as it does for a width with a `u` on it, which is also outside every bin.
 
-Notice that **the message never mentions `W`, units or bins.** It is the same message for two
-different mistakes. That is why the habit from
-[Getting started](https://uoftasic.com/ad103/guide/getting-started.html) is "look at `W` and `L`
-first" rather than "read the error".
+The message never mentions `W`, units or bins, so two different mistakes produce the same text. That
+is why the habit from [Getting started](https://uoftasic.com/ad103/guide/getting-started.html) is
+"look at `W` and `L` first" rather than "read the error".
 
-**If you want a device wider than 100 µm, build it out of several.** That isn't a workaround; it is
-what the layout of a wide device actually looks like, and it is the `nf` story from Part 5 of the
-lab arriving with a reason.
+**If you want a device wider than 100 µm, build it out of several.** You aren't working around the
+model by doing that, because it's what the layout of a wide device looks like anyway, so this is
+the `nf` story from Part 5 of the lab, now with a reason behind it.
 
 ---
 
@@ -66,18 +65,19 @@ Vp5 p5 0 0
 | PMOS $I_D/W$ (µA/µm) | 23.495 | 20.831 | 20.676 | 20.440 |
 | NMOS $I_D/W$ (µA/µm) | 127.147 | 139.255 | 139.532 | 135.243 |
 
-Two things to argue about.
+There are two things here to argue about.
 
-**The PMOS per-micron number falls at every step**, where the NMOS one rose and then fell. Same
-process, same bias, different device. So "current is proportional to $W$" isn't one rule with one
-set of exceptions; it is an approximation whose error depends on which device you picked.
+**The PMOS per-micron number falls at every step**, where the NMOS one rose and then fell. The
+process and the bias are the same, and only the device type has changed. So
+"current is proportional to $W$" is an approximation whose error depends on which device you picked, rather
+than one rule with one set of exceptions.
 
 **At $L$ = 1 µm the NMOS carries 6.685× the PMOS** at the same width (696.2755 / 104.1549). Keep
 that number in mind, because [the capstone](https://uoftasic.com/ad103/labs/capstone-inverter-overview.html)
-measures the same ratio at $L$ = 0.15 µm and gets **2.496**. The ratio between the two device types
-isn't a property of the process alone; it depends on the length you chose too. The reason is
-velocity saturation: electrons are faster than holes, so shortening the channel costs the electrons
-more of their advantage.
+measures the same ratio at $L$ = 0.15 µm and gets 2.496. The ratio between the two device types
+isn't set by the process alone, because it also depends on the length you chose. That is because of velocity saturation:
+electrons are faster than holes, so shortening the channel costs the electrons more of their
+advantage.
 
 An inverter sized from the long-channel ratio would have $W_p = 6.7\,W_n$. At minimum length that is
 nearly three times too wide.
@@ -96,19 +96,19 @@ overdrive drops from about 1.2 V to about 0.3 V, so the channel is far from its 
 | rule error | **+29.5 %** | +19.6 % | — | −16.5 % | −19.5 % |
 | the same error at $V_{GS}$ = 1.8 V | +75.5 % | +16.4 % | — | −8.6 % | −12.1 % |
 
-**The short-channel over-prediction falls from +75.5 % to +29.5 %.** That is what the
-velocity-saturation explanation predicts, and it holds: take the field away and most of the
+**The short-channel over-prediction falls from +75.5 % to +29.5 %.** The velocity-saturation
+explanation predicts this, and the run bears it out: take the field away and most of the
 short-channel error goes with it.
 
 **The long-channel error gets worse, from −12.1 % to −19.5 %.** The velocity-saturation explanation
-does *not* predict that, which makes it the more interesting half. At $L$ = 4 µm the threshold is
-536.41 mV against the $L$ = 1 µm device's 589.46 mV: 53 mV of difference, which is small against
-1.2 V of overdrive and a sixth of a 0.3 V one. Shrink the overdrive and every threshold shift in the
-process matters more.
+does *not* predict that, so this is the more interesting half. At $L$ = 4 µm the threshold is
+536.41 mV against the $L$ = 1 µm device's 589.46 mV. That 53 mV difference is small against 1.2 V
+of overdrive, but it's a sixth of a 0.3 V one, so as you shrink the overdrive every threshold shift
+in the process matters more.
 
-So the two ends of the ladder fail for two different reasons, and lowering the gate voltage fixes
-one and worsens the other. **There is no bias at which $1/L$ is simply correct.** That is the honest
-form of the lesson, and the reason nobody sizes a real circuit from the square law alone.
+The two ends of the ladder therefore fail for two different reasons, and lowering the gate voltage
+fixes one and worsens the other. There is no bias at which $1/L$ is simply correct. That is the honest
+form of the lesson, and it's why nobody sizes a real circuit from the square law alone.
 
 ---
 
@@ -118,8 +118,8 @@ The W ladder humps: per-micron current rises to $W$ = 10 µm and then falls. The
 at every step (615.2253 mV → 556.5815 mV), so the threshold can't be what turns the curve around: a
 cause that only moves one way can't on its own produce an effect that rises and then falls.
 
-Something else moves in the opposite direction and overtakes it past $W$ = 10 µm. This course
-doesn't tell you what, because we haven't measured it, and a mechanism you can't point to in a run
-is a story rather than a result. If you find it (`mobmod`, the binning boundaries in the model file,
-or a `print` of some other `@m...[...]` parameter across the ladder), bring it to
-[Discord](https://discord.gg/hrJnP5UsGz). It is a genuinely open question in this lab.
+Something else must move in the opposite direction and overtake it past $W$ = 10 µm. We don't tell
+you what, because we haven't measured it, and a mechanism you can't point to in a run is a story
+rather than a result, so in this lab it's a genuinely open question. If you find it (`mobmod`, the binning
+boundaries in the model file, or a `print` of some other `@m...[...]` parameter across the ladder
+are places to start), bring it to [Discord](https://discord.gg/hrJnP5UsGz).
