@@ -327,8 +327,8 @@ that print this block go on to produce numbers quoted to six figures.
 These lines say `Error`, but they are **not** followed by `Simulation interrupted due to error!`,
 and the run exits `0`. A line starting with `Error:` isn't enough on its own to mean the run
 failed, so look for the pair.
-Every AD103 `Makefile` sends ngspice's output to a log, so you'll only see these lines when you run
-`ngspice -b` yourself.
+Every AD103 `Makefile` sends ngspice's output to a log, so these lines reach your terminal only
+when you run `ngspice -b` yourself.
 
 ### The warning block from resistors and diodes
 

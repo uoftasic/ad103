@@ -1,21 +1,21 @@
 # The CMOS inverter
 
-The digital track draws this circuit and calls it a NOT gate. It is also an amplifier, although
-digital design only ever looks at it from its two ends (the two flat ends of the transfer curve
-below), and this page treats it as one.
+The digital track draws this circuit and calls it a NOT gate. It is also an amplifier, and this
+page treats it as one, although digital design only ever looks at its two ends (the two flat ends
+of the transfer curve below).
 
 The circuit is two transistors with their gates tied together and their drains tied together: an
 NMOS pulling the output down and a PMOS pulling it up. In [DD101](https://uoftasic.com/dd101/)
-this is the smallest circuit that computes. In this course it is the smallest circuit with gain,
-and both descriptions are of the same circuit.
+this is the smallest circuit that computes, and in this course it is the smallest circuit with
+gain.
 
 ## What you already know
 
 The pieces you need all come from earlier pages:
 
-- A MOSFET is **off** below threshold and **on** above it
+- Roughly speaking, a MOSFET is **off** below threshold and **on** above it
   ([How a MOSFET works](../guide/a-mosfet-is-a-valve.md)).
-- Between those extremes it has four regions, and the interesting one here is saturation
+- In more detail it has four regions, and the interesting one here is saturation
   ([The four regions](../guide/four-regions-not-three.md)).
 - In saturation the gate moves the current by $g_m$, and the drain leaks it back through $r_o$
   ([Transconductance and output resistance](../guide/gm-and-ro.md)).
@@ -38,9 +38,9 @@ L = 0.15 µm and both turned fully on:
 The NMOS current, **501.0462 µA**, is the same number Lab 01's `make` printed on your first day,
 from a deck with only that one transistor in it.
 
-The PMOS, drawn the same size and driven just as hard, carries **200.7478 µA**, which is **2.4959
-times less**. Holes drift through silicon more slowly than electrons do, by roughly that factor in
-this process, and the only thing a designer can do about it is draw the PMOS wider. Every
+The PMOS, drawn the same size and driven just as hard, carries **200.7478 µA**, so the NMOS
+carries **2.4959 times** as much. Holes drift through silicon more slowly than electrons do, by
+roughly that factor in this process, and the only thing a designer can do about it is draw the PMOS wider. Every
 asymmetry on the rest of this page comes from that ratio.
 
 ## The transfer curve
@@ -153,7 +153,7 @@ grows quickly with length. So the next step is to lengthen both devices and chan
 ```
 
 Making the channels 3.33× longer gives **8.84× the gain**, from the same two transistors on the
-same supply, with one number changed in one field.
+same supply, with nothing changed but `L`.
 
 ![Two transfer curves overlaid: the L = 0.15 µm inverter and the much steeper L = 0.5 µm one](../assets/img/ad103-inverter-gain.png)
 
@@ -186,9 +186,9 @@ same schematic your logic library calls `inv_1`.
    peak supply current                       20.0048 uA   at V_in = 0.891 V
 ```
 
-At either end of the sweep one transistor is off, so the gate draws almost nothing: 2 pA with the
-input low and 320 pA with it high. That is why CMOS replaced every logic family before it: a CMOS
-gate that isn't switching costs essentially nothing.
+At either end of the sweep one transistor is off, so the gate draws almost nothing, 2 pA with the
+input low and 320 pA with it high. A CMOS gate that isn't switching costs essentially nothing, and
+that is why CMOS replaced every logic family before it.
 
 Halfway through a transition both devices are on at once, and **20.0048 µA** flows straight from
 $V_{DD}$ to ground without doing any useful work. This is **short-circuit current**, one of the two

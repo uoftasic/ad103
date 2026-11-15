@@ -43,8 +43,8 @@ to seven digits, which is what you'd expect from a theorem whose hypothesis hold
 For the diode, superposition predicts **250.8180 pA**, but the circuit actually delivers
 **3.917437 µA**, which is out by a factor of **15,618**.
 
-The wrong answer isn't noisy, and nothing about it looks broken. It's a clean, plausible-looking
-number with seven significant figures, and nothing in the output says
+Nothing about the wrong answer looks broken. It's a clean, plausible-looking number with seven
+significant figures and no noise on it, and nothing in the output says
 "superposition does not apply", so it's up to you to know when the theorem holds and when it
 doesn't.
 
@@ -103,8 +103,8 @@ will serve you for the rest of your career.
 
 With a nonlinear element in the circuit, analysis becomes a **search**. Instead of asking
 "what is the answer?", you ask "which pair of numbers, one voltage and one current, satisfies both the
-element and the rest of the circuit at the same time?" There's no crank to turn; what you have
-instead is a target, and a way of closing in on it.
+element and the rest of the circuit at the same time?" Instead of a crank to turn, you have a
+target, and you need a way of closing in on it.
 
 ## Check yourself
 

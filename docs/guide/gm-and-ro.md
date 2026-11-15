@@ -158,9 +158,9 @@ channel slightly, that's a *large* fractional change in its length, so $g_{ds}$ 
 **This is the most important trade in analog IC design, and it runs in the opposite direction to
 digital design.** The digital track, DD101 through DD104, wants every transistor as short as the
 process allows, because short transistors are fast. An analog designer who needs gain deliberately
-draws long devices and pays for them in area and speed. It's the same process and the same
-transistor with the opposite instinct, and when the two teams share a die, this is what they argue
-about.
+draws long devices and pays for them in area and speed. Both use the same process and the same
+transistor, with opposite instincts about its length, and when the two teams share a die, this is
+what they argue about.
 
 > **Intrinsic gain in the tens is normal** for a modern process. If a hand analysis promises a
 > gain of 500 from one transistor, it used a value of $\lambda$ from a textbook written when

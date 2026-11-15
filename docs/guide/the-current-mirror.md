@@ -5,8 +5,8 @@ is held at 0.712 V, where it sits on a slope with a gain of 116. This page is ab
 bias point like that in place, and the answer is a **current** rather than a voltage.
 
 It's the last new idea in AD103, and it's the one that turns the previous pages into a circuit
-you could build. You have already met it in [AD102](https://uoftasic.com/ad102/), applied to
-resistors.
+you could build. You have already met the idea behind it in [AD102](https://uoftasic.com/ad102/),
+applied to resistors.
 
 ## Why not distribute a voltage
 
@@ -56,9 +56,9 @@ v(ng) = 8.672678e-01
 ```
 
 The diode-connected device chose **0.8672678 V** to carry 50 µA. Nobody calculated that number;
-it's the transistor's own answer. If the die is hot or slow, or the threshold has moved, the
-number moves with it, and that's the point: the copy has shifted in the same way, so the gate
-voltage that is right for the reference is right for the copy too.
+the transistor found it for itself. If the die is hot or slow, or the threshold has moved, the
+number moves with it, which is what you want, because the copy has shifted in the same way, so the
+gate voltage that is right for the reference is right for the copy too.
 
 With the copy's output held at 0.9 V, the deck measures the copied current:
 

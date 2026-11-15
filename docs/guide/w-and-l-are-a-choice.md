@@ -156,10 +156,11 @@ femtofarad of gate has to be charged by whatever drives it, which costs time and
 in the circuit.
 
 Designing a transistor means making that trade: more current, with more area and more
-capacitance, or less of all three. There is no correct answer to it, only the one you choose.
+capacitance, or less of all three. There's no correct answer to it in general, so it's a choice
+you make for each design.
 
 Lab 04 tests the $W/L$ rule over a much wider range, with seventeen devices, five of which all
-have $W/L$ = 5. The third Lab 03 extension (device D at `L=0.5`) checks whether the two-step
+have $W/L$ = 5. The second Lab 03 extension (device D at `L=0.5`) checks whether the two-step
 arithmetic above still accounts for the whole gap in a longer device.
 
 ## Check yourself

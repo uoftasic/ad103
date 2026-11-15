@@ -29,14 +29,14 @@ forms a capacitor with the silicon rather than making an electrical connection t
 will tell you how big that capacitor is: for the W = 5 µm, L = 1 µm device this course measures,
 `@m.xm1.msky130_fd_pr__nfet_01v8[cgg]` comes back as **30.56 fF** at $V_{GS} = V_{DS} = 1.8$ V.
 
-This means that **no steady current flows into the gate.** You aren't injecting anything into
-the silicon. You are putting charge on a plate, and the electric field from that charge reaches
+This means that **no steady current flows into the gate.** Instead of injecting anything into the
+silicon, you are putting charge on a plate, and the electric field from that charge reaches
 through the glass and pulls mobile electrons up to the surface of the silicon underneath, out of
 a p-type body that had few to spare. Those electrons are the **channel**.
 
 That is why the terminal is called a gate rather than an input: moving it costs charge, but
-holding it where it is costs nothing. Whenever you've read that the gate is high impedance, this
-one fact is the reason.
+holding it where it is costs nothing. It's also the reason you'll read that the gate is high
+impedance.
 
 > **The body is a terminal too.** In this course the body is wired to the source on every NMOS,
 > which makes the four-terminal device behave like the three-terminal one in your textbook.
@@ -107,8 +107,8 @@ it prints:
 Look at the last column first. It is the resistance of the channel, measured with only 10 mV
 across it, which is small enough that the transistor is unambiguously behaving as a resistor. The
 resistance goes from **26.6 kΩ** to **737 Ω** as the gate goes from 0.6 V to 1.8 V, a 36-fold
-change with no moving parts, controlled by a voltage on a plate of glass, which makes the
-transistor a dial rather than an on/off switch.
+change with no moving parts, controlled by the voltage on a plate that sits on glass, which makes
+the transistor a dial rather than an on/off switch.
 
 The current at the off end isn't zero either. With the gate at 0 V and 1.8 V across the device,
 the same lab measures

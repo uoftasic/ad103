@@ -39,7 +39,8 @@ change your shell's environment. The catch is that the change lasts only as long
 so you have to load the script again in every new terminal you open.
 
 Checking takes a couple of seconds: `echo $PDK` should print `sky130A`, and XSchem's menu bar
-should say **SKY130**. You'll do both in Lab 01, Part 1, and it's worth making a habit of it.
+should say **SKY130**. You'll make the first check in Lab 01, Part 1, and the second in Part 3,
+and it's worth making a habit of both.
 
 ## Where XSchem starts
 
