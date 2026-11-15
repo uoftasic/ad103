@@ -1,0 +1,30 @@
+* AD103 capstone - where the long-channel inverter's gain comes from
+*
+* The same two transistors as spice/vtc_long.spice (W = 1 um, L = 0.5 um),
+* with the input held at 0.712 V, where that deck's transfer curve is
+* steepest. ngspice prints each transistor's own gm and gds at that one bias.
+* The two transconductances add and the two output conductances add, so the
+* gain of the pair is (gmn + gmp) / (gdsn + gdsp); block 5 of src/extract.py
+* works it out and compares it with the slope of the sweep.
+*
+*   ngspice -b spice/gain_op.spice
+
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice tt
+
+Vdd vdd 0 1.8
+Vin in  0 0.712
+
+XN out in 0   0   sky130_fd_pr__nfet_01v8 L=0.5 W=1
+XP out in vdd vdd sky130_fd_pr__pfet_01v8 L=0.5 W=1
+
+.control
+op
+let vout_op = v(out)
+let idd_op  = -i(Vdd)
+let gmn  = @m.xn.msky130_fd_pr__nfet_01v8[gm]
+let gdsn = @m.xn.msky130_fd_pr__nfet_01v8[gds]
+let gmp  = @m.xp.msky130_fd_pr__pfet_01v8[gm]
+let gdsp = @m.xp.msky130_fd_pr__pfet_01v8[gds]
+print vout_op idd_op gmn gdsn gmp gdsp
+.endc
+.end

@@ -56,6 +56,7 @@ make mine      # netlists it, says what is wrong, and if nothing is, simulates i
 | `spice/vtc.spice` | the transfer curve of the $W_n = W_p$ = 1 µm inverter, and its supply current |
 | `spice/vtc_ratio.spice` | five pull-up widths, one input, five switching thresholds |
 | `spice/vtc_long.spice` | the same inverter at $L$ = 0.5 µm |
+| `spice/gain_op.spice` | the $L$ = 0.5 µm inverter held at its steepest point, 0.712 V: each transistor's $g_m$ and $g_{ds}$ (run by `make extract`) |
 | `spice/delay.spice` | a real edge, a 10 fF load, and `.meas` for rise and fall delay |
 | `spice/vtc_broken.spice` | `vtc.spice` with the PMOS source and body on `0` |
 | `spice/mirror.spice` | a 50 µA reference copied 1:1, 1:2 and 1:4, at several output voltages, and as two unit devices |

@@ -161,14 +161,34 @@ It's worth checking this against [Transconductance and output
 resistance](../guide/gm-and-ro.md), where the intrinsic gain $g_m r_o$ of a single $L = 0.5$ µm
 device was **35.07**. The inverter gets **116.03**, more than three times that.
 
-The extra gain comes from **both** transistors amplifying at once. The gates are tied together, so
-a wiggle on the input moves the NMOS current and the PMOS current in the same direction through
-the output node. The transconductances therefore add, and the output resistances combine in
-parallel:
+**Both** transistors amplify at once. The gates are tied together, so a wiggle on the input moves
+the NMOS current and the PMOS current in the same direction through the output node. The
+transconductances therefore add, and the output resistances combine in parallel:
 
 $$A_v = -\left(g_{mn} + g_{mp}\right)\left(r_{on} \parallel r_{op}\right)$$
 
-Two devices pushing into one node is the cheapest gain in analog design. The arrangement is called
+The output conductances add as well, though, so this formula is a weighted average of the two
+devices' own $g_m r_o$, and a second transistor can't by itself lift the gain above what each one
+manages alone. What lifts it above 35.07 is the bias. That number was measured with the gate and
+drain at 1.8 V, but at the inverter's steepest point the input is 0.712 V, both transistors are
+only just on, and the supply current through the pair is 2.3618 µA. Block 5 of the capstone's
+`make extract` gets each device's own $g_m$ and $g_{ds}$ at that point from `spice/gain_op.spice`:
+
+```
+                  g_m           g_ds       g_m / g_ds
+   NMOS       36.3178 uS      0.3136 uS      115.81
+   PMOS       22.2154 uS      0.1894 uS      117.31
+   (g_mn + g_mp) / (g_dsn + g_dsp)            116.37
+   the sweep's steepest slope                 116.03
+```
+
+At this bias each transistor has a $g_m r_o$ of about 116 on its own, and the formula gives 116.37
+against the 116.03 the sweep measured.
+
+Driving both gates still earns its keep. If the PMOS were only a load, with its gate held still,
+the NMOS would see the same two output conductances and give
+$36.3178 / (0.3136 + 0.1894) = 72.2$. Because the PMOS amplifies too, the pair gets 116. Two
+devices pushing into one node is the cheapest gain in analog design. The arrangement is called
 the **CMOS inverting amplifier**, or push-pull stage, and you'll meet it again in AD201. It's the
 same schematic your logic library calls `inv_1`.
 
