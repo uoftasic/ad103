@@ -1,2 +1,2 @@
 schemdraw==0.23
-matplotlib
+matplotlib==3.10.9
