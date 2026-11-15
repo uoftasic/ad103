@@ -1,6 +1,6 @@
 # Survival-card decks
 
-This directory holds the six decks printed on the ngspice survival card,
+This directory holds the six decks behind the ngspice survival card,
 [`docs/reference/ngspice-errors.md`](../../docs/reference/ngspice-errors.md). `make` checks every
 number those decks print on that page against the value the page shows, so the page can't drift
 away from what ngspice actually does.
@@ -38,7 +38,7 @@ the image already has `PDK_ROOT` at `/foss/pdks` (and the `Makefile` pins it the
 | `spice/rc_parts.spice` | **"The two analyses have to agree"**: the $R$ and the $C$ on their own |
 | `src/check.py` | the verdict, plus the three-way $R$ / $C$ / $\tau$ check |
 
-The circuit in section 1 is the one you have already run in Lab 01,
+The circuit in section 1 of the page is the one you have already run in Lab 01,
 [`labs/lab-01-first-schematic/spice/nmos_op.spice`](../lab-01-first-schematic/spice/nmos_op.spice).
 `spice/op_nmos.spice` is that deck with the page's `print` line for the small-signal parameters
 added, so that `make` can check those four numbers along with the drain current.
