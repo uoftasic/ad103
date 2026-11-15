@@ -1,19 +1,20 @@
 # Survival-card decks
 
-The five decks printed on
-[`docs/reference/ngspice-errors.md`](../../docs/reference/ngspice-errors.md), the ngspice survival
-card. Every number on that page comes out of this directory, and `make` checks each one, so the page
-can't drift away from what ngspice actually does.
+This directory holds the five decks printed on the ngspice survival card,
+[`docs/reference/ngspice-errors.md`](../../docs/reference/ngspice-errors.md). Every number on that
+page comes out of these decks, and `make` checks each one against the value the page prints, so the
+page can't drift away from what ngspice actually does.
 
-This is not a lab. There is nothing to design and nothing to hand in. It exists so that no page in
-AD103 ever asks you to retype a deck.
+Although it sits under `labs/`, this is not a lab: you have nothing to design and nothing to hand
+in. It's here so that no page in AD103 ever asks you to retype a deck.
 
 ```bash
 cd labs/survival-card
 make            # all five decks and a verdict, about 50 seconds
 ```
 
-It runs in a bare `hpretl/iic-osic-tools:2026.08` container with no environment setup.
+It runs in a bare `hpretl/iic-osic-tools:2026.08` container with no environment setup, because
+the image already has `PDK_ROOT` at `/foss/pdks` (and the `Makefile` pins it there anyway).
 
 | Command | What it does |
 |---|---|
@@ -22,7 +23,7 @@ It runs in a bare `hpretl/iic-osic-tools:2026.08` container with no environment 
 | `make tran` | `.tran`: the time domain |
 | `make ac` | `.ac`: the frequency domain |
 | `make parts` | the R and the C on their own, so the arithmetic can close |
-| `make clean` | delete `results/` |
+| `make clean` | delete the logs in `results/` |
 
 ## Files
 
@@ -35,9 +36,8 @@ It runs in a bare `hpretl/iic-osic-tools:2026.08` container with no environment 
 | `spice/rc_parts.spice` | **"The two analyses have to agree"**: the $R$ and the $C$ on their own |
 | `src/check.py` | the verdict, plus the three-way $R$ / $C$ / $\tau$ check |
 
-The `.op` deck from section 1 isn't duplicated here. It is
-[`labs/lab-01-first-schematic/spice/nmos_op.spice`](../lab-01-first-schematic/spice/nmos_op.spice),
-which you have already run.
+The `.op` deck from section 1 isn't repeated here, because you have already run it in Lab 01:
+it's [`labs/lab-01-first-schematic/spice/nmos_op.spice`](../lab-01-first-schematic/spice/nmos_op.spice).
 
 ## Reference output
 
@@ -63,6 +63,7 @@ which you have already run.
 PASS  every number on the survival card reproduces
 ```
 
-The last block is the habit the page teaches: **whenever you have an RC, you have three numbers,
-and any two of them give you the third.** Two analyses and one hand calculation agreeing to four
-figures is what a correct deck looks like.
+The last block is the habit the page teaches: whenever you have an RC, you have three numbers, and
+any two of them give you the third. Here the `.ac` result lands within 0.0005 % of the hand
+calculation and the `.tran` result within 0.204 %, once you subtract the 1 ns edge. Two analyses
+and one hand calculation that agree that closely are good evidence the decks are right.
