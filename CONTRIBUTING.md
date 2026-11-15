@@ -5,14 +5,14 @@ Thanks for improving materials for the **UofT ASIC Team**.
 ## After creating a course from this template
 
 1. Run `scripts/init-template.py` with `--id`, `--title`, and `--description` (org is always `uoftasic`).
-2. Enable GitHub Pages: branch `main`, folder `/docs`.
+2. Enable GitHub Pages with **Settings → Pages → Source: GitHub Actions**, so that `.github/workflows/site.yml` can build and deploy the site.
 3. Prefer repo names that match course ids (`dd103`, `ic101`, …).
 
 See [TEMPLATE.md](TEMPLATE.md).
 
 ## Placeholders
 
-Only these three are fillable:
+These three tokens are the only placeholders, and `scripts/init-template.py` fills them in:
 
 | Token | Example |
 |-------|---------|
@@ -40,7 +40,7 @@ Only these three are fillable:
 - **`labs/`** — runnable HDL / Python / data. Each `labs/<id>/README.md` links to its writeup on the site.
 - **`scripts/`** — utilities; list entry points in `scripts/README.md`.
 
-Do not put grades, solution keys, or PII under `docs/`. Prefer `labs/**/solutions/` and gitignore them on student forks when needed.
+Do not put grades, solution keys, or PII under `docs/`, because everything there is published. Put solution keys in `labs/**/solutions/` instead, and gitignore them on student forks when needed.
 
 ## Local docs preview
 
@@ -48,6 +48,11 @@ Do not put grades, solution keys, or PII under `docs/`. Prefer `labs/**/solution
 quarto preview docs
 ```
 
+This serves a live preview of the site at http://localhost:4200.
+
 ## Pull requests
 
-Keep changes focused. For doc-only PRs, check navigation and math locally when practical. Optional CI may link-check `docs/**`.
+Keep each pull request focused on one change. For a doc-only PR, check the navigation and the math in a local preview when you can. A pull request that changes `docs/` runs two checks in CI:
+
+- `.github/workflows/site.yml` renders the site with Quarto and runs `scripts/check_site.py` on it, which checks that every local link, image and `#anchor` resolves.
+- `.github/workflows/docs-link-check.yml` runs lychee over the Markdown under `docs/`, which also checks external links, and checks that every image a page references exists on disk.

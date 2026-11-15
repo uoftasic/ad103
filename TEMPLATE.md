@@ -1,6 +1,6 @@
 # Template bootstrap (UofT ASIC)
 
-Create a course or lab-notes repo from this template under **`uoftasic`**, fill the three course fields, enable Pages.
+To start a course or lab-notes repo from this template, create it under **`uoftasic`**, fill in the three course fields, and enable Pages.
 
 ## Fixed vs fillable
 
