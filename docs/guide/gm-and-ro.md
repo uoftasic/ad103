@@ -138,8 +138,8 @@ When you multiply the two, the units of current cancel and you're left with a vo
 
 $$A_{v,\max} = g_m r_o = \frac{g_m}{g_{ds}}$$
 
-This is the **intrinsic gain**, the most voltage gain one transistor can ever produce, whatever you
-build around it. It's an upper limit because it assumes you loaded the transistor with something
+This is the **intrinsic gain**, the most voltage gain one transistor can produce at a given bias,
+whatever you build around it. It's an upper limit because it assumes you loaded the transistor with something
 infinitely better than itself. `spice/gm_ro.spice` measures it at four lengths, each at
 $V_{GS} = V_{DS}$ = 1.8 V:
 
@@ -175,9 +175,12 @@ you have two transconductances driving one node, loaded by two output resistance
 
 $$A_v = -\left(g_{mn} + g_{mp}\right)\left(r_{on} \parallel r_{op}\right)$$
 
-Both devices push on the output, so their $g_m$ values add. That's why
-[the CMOS inverter](../guide/the-inverter-is-an-amplifier.md) measures a gain of **−116.0341** at
-L = 0.5 µm, well above the 35.07 that a single L = 0.5 µm device could manage alone.
+Both devices push on the output, so their $g_m$ values add, but their output conductances add as
+well, so the result is a weighted average of the two devices' own $g_m r_o$ rather than a sum.
+[The CMOS inverter](../guide/the-inverter-is-an-amplifier.md) measures a gain of **−116.0341** at
+L = 0.5 µm, well above the 35.07 in the table above, and the reason is the bias. The table's
+devices have their gate and drain at 1.8 V, while the inverter is steepest at an input of
+0.712 V, where both transistors are only just on and each one's own $g_m r_o$ is about 116.
 
 **The mirror.** A saturated transistor is very nearly a current source, and $r_o$ tells you how
 nearly. An L = 1 µm device holding 50 µA changes its current by **1.46 %** when its drain moves from

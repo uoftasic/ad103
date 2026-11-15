@@ -25,7 +25,8 @@ Package: [`labs/capstone-inverter/`](https://github.com/uoftasic/ad103/tree/main
   The `Makefile` sets `PDK=sky130A` itself, so the `make` targets work even without the first line.
 
 **Time:** about 2.5 hours. `make` takes about 55 seconds; `make mirror` and `make broken` take about
-ten seconds each; `make extract` and `make figures` take a few seconds once `make` has run.
+ten seconds each. Once `make` has run, `make figures` takes a few seconds, and so does
+`make extract`, except the first time, when it also runs `spice/gain_op.spice` and takes about ten.
 
 At the switching threshold the input and output are the same voltage, so both transistors are
 saturated and carrying the same current:

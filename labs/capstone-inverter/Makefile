@@ -48,9 +48,15 @@ results/delay.log: spice/delay.spice | results
 	@$(NGSPICE) -b $< </dev/null > $@ 2>&1 || true
 	@echo "   wrote $@"
 
+# Only block 5 of 'make extract' reads this one, so plain 'make' doesn't run it.
+results/gain_op.log: spice/gain_op.spice | results
+	@echo "== $<"
+	@$(NGSPICE) -b $< </dev/null > $@ 2>&1 || true
+	@echo "   wrote $@"
+
 sweeps: $(DATA) $(LOGS)
 
-extract: $(DATA) $(LOGS)
+extract: $(DATA) $(LOGS) results/gain_op.log
 	@$(PYTHON) src/extract.py
 
 figures: $(DATA) $(LOGS)
