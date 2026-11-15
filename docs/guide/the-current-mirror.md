@@ -19,7 +19,7 @@ have to survive, using numbers from earlier pages:
 | threshold moving with temperature | **−0.9025 mV/°C**, 148.9 mV across the automotive range |
 | threshold moving with channel length | **171.44 mV** from L = 4 µm to L = 0.15 µm |
 | threshold moving with source-to-bulk voltage | **232.791 mV** at $V_{SB}$ = 1.2 V |
-| process corners | the whole subject of AD102 Lab 04 |
+| process corners | Part 1 of AD102 Lab 04 |
 
 A gate voltage that is 100 mV wrong, on a device with $g_m$ = 334 µS, gives a current that is
 **33 µA** wrong, so the plan doesn't survive a real die.
@@ -151,10 +151,11 @@ size.
 
 ## The fix: unit devices
 
-[Matching beats accuracy](https://uoftasic.com/ad102/guide/matching-beats-accuracy.html) gave you a
+[Matching and Pelgrom's law](https://uoftasic.com/ad102/guide/matching-beats-accuracy.html) gave you a
 rule for resistors:
 
-> *if you need a ratio, build both sides out of the same unit device*
+> *If you need a ratio, build both sides from repeated copies of the same unit device, never from
+> one big device and one small one.*
 
 A 4:1 resistor ratio is built from four identical units and one unit, never from a long strip
 beside a short one, because the ends of a strip don't scale with its length. Transistors follow
