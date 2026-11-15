@@ -105,7 +105,7 @@ At $V_{GS} = 0.9$ V the textbook boundary predicts a knee at 0.298 V, and the cu
 **0.29 V**, so at low overdrive the simple theory is right to two digits.
 
 At $V_{GS} = 1.8$ V the boundary predicts 1.198 V, but the curve knees at **0.89 V**, which makes
-the theory 34 % higher than the measured knee. Taken the other way round, with $V_{ov}$ as the
+the theory 35 % higher than the measured knee. Taken the other way round, with $V_{ov}$ as the
 base, the knee is 26 % lower than the theory. The error grows steadily the harder you drive the
 gate.
 

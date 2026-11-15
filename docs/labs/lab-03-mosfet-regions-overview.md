@@ -164,7 +164,7 @@ Where does each output curve knee, and does it land at $V_{GS} - V_{TH}$?
 **You should see** the channel resistance fall from **26.6 kΩ** to **737 Ω** as $V_{GS}$ goes from
 0.6 V to 1.8 V. At $V_{GS}$ = 0.9 V the knee lands at **0.29 V** against a predicted 0.298 V,
 which is close, but at 1.8 V it lands at **0.89 V** against a predicted 1.198 V, so there the
-prediction is 34 % high. The model's `vdsat` is below $V_{GS} - V_{TH}$ at every gate voltage.
+prediction is 35 % high. The model's `vdsat` is below $V_{GS} - V_{TH}$ at every gate voltage.
 Even with the gate at 0 V, the device still passes **2.1853 pA**.
 
 Why does the 1.8 V curve knee so far below $V_{GS} - V_{TH}$?
