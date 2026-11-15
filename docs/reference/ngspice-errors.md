@@ -13,9 +13,9 @@ cd labs/survival-card
 make
 ```
 
-runs the five decks in that package in about 50 seconds and checks every number on this page
-against what ngspice has just printed, so the page and the decks can't drift apart without the
-check failing:
+runs the six decks in that package in about a minute and checks every number those decks print on
+this page against what ngspice has just printed, so the page and the decks can't drift apart
+without the check failing:
 
 ```
 PASS  every number on the survival card reproduces
@@ -97,10 +97,13 @@ print @m.XM1.msky130_fd_pr__nfet_01v8[vth] @m.XM1.msky130_fd_pr__nfet_01v8[gm] @
 
 ```
 @m.xm1.msky130_fd_pr__nfet_01v8[vth] = 7.692674e-01
-@m.xm1.msky130_fd_pr__nfet_01v8[gm]  = 5.322242e-04
+@m.xm1.msky130_fd_pr__nfet_01v8[gm] = 5.322242e-04
 @m.xm1.msky130_fd_pr__nfet_01v8[gds] = 5.141539e-05
 @m.xm1.msky130_fd_pr__nfet_01v8[cgg] = 8.568632e-16
 ```
+
+Those four lines come from `labs/survival-card/spice/op_nmos.spice`, which is the deck above with
+that `print` line added, and `make op` in the survival-card package runs it.
 
 The name is ugly, and you can't shorten it. `XM1` is *your* instance, and inside it the PDK's
 subcircuit builds a real MOSFET called `msky130_fd_pr__nfet_01v8`; `@m.XM1.<that>[...]` is the

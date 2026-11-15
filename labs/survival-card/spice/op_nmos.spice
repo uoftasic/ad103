@@ -1,0 +1,14 @@
+* AD103 survival card, analysis 1 -- .op, one bias point
+* Printed on docs/reference/ngspice-errors.md, section "1. .op". The circuit is
+* Lab 01's spice/nmos_op.spice; this copy adds the print line for the
+* small-signal parameters, so that make checks those numbers too.
+.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice tt
+XM1 d g 0 0 sky130_fd_pr__nfet_01v8 L=0.15 W=1
+Vgs g 0 1.8
+Vds d 0 1.8
+.control
+op
+print i(Vds)
+print @m.XM1.msky130_fd_pr__nfet_01v8[vth] @m.XM1.msky130_fd_pr__nfet_01v8[gm] @m.XM1.msky130_fd_pr__nfet_01v8[gds] @m.XM1.msky130_fd_pr__nfet_01v8[cgg]
+.endc
+.end
