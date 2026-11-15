@@ -2,7 +2,7 @@
 
 The diode and the MOSFET in XSchem: regions of operation, and what the parameters mean.
 
-The third course in the UofT ASIC Team **analog track**. The published docs live under `./docs` and are served by GitHub Pages; the runnable XSchem/ngspice packages live in `labs/`. Students start at the Course path on the course home page.
+AD103 is the third course in the UofT ASIC Team's **analog track**. The site students read is built from `docs/` with Quarto and published on GitHub Pages, and the XSchem/ngspice packages they run are in `labs/`. Students start at the Course path on the course home page.
 
 Org: [github.com/uoftasic](https://github.com/uoftasic)
 
@@ -16,7 +16,7 @@ Org: [github.com/uoftasic](https://github.com/uoftasic)
 
 ## Quick start
 
-Every package under `labs/` runs with `make` alone, in a bare container, with no environment setup. Each package pins its own PDK and model paths and ends in `PASS` or `FAIL` with a reason.
+Every package under `labs/` runs with `make` alone in a bare container, with no environment setup, because each package pins its own PDK and model paths. A run ends in `PASS`, or in `FAIL` with a reason.
 
 ```bash
 git clone https://github.com/uoftasic/ad103.git
@@ -54,7 +54,7 @@ Students run the labs in the team workbench set up in [IC101](https://uoftasic.c
 |---------|--------|
 | Source | GitHub Actions |
 
-`.github/workflows/site.yml` renders `docs/` with Quarto on every push to `main` and deploys `docs/_site`, which includes a PDF of every page.
+On every push to `main` that changes `docs/`, `.github/workflows/site.yml` renders the site with Quarto, checks its links and anchors with `scripts/check_site.py`, and deploys `docs/_site`. The deployed site includes a PDF of every page and the whole course as one PDF. Pull requests get the same build and check, without the deploy.
 
 ## Contributing
 
