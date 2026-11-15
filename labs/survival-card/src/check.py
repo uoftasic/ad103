@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Verdict for the AD103 survival-card decks.
 
-Every number the reference page prints comes out of these five decks. This
-checks each one against the value written on the page, so the page and the
-decks cannot drift apart.
+Every number these six decks print on the reference page is checked here
+against the value written on the page, so the page and the decks cannot
+drift apart.
 
 Usage:  python3 src/check.py
 """
@@ -16,12 +16,19 @@ R = Path("results")
 
 # (log file, regex for the value, label, page value, tolerance as a fraction)
 CHECKS = [
+    ("op_nmos.log",   r"^i\(vds\)\s*=\s*([\d.eE+-]+)",       "op i(vds) (A)",      -5.01046e-04, 2e-5),
+    ("op_nmos.log",   r"\[vth\]\s*=\s*([\d.eE+-]+)",         "op vth (V)",         7.692674e-01, 2e-5),
+    ("op_nmos.log",   r"\[gm\]\s*=\s*([\d.eE+-]+)",          "op gm (S)",          5.322242e-04, 2e-5),
+    ("op_nmos.log",   r"\[gds\]\s*=\s*([\d.eE+-]+)",         "op gds (S)",         5.141539e-05, 2e-5),
+    ("op_nmos.log",   r"\[cgg\]\s*=\s*([\d.eE+-]+)",         "op cgg (F)",         8.568632e-16, 2e-5),
     ("dc_id_vgs.log", r"No\. of Data Rows\s*:\s*(\d+)",      "dc rows",            181,        0),
     ("dc_id_vgs.log", r"id_1v8\s*=\s*([\d.eE+-]+)",          "id_1v8 (A)",         6.96275e-04, 2e-5),
     ("dc_id_vgs.log", r"id_0v9\s*=\s*([\d.eE+-]+)",          "id_0v9 (A)",         6.38760e-05, 2e-5),
     ("dc_id_vgs.log", r"vg_at_1ua\s*=\s*([\d.eE+-]+)",       "vg_at_1ua (V)",      5.65815e-01, 2e-5),
     ("dc_family.log", r"No\. of Data Rows\s*:\s*(\d+)",      "dc family rows",     905,        0),
     ("dc_family.log", r"id\[180\]\s*=\s*([\d.eE+-]+)",       "id[180] (A)",        2.005399e-06, 2e-5),
+    ("dc_family.log", r"id\[181\]\s*=\s*([\d.eE+-]+)",       "id[181] (A)",        1.881519e-42, 2e-5),
+    ("tran_rc.log",   r"No\. of Data Rows\s*:\s*(\d+)",      "tran rows",          8014,       0),
     ("tran_rc.log",   r"tau\s*=\s*([\d.eE+-]+)",             "tran tau (s)",       3.10826e-09, 2e-5),
     ("tran_rc.log",   r"vfinal\s*=\s*([\d.eE+-]+)",          "tran vfinal (V)",    1.80000e+00, 2e-5),
     ("ac_rc.log",     r"No\. of Data Rows\s*:\s*(\d+)",      "ac rows",            1001,       0),
@@ -30,7 +37,7 @@ CHECKS = [
     ("rc_parts.log",  r"^cmim\s*=\s*([\d.eE+-]+)",           "C_mim (F)",          2.065822e-13, 2e-5),
 ]
 
-print("== checking the five survival-card decks against the reference page")
+print("== checking the six survival-card decks against the reference page")
 bad = []
 got = {}
 for logname, pat, label, want, tol in CHECKS:
