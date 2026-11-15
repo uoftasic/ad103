@@ -131,7 +131,7 @@ You'll produce this table in Lab 03, Part 3.
 
 ## Units: `W=5`, never `W=5u`
 
-The units trap from [Getting started](../guide/getting-started.md#w1-never-w1u) applies to every
+The units trap from [Getting started](../guide/getting-started.md#units-on-w-and-l) applies to every
 deck from here on. In SKY130, **`W` and `L` are plain micron numbers with no unit suffix.** `W=5`
 means five micrometres. `W=5u` falls outside every model bin, and ngspice stops with
 `could not find a valid modelname`, a message that names neither `W` nor units. Lab 03, Part 7
