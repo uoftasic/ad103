@@ -4,8 +4,9 @@ In this course you draw transistors in XSchem, simulate them with real SKY130 mo
 learn to tell a believable answer from a wrong one. It is the third course in the analog
 track, and the first one where the circuits stop being linear.
 
-Part of the **UofT ASIC Team** education materials. Published at **https://uoftasic.com/ad103/**.
-Labs run inside the shared **workspace** you set up in [IC101](https://uoftasic.com/ic101/).
+AD103 is part of the **UofT ASIC Team** education materials, and it's published at
+**https://uoftasic.com/ad103/**. The labs run inside the shared **workspace** you set up in
+[IC101](https://uoftasic.com/ic101/).
 
 ## At a glance
 
@@ -14,7 +15,7 @@ Labs run inside the shared **workspace** you set up in [IC101](https://uoftasic.
 | **Who it's for** | 2nd–3rd year ECE students on the analog track |
 | **Track** | Analog |
 | **Prerequisites** | [IC101](https://uoftasic.com/ic101/) → [AD101](https://uoftasic.com/ad101/) → [AD102](https://uoftasic.com/ad102/), in that order |
-| **Main tool** | **XSchem**, the schematic editor. You have not used it before, and Lab 01 assumes that. |
+| **Main tool** | **XSchem**, the schematic editor. Lab 01 assumes you have never used it before. |
 | **Also** | ngspice 47 and the SKY130 device models, both already in the workbench |
 | **Math level** | Algebra, exponentials, logarithms, and one square root. You won't need calculus. |
 | **Time** | About 16.5 hours, self-paced |
@@ -52,15 +53,15 @@ include in your question.
 ## The workbench
 
 This course is pinned to the workbench image **`hpretl/iic-osic-tools:2026.08`**, which ships
-**XSchem 3.4.8RC** and **ngspice-47**. Lab 01 has you check both.
+**XSchem 3.4.8RC** and **ngspice-47**, and Lab 01 has you check both versions.
 
-> **Warning:** the image's default PDK is not SKY130. If you launch XSchem without fixing that,
-> you get IHP's 130 nm process instead, with none of the symbols this course uses, and no error
-> message. [Getting started](guide/getting-started.md) explains what to look for, and Lab 01
+> **Warning:** the image's default PDK is not SKY130. If you launch XSchem without changing it,
+> you get IHP's 130 nm process instead, which has none of the symbols this course uses, and
+> XSchem gives you no error message. [Getting started](guide/getting-started.md) explains what to look for, and Lab 01
 > has you check it.
 
-The warning is about starting XSchem yourself. The lab `make` targets don't depend on it, because
-every lab package pins its own PDK and model paths. Even if Lab 01, Part 1 can't load the course
+The warning applies when you start XSchem yourself. The lab `make` targets don't depend on the
+PDK setting, because every lab package pins its own PDK and model paths. Even if Lab 01, Part 1 can't load the course
 environment for you, `make` in a lab folder still runs to completion in a bare container, and each
 lab ends in `PASS` or `FAIL` with a reason.
 
@@ -69,13 +70,13 @@ lab ends in `PASS` or `FAIL` with a reason.
 AD101 taught you to read a signal. AD102 taught you that a resistor is a doped strip of silicon
 whose value is set by its shape. In both, doubling the input doubled the output.
 
-The diode and the MOSFET don't behave that way, and most of what makes a chip work comes from
-that. A transistor is useful because its response bends. When you amplify with it, the bend
-gives you gain; when you switch with it, the bend gives you on and off. Push it too far either
-way and the bend becomes distortion.
+The diode and the MOSFET don't behave that way, and most of what makes a chip work depends on
+that: a transistor is useful because its response bends. When you amplify with it, the bend
+gives you gain, and when you switch with it, the bend gives you on and off. If you push it too
+far either way, the same bend becomes distortion.
 
-The algebra from AD102 can't solve these circuits. Instead you learn to ask a simulator, and to
-know enough to tell a plausible answer from a wrong one.
+The algebra from AD102 can't solve these circuits, so in this course you learn to ask a
+simulator instead, and to know enough to tell a plausible answer from a wrong one.
 
 ## What you'll learn
 
@@ -96,5 +97,5 @@ and work out which of the two was wrong.
 
 ## Next courses
 
-- **[AD104](https://uoftasic.com/ad104/)** — Layout: draw those transistors as geometry in Magic, DRC and LVS clean
+- **[AD104](https://uoftasic.com/ad104/)** — Layout: you draw those transistors as geometry in Magic, and make them pass DRC and LVS
 - **AD201** — Analog Signal Processing · **AD202** — Mixed Signal
