@@ -80,7 +80,7 @@ With two parameters fitted to five points, the worst error is **0.23 mV**. That'
 significant figures of agreement between a formula from the 1960s and a BSIM4 model with several
 hundred parameters.
 
-Compare that with the last two pages, where the square law missed the saturation knee by 34 % and
+Compare that with the last two pages, where the square law missed the saturation knee by 35 % and
 the $\sqrt{I_D}$ extraction missed the threshold by 12 %. Here a formula from the same era lands
 within a quarter of a millivolt. The difference is that the square law relies on physics that
 short channels changed, while the body-effect formula rests on the depletion charge under the
