@@ -335,11 +335,11 @@ Why does a longer channel give so much more gain, and which inverter would you u
 <details>
 <summary>Answer</summary>
 
-Lab 04 measured the reason: $r_o$ rises with $L$, and the gain is $g_m (r_{on} \parallel r_{op})$.
-A logic gate needs only enough gain to restore a degraded signal, and more than that doesn't help
-it, whereas an amplifier wants every decibel it can get. So the same two transistors do a
-different job depending on $L$: the minimum-length inverter is the logic gate, and the
-long-channel one is the amplifier.
+Lab 04 measured the reason: $r_o$ rises with $L$, and the gain is
+$(g_{mn}+g_{mp})(r_{on} \parallel r_{op})$. A logic gate needs only enough gain to restore a
+degraded signal, and more than that doesn't help it, whereas an amplifier wants every decibel it
+can get. So the same two transistors do a different job depending on $L$: the minimum-length
+inverter is the logic gate, and the long-channel one is the amplifier.
 
 </details>
 
@@ -532,7 +532,7 @@ you've been calculating about appear under the oxide.
 ### Your inverter in AD104
 
 You now have a schematic of a real logic gate, sized by you against a criterion you chose and
-verified against a simulation to six digits. **AD104: Layout** takes this file and asks you to draw
+verified against a simulation to five digits. **AD104: Layout** takes this file and asks you to draw
 it as geometry in Magic. Every transistor becomes a rectangle of diffusion under a stripe of poly,
 and every net becomes metal with a width and a spacing. Then Magic runs **DRC** to check that a fab
 could make what you drew, and netgen runs **LVS** to show that what you drew is the same circuit as
@@ -544,7 +544,8 @@ This is the foundry's own inverter, `sky130_fd_sc_hd__inv_1`, opened in Magic:
 
 Every hatch pattern in that window is a mask layer, listed by name on the right. `A` enters on local
 interconnect, crosses both channels as the single poly stripe in the middle, and `Y` leaves on local
-interconnect. These are the same three nodes you put on the schematic, drawn here as rectangles.
+interconnect. These are the nets on your schematic: `A` is `in`, `Y` is `out`, and the
+VPWR and VGND rails along the top and bottom are `vdd` and `0`, all drawn here as rectangles.
 
 The geometry has to obey design rules, and Magic checks them continuously while you paint. If you
 drop a metal1 shape 0.04 µm from the power rail, Magic tells you before you've even finished the

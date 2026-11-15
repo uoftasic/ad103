@@ -3,17 +3,19 @@
 This page covers the analyses you can ask ngspice to run on a netlist, and what ngspice says when
 you get one wrong.
 
-Five analyses cover everything in AD103 and most of second year. Each deck below is a complete
-file that ships in a lab package, so you never have to retype one, and every output shown on this
-page came from running that file in `hpretl/iic-osic-tools:2026.08` with ngspice 47.
+Four analyses, and the `meas` command that turns their results into numbers, cover everything in
+AD103 and most of second year. Each deck below is a complete file that ships in a lab package, so
+you never have to retype one, and every output shown on this page came from running that file in
+`hpretl/iic-osic-tools:2026.08` with ngspice 47.
 
 ```bash
 cd labs/survival-card
 make
 ```
 
-runs all five in about 50 seconds and checks every number on this page against what ngspice has
-just printed, so the page and the decks can't drift apart without the check failing:
+runs the five decks in that package in about 50 seconds and checks every number on this page
+against what ngspice has just printed, so the page and the decks can't drift apart without the
+check failing:
 
 ```
 PASS  every number on the survival card reproduces
@@ -273,7 +275,7 @@ $$f_{-3\text{dB}} = \frac{1}{2\pi RC} = 75.6453\ \text{MHz}$$
 
 `.ac` measured 75.6449 MHz, which is 0.0005 % from the arithmetic. `.tran` measured 2.10826 ns,
 0.20 % from the arithmetic, and it's high rather than randomly off, because a 5 ps step can't land
-exactly on the crossing. When two analyses and a hand calculation agree to four figures like this,
+exactly on the crossing. When two analyses and a hand calculation agree this closely,
 you can be confident the deck is correct. It's worth making this a habit: whenever you have an RC,
 the three numbers are tied together by $f_{-3\text{dB}} = 1/(2\pi RC)$, so one of them comes free
 as a check on the others. `make` in that package prints this comparison at the end.

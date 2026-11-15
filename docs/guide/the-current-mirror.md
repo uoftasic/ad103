@@ -24,10 +24,9 @@ have to survive, using numbers from earlier pages:
 A gate voltage that is 100 mV wrong, on a device with $g_m$ = 334 µS, gives a current that is
 **33 µA** wrong, so the plan doesn't survive a real die.
 
-AD102's Lab 04 and [Sizing with W and L](../guide/w-and-l-are-a-choice.md) both reached a
-conclusion that points the way out: **absolute values wander, but ratios hold.** Two devices side by
-side on the same die are at the same temperature and in the same corner, and they have the same
-threshold, so whatever moved one has moved the other too.
+AD102's Lab 04 reached a conclusion that points the way out: **absolute values wander, but ratios
+hold.** Two devices side by side on the same die are at the same temperature and in the same
+corner, and they have the same threshold, so whatever moved one has moved the other too.
 
 So instead of distributing a voltage, you distribute a *current*, using a circuit whose output is a
 **ratio** of its input.

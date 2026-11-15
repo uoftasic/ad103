@@ -112,8 +112,9 @@ the device needs a fixed extra voltage for each factor of ten in current, and th
 "exponential" means when you say it in millivolts. A straight-line fit over 1 nA to 100 nA gives
 **77.037 mV/decade**.
 
-That exchange rate matters for all of analog design. It says you can't get a big current change
-out of a small voltage change, or a small current change out of a big one, because the rate is
+That exchange rate matters for all of analog design. It says that a small voltage change makes a
+big current change, about a factor of ten for every 77 mV on this diode, and that even a big
+current change moves the voltage only a little. You're stuck with that trade, because the rate is
 fixed by physics. Bias networks, references, and every "why is this circuit so sensitive?"
 question come back to it.
 

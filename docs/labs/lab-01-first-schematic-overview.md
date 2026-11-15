@@ -103,8 +103,8 @@ Does your workbench give the reference answer, and what does a SPICE device line
    names, `d g 0 0`, are in the order **drain, gate, source, body**, and you'll find each of them
    on the drawing in Part 3.
 
-3. Open `results/nmos_op.log` and find `i(vds) = -5.01046e-04`. The log opens with several
-   `Error opening osdi lib` lines; they are harmless, and
+3. Open `results/nmos_op.log` and find `i(vds) = -5.01046e-04`. On some builds of the image the
+   log opens with several `Error opening osdi lib` lines; they are harmless, and
    [Harmless messages](../reference/ngspice-errors.md#harmless-messages) says why.
 
    The transistor is conducting, so why is the current negative?
@@ -143,7 +143,7 @@ drawing?
    in this terminal, and launch it again. Other ways XSchem can fail, most of them without any
    error, are listed under [Failures that exit 0](../reference/xschem-cheatsheet.md#failures-that-exit-0).
 
-3. Learn the keys you need. XSchem has several hundred key bindings, but the ones in this table
+3. Learn the keys you need. XSchem has 154 key bindings, but the ones in this table
    cover everything in the course. They're taken from XSchem's own list, which you can open with
    **Help → Keys**, or with `/` for a full-screen poster.
 
@@ -374,7 +374,7 @@ Does a transistor twice as wide carry twice the current?
    The symbol computes the source and drain diffusion areas and resistances from $W$ (`ad`, `as`,
    `pd`, `ps`, `nrd`, `nrs`) and writes them onto the device line, while the hand-written deck
    leaves them at zero. This is the first time in the course that layout shows up in an
-   electrical answer, and the effect is the smallest you'll see.
+   electrical answer, and here the effect is small.
 
    </details>
 
