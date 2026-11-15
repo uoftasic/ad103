@@ -179,6 +179,28 @@ end
 
 return {
   {
+    -- The pages start with an H1 and have no title in their front matter, so
+    -- without this the browser tab shows the file name. Use the H1 instead.
+    -- Quarto fills in pagetitle with the file name itself, so a pagetitle
+    -- equal to the file name counts as unset.
+    Pandoc = function(doc)
+      if not is_html or doc.meta.title then
+        return nil
+      end
+      local stem = quarto.doc.input_file:match("([^/\\]+)%.%w+$")
+      if doc.meta.pagetitle
+          and pandoc.utils.stringify(doc.meta.pagetitle) ~= stem then
+        return nil
+      end
+      for _, b in ipairs(doc.blocks) do
+        if b.t == "Header" and b.level == 1 then
+          doc.meta.pagetitle = pandoc.utils.stringify(b.content)
+          return doc
+        end
+      end
+    end,
+  },
+  {
     Meta = function(meta)
       local v = meta["answers-in-pdf"]
       answers_inline = v ~= nil and pandoc.utils.stringify(v) == "inline"
