@@ -397,7 +397,7 @@ What does ngspice say when `W` and `L` carry a unit suffix?
    ```
 
 **You should see** two characters of difference: `L=0.15u W=1u` instead of `L=0.15 W=1`.
-[Getting started](../guide/getting-started.md#w1-never-w1u) explains what the `u` does.
+[Getting started](../guide/getting-started.md#units-on-w-and-l) explains what the `u` does.
 
 The message names neither `W` nor units. So when you see `could not find a valid modelname`, what
 do you check first?
