@@ -6,11 +6,12 @@ $$
 I_D^{\text{sat}} = \tfrac12\,\mu_n C_{ox}\frac{W}{L}\,(V_{GS}-V_{TH})^2
 $$
 
-You'll test that claim on seventeen transistors at one bias point, after writing six predictions
-down. Two of them land. Four miss, by up to 91 %, in a pattern you can read off the sign column,
-and five devices whose $W/L$ is exactly 5 carry five different currents. Between writing the
-predictions and scoring them, you'll use the Lab 03 package to watch the threshold move and to
-measure how much gain one transistor can give.
+You'll test that claim on seventeen transistors at one bias point, after first writing down your
+own predictions for six of them. The rule gets two of those six right to within 3 % and misses
+the other four by up to 91 %, and the signs of those errors follow a pattern you can read straight
+off the scoring table. Five of the devices have a $W/L$ of exactly 5, and they carry five
+different currents. Between writing the predictions and scoring them, you'll use the Lab 03
+package to watch the threshold move and to measure how much gain one transistor can give.
 
 Package: [`labs/lab-04-wl-knob/`](https://github.com/uoftasic/ad103/tree/main/labs/lab-04-wl-knob),
 plus three targets in [`labs/lab-03-mosfet-regions/`](https://github.com/uoftasic/ad103/tree/main/labs/lab-03-mosfet-regions)
@@ -26,13 +27,14 @@ plus three targets in [`labs/lab-03-mosfet-regions/`](https://github.com/uoftasi
   setup is needed.
 
 **Time:** about 2 hours. `make` in this lab takes about 40 seconds; each Lab 03 target in Parts 2
-and 3 takes about ten. Wall times depend on your machine. Every other number on this page is
-fixed, and the checker enforces it.
+and 3 takes about ten. Those wall times depend on your machine, but every other number on this
+page is fixed, and the checker enforces it.
 
 ## Part 1: Write your predictions
 
-What does the $W/L$ rule predict for six devices? Do this before you run anything. It takes ninety
-seconds, and it is the only part of the lab you can't redo afterwards.
+What does the $W/L$ rule predict for six devices? Do this before you run anything. It takes
+ninety seconds, and it's the only part of the lab you can't redo afterwards, because once you've
+seen the measured currents you can't predict them honestly any more.
 
 1. Go to the lab folder, then open `predictions.txt` in a text editor:
 
@@ -44,9 +46,9 @@ seconds, and it is the only part of the lab you can't redo afterwards.
    $V_{GS} = V_{DS}$ = 1.8 V, $I_D$ = 696.2755 µA.
 
 3. For each of the six devices, write the current the $W/L$ rule predicts, in microamps, to one
-   decimal place, after the `=`. Write the number only: `make predict` doesn't read a line that
-   ends in `uA`. Don't run anything first, and don't go back and change a prediction once you've
-   seen the answer.
+   decimal place, after the `=`. Write only the number, because `make predict` doesn't read a
+   line that ends in `uA`. Don't run anything first, and don't go back and change a prediction
+   once you've seen the answer.
 
    ```
    P1  W=10   L=1      =
@@ -59,12 +61,13 @@ seconds, and it is the only part of the lab you can't redo afterwards.
 
 4. Save the file.
 
-**You should see** six numbers in `predictions.txt`. Leave it until Part 4.
+**You should see** six numbers in `predictions.txt`. Leave the file alone until Part 4, where
+you score them.
 
 ## Part 2: Move the threshold
 
-How far do body bias, temperature and channel length move $V_{TH}$? These two decks are in the
-Lab 03 package.
+How far do body bias, temperature and channel length move $V_{TH}$? The two decks that answer
+this are in the Lab 03 package.
 
 1. Go to the Lab 03 folder and lift the source above the bulk:
 
@@ -93,8 +96,8 @@ Lab 03 package.
    i(vds) = -4.50650e-05
    ```
 
-   The rows marked `...` are in your terminal (the 27 °C row among them), and tabulated on
-   [What moves the threshold](../guide/threshold-is-not-a-constant.md#body-effect).
+   The rows marked `...` here, the 27 °C row among them, are printed in full in your terminal,
+   and they're also tabulated on [What moves the threshold](../guide/threshold-is-not-a-constant.md#body-effect).
 
 2. Work out the threshold shift at each $V_{SB}$, relative to $V_{SB}$ = 0, and the drop in drain
    current at $V_{SB}$ = 1.2 V. Check one row against the body-effect formula with
@@ -123,10 +126,11 @@ Lab 03 package.
       4 um       5.364102e-01 V
    ```
 
-**You should see** a shift of **+232.791 mV** at $V_{SB}$ = 1.2 V with **22.2 %** less current, the
-formula within a fraction of a millivolt of the measurement, a slope of about **−0.9 mV/°C** with
-the hot device carrying **32.1 % less** current, and a threshold that *rises* by **171.44 mV** as
-the length shrinks from 4 µm to 0.15 µm. [What moves the threshold](../guide/threshold-is-not-a-constant.md)
+**You should see** a threshold shift of **+232.791 mV** at $V_{SB}$ = 1.2 V, with **22.2 %** less
+current, and the body-effect formula should agree with the measurement to within a fraction of a
+millivolt. The threshold's temperature slope is about **−0.9 mV/°C**, and the hot device carries
+**32.1 % less** current than the one at 27 °C. As the length shrinks from 4 µm to 0.15 µm, the
+threshold *rises* by **171.44 mV**. [What moves the threshold](../guide/threshold-is-not-a-constant.md)
 explains each of these.
 
 ## Part 3: Efficiency and intrinsic gain
@@ -141,7 +145,7 @@ How much voltage gain can one transistor give, and how does that depend on $L$?
    make gm-ro
    ```
 
-   The first block is four lengths at $V_{GS} = V_{DS}$ = 1.8 V; the first of them reads:
+   The first block covers four lengths at $V_{GS} = V_{DS}$ = 1.8 V, and the first of them reads:
 
    ```
    --- W = 5 um, V_GS = V_DS = 1.8 V, four channel lengths ---
@@ -159,8 +163,9 @@ How much voltage gain can one transistor give, and how does that depend on $L$?
    ceiling of 26.9 /V from [Transconductance and output resistance](../guide/gm-and-ro.md).
 
 **You should see** an intrinsic gain of **8.86** at L = 0.15 µm rising to **106.11** at L = 4 µm,
-even though $g_m$ falls by a factor of nine over the same range, and $g_m/I_D$ of **13.50 /V** at
-$V_{GS}$ = 0.7 V, about half the ceiling, against 1.31 /V wide open.
+even though $g_m$ falls by a factor of nine over the same range. In the second block, $g_m/I_D$
+is **13.50 /V** at $V_{GS}$ = 0.7 V, about half the ceiling, against only 1.31 /V with the gate
+wide open.
 
 ## Part 4: Run the lab and score your predictions
 
@@ -201,8 +206,9 @@ Which of your six predictions land, and is there a pattern in the misses?
    PASS  all ten measured values match the reference run
    ```
 
-   Every run also leaves a three-line `bsim4v5.out` in the lab folder. It is harmless; see
-   [Eta0 is negative](../reference/ngspice-errors.md#eta0-is-negative) on the ngspice survival card.
+   Every run also leaves a three-line `bsim4v5.out` in the lab folder. It's harmless, and
+   [Eta0 is negative](../reference/ngspice-errors.md#eta0-is-negative) on the ngspice survival card has
+   the details.
 
 2. Score your predictions:
 
@@ -221,23 +227,25 @@ Which of your six predictions land, and is there a pattern in the misses?
      W=20   L=4       5.00     696.275 uA    798.0193 uA    -12.7 %           --         --
    ```
 
-   That sample is from an empty `predictions.txt`, so its last two columns are `--`. With yours
-   filled in, your numbers appear there. (If `make predict` says `predictions.txt still has 6
-   blank(s)`, you didn't save the file in Part 1.)
+   The sample above was made with an empty `predictions.txt`, which is why its last two columns
+   are `--`. With your file filled in, your own numbers appear there instead. (If
+   `make predict` says `predictions.txt still has 6 blank(s)`, you didn't save the file in
+   Part 1.)
 
 3. Cover the last two columns and read only `rule err`, top to bottom.
 
-**You should see** your six predictions in the `your guess` column, the two rows where only $W$
-changed within 3 %, and the four where $L$ changed out by 8 to 91 %: positive every time $L$ got
-shorter, negative every time it got longer.
+**You should see** your six predictions in the `your guess` column. In `rule err`, the two rows
+where only $W$ changed are within 3 %, and the four where $L$ changed are out by 8 to 91 %. That
+error is positive every time $L$ got shorter and negative every time it got longer.
 
 Which half of $W/L$ can you use in a hand calculation, and which half can't you?
 
 <details>
 <summary>Answer</summary>
 
-$W$: changing it alone kept the rule within 3 %. $L$ is the half you can't trust: the rule
-over-predicts every shorter device and under-predicts every longer one, by 8 to 91 %.
+You can use $W$, because changing it on its own kept the rule within 3 %. $L$ is the half you
+can't trust: the rule over-predicts the current of every shorter device and under-predicts every
+longer one, by 8 to 91 %.
 
 </details>
 
@@ -265,8 +273,9 @@ Is current proportional to $W$, and is "twice as wide" the same as "two of them"
       50       6762.1370 uA  135.2427 uA/um     -5.99 %     556.5815 mV
    ```
 
-   On the left plot the measurement and the proportional-to-$W$ line are almost on top of each
-   other. Look at the right one, the same data divided by $W$.
+   On the left plot, the measurement and the proportional-to-$W$ line lie almost on top of each
+   other, so the difference is hard to see there. Look at the right plot instead, which shows the
+   same data divided by $W$.
 
 3. Read block 2, six ways of asking for "twice as wide":
 
@@ -285,8 +294,8 @@ Is current proportional to $W$, and is "twice as wide" the same as "two of them"
 
 **You should see** current per micron of width climb 9.7 % from $W$ = 1 to $W$ = 10 and then fall
 3.1 % by $W$ = 50, while the model's `vth` falls at every step of the ladder, by 58.6438 mV in all.
-In block 2, C and D match **1392.5510** to every digit: two 5 µm transistors in parallel carry
-exactly twice one of them, and so does `m=2`.
+In block 2, C and D both match the hand-doubled **1392.5510** to every digit, so two 5 µm
+transistors in parallel carry exactly twice the current of one, and so does `m=2`.
 
 Over this hundredfold range of width, is "current is proportional to $W$" good enough to use? And
 can the falling `vth` explain both the rise and the fall in current per micron?
@@ -294,24 +303,24 @@ can the falling `vth` explain both the rise and the fall in current per micron?
 <details>
 <summary>Answer</summary>
 
-Yes, use it: it is wrong by less than 10 % over the whole ladder. The direction of the `vth` trend
-makes sense (a wider device has a lower threshold, so it turns on harder), but a cause that only
-ever moves one way can't on its own produce a rise and then a fall. Something else moves the other
-way past $W$ = 10 µm, and this course doesn't claim to know what.
+Yes, you can use it, because it's wrong by less than 10 % over the whole ladder. The direction of
+the `vth` trend makes sense (a wider device has a lower threshold, so it turns on harder), but a
+cause that only ever moves one way can't on its own produce a rise and then a fall. Something else
+must push the other way beyond $W$ = 10 µm, and this course doesn't claim to know what it is.
 
 </details>
 
 Now work out what each of the other rows in block 2 says.
 
-- B is 2.0040× A, not 2.0000×. Why isn't one 10 µm device the same as two 5 µm ones?
+- B is 2.0040× A rather than 2.0000×. Why isn't one 10 µm device the same as two 5 µm ones?
 
   <details>
   <summary>Answer</summary>
 
   One 10 µm device carries 2.7690 µA (+0.199 %) more than two 5 µm ones. The model reports `vth` =
-  589.4596 mV for the 5 µm device and 576.6242 mV for the 10 µm one, 12.8354 mV apart at identical
-  bias and length. Width is inside the model, not just a multiplier in front of it. "Twice as
-  wide" and "two of them" are different circuits.
+  589.4596 mV for the 5 µm device and 576.6242 mV for the 10 µm one, 12.8354 mV apart even though
+  the bias and length are identical. So width enters the model itself rather than only multiplying
+  its result, and that makes "twice as wide" and "two of them" different circuits.
 
   </details>
 
@@ -323,12 +332,12 @@ Now work out what each of the other rows in block 2 says.
   The SKY130 subcircuit declares a parameter called `mult` and never uses it. You can see this in
   `/foss/pdks/sky130A/libs.ref/sky130_fd_pr/spice/sky130_fd_pr__nfet_01v8__tt.pm3.spice`, where the
   `.subckt`'s `.param` line lists `mult = 1` and the device line inside carries no `m = {mult}`.
-  So `mult=2` in a hand-written deck is accepted, ignored, and never mentioned; `m=2` is the one
-  that works. XSchem's symbol writes `m=` for you whenever `mult` isn't 1: set `mult=2` in the
-  property editor and the device line comes out `... sd=0 mult=2 m=2`, and the current doubles.
-  (At `mult=1` the line ends `... sd=0 mult=1` with no `m=`, because there is nothing to
-  multiply.) That is why drawing the schematic gets this right and copying a device line by hand
-  doesn't.
+  So if you write `mult=2` in a deck by hand, it's accepted and ignored, and nothing tells you so;
+  `m=2` is the parameter that works. XSchem's symbol writes `m=` for you whenever `mult` isn't 1.
+  If you set `mult=2` in the property editor, the device line comes out `... sd=0 mult=2 m=2`,
+  and the current doubles. (At `mult=1` the line ends `... sd=0 mult=1` with no `m=`, because
+  there is nothing to multiply.) That's why drawing the schematic gets this right, and copying a
+  device line by hand doesn't.
 
   </details>
 
@@ -337,17 +346,17 @@ Now work out what each of the other rows in block 2 says.
   <details>
   <summary>Answer</summary>
 
-  `nf=2` folds one 10 µm channel into two 5 µm fingers that share a drain diffusion. That isn't in
-  $W/L$ at all. It is a fact about the layout, and [AD104](https://uoftasic.com/ad104/) is where
-  you draw it.
+  `nf=2` folds one 10 µm channel into two 5 µm fingers that share a drain diffusion. Nothing in
+  $W/L$ describes that, because it's a fact about the layout, and you'll draw it in
+  [AD104](https://uoftasic.com/ad104/).
 
   </details>
 
 > **Don't push `nf` higher to see how far the effect goes.** `W=10 nf=5` aborts the entire run
 > with `Fatal: Drout = -1.76308 is negative` and
 > `doAnalyses: no such parameter on this device or parameter is missing`. That is a BSIM parameter
-> check failing inside a model bin, not a mistake you made. Two fingers is enough to show the
-> effect.
+> check failing inside one of the model bins, not a mistake you made, and two fingers are enough
+> to show the effect.
 
 ## Part 6: Length
 
@@ -367,7 +376,8 @@ How badly does $1/L$ fail, and why?
       4         197.9738 uA   791.8952        -12.07 %     536.41  1001.27 mV
    ```
 
-2. The $I_D \times L$ column is the test. If $1/L$ were the law, it would show one number six times.
+2. The $I_D \times L$ column is the one that tests the rule: if current really went as $1/L$,
+   that column would show the same number in all six rows.
 
 3. Compare `vdsat` with the overdrive $V_{GS} - V_{TH}$ for the shortest and longest devices
    (1092.6 mV and 1263.6 mV).
@@ -382,9 +392,9 @@ How badly does $1/L$ fail, and why?
       The threshold step closes 43.1 % of the gap.
    ```
 
-**You should see** $I_D \times L$ run from **396.63 to 791.90**, so it doubles, and `vdsat` run from
-351.92 mV to 1001.27 mV. Correcting for each device's threshold closes **less than half** of the
-gap at 0.15 µm.
+**You should see** $I_D \times L$ run from **396.63 to 791.90**, so it doubles across the ladder,
+and `vdsat` run from 351.92 mV to 1001.27 mV. Correcting for each device's threshold closes
+**less than half** of the gap at 0.15 µm.
 
 The 0.15 µm device stopped responding to its drain at a third of the overdrive the square law
 assumed. What does that tell you, and why can't more arithmetic on `vth` close the rest of the gap?
@@ -392,15 +402,16 @@ assumed. What does that tell you, and why can't more arithmetic on `vth` close t
 <details>
 <summary>Answer</summary>
 
-That is velocity saturation, and it is why $1/L$ over-promises on every short device. No further
-arithmetic on `vth` reaches the rest of the gap, because the square law has no term for a carrier
-speed limit. This is where hand calculation stops and the simulator takes over.
+It tells you the device is velocity saturated, and that's why $1/L$ over-promises on every short
+device. No further arithmetic on `vth` can close the rest of the gap, because the square law has
+no term for a carrier speed limit. At this point hand calculation runs out, and you need the
+simulator.
 
 </details>
 
 ## Part 7: Five devices with $W/L$ = 5
 
-Five devices with $W/L$ = 5: what does the extra area buy?
+Five devices share a $W/L$ of 5 but differ in area. What does the extra area buy?
 
 1. Read block 4 of `make extract`, and open `results/ad103-same-ratio.png`:
 
@@ -415,7 +426,7 @@ Five devices with $W/L$ = 5: what does the extra area buy?
          20 / 4       798.0193 uA   80.0000 um^2   484.1798 fF       9.98 uA/um^2
    ```
 
-2. Check the ratio in the first column: 0.75/0.15 = 5, and 20/4 = 5. Every row is 5.
+2. Check the ratio in the first column: 0.75/0.15 = 5, 20/4 = 5, and so is every row in between.
 
 3. Work out what the largest device buys over the smallest: the ratio of currents, of gate areas
    and of gate capacitances.
@@ -427,19 +438,20 @@ Five devices with $W/L$ = 5: what does the extra area buy?
         gds(20/4)      =    7.435 uS  ->  r_o =  134.50 kohm
    ```
 
-**You should see** **364.9284 µA to 798.0193 µA, a factor of 2.1868**, for identical $W/L$ at
-identical bias. The biggest device buys 2.19× the current of the smallest for **711× the gate
-area** and **753× the gate capacitance**; per square micron of gate, the small one is **325× more
-efficient**. Its output resistance is **5.23×** the small one's.
+**You should see** currents from **364.9284 µA to 798.0193 µA, a factor of 2.1868**, for
+identical $W/L$ at identical bias. The biggest device gets 2.19× the current of the smallest for
+**711× the gate area** and **753× the gate capacitance**, so per square micron of gate the small
+one is **325× more efficient**. The biggest device's output resistance is **5.23×** the small
+one's.
 
 What does the biggest device buy for its 711× area?
 
 <details>
 <summary>Answer</summary>
 
-Not much current: 2.19× for 711× the area. Area is money, and gate capacitance is time, because whatever drives the gate has
-to charge it. What the area does buy is the 5.23× output resistance. An amplifier's gain is
-$g_m r_o$, so that factor is the whole reason an analog designer pays for a long channel, and the
+It doesn't buy much current: 2.19× for 711× the area. Area costs money, and gate capacitance
+costs time, because whatever drives the gate has to charge it. What the area does buy is 5.23×
+the output resistance. An amplifier's gain is $g_m r_o$, so that factor is the whole reason an analog designer pays for a long channel, and the
 reason a digital designer doesn't.
 
 </details>
@@ -454,8 +466,9 @@ What does the checker tell you when one number is 3 % off?
    make broken
    ```
 
-   It copies your W ladder, moves the $W$ = 10 µm current by 3 %, and gives that to the checker.
-   Three percent is far too small to see by eye, and large enough to be a wrong device.
+   It copies your W ladder, moves the $W$ = 10 µm current by 3 %, and hands the result to the
+   checker. A 3 % error is far too small to see by eye, but it's large enough to mean you
+   simulated the wrong device.
 
    ```
      XX  I_D  W=10 L=1                 1437.1800 uA  (reference 1395.3200)
@@ -470,9 +483,9 @@ What does the checker tell you when one number is 3 % off?
 
 2. Run `make` again to get back to `PASS`.
 
-**You should see** one `XX` row among nine `ok` rows, naming the number, both values and the
-percentage, followed by three causes in order of how often they happen, with a `grep` for the
-first one.
+**You should see** one `XX` row among nine `ok` rows. The `FAIL` section names the number and
+gives both values and the percentage, then lists three causes in order of how often they happen,
+with a `grep` for the first one.
 
 ## Finishing
 
@@ -492,18 +505,18 @@ Nothing to submit.
 ## Going further
 
 Three extensions, with reference answers in
-[`solutions/`](https://github.com/uoftasic/ad103/tree/main/labs/lab-04-wl-knob/solutions). Predict,
-then run, then read, in that order.
+[`solutions/`](https://github.com/uoftasic/ad103/tree/main/labs/lab-04-wl-knob/solutions). For each
+one, predict first, then run it, and only then read the answer.
 
 1. **Widen further.** Add `W=100` to the W ladder, then `W=200`. One of them tells you where the
    model ends, and the error it gives is one you have already met for a completely different
    reason.
 2. **Repeat the ladder in PMOS.** Build the same ladder out of `pfet_01v8`. At $L$ = 1 µm the NMOS
    carries **6.685×** the PMOS; the capstone measures the same ratio at $L$ = 0.15 µm and gets
-   **2.496**. The ratio between the two device types isn't a property of the process alone.
+   **2.496**, so the ratio between the two device types isn't a property of the process alone.
 3. **Lower the gate.** Re-run the L ladder at $V_{GS}$ = 0.9 V. If velocity saturation is really
-   what breaks $1/L$, the short-channel error should shrink, and it does, from +75.5 % to +29.5 %.
-   Then look at what happens at the long end.
+   what breaks $1/L$, the short-channel error should shrink at the lower gate voltage, and it
+   does, from +75.5 % to +29.5 %. Then look at what happens at the long end.
 
 Next on the [Course path](../index.md#course-path): read
 [The CMOS inverter](../guide/the-inverter-is-an-amplifier.md).
