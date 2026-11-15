@@ -232,7 +232,10 @@ Which of your six predictions land, and is there a pattern in the misses?
    `make predict` says `predictions.txt still has 6 blank(s)`, you didn't save the file in
    Part 1.)
 
-3. Cover the last two columns and read only `rule err`, top to bottom.
+3. Cover the last two columns and read only `rule err`, top to bottom. Each entry is the rule's
+   error as a percentage of the measured current. That's why the L = 2 µm row reads −8.6 % here,
+   while Sizing with W and L calls the same gap 9.4 % more current than $1/L$ predicts: that page
+   takes it as a percentage of the rule's 348.138 µA.
 
 **You should see** your six predictions in the `your guess` column. In `rule err`, the two rows
 where only $W$ changed are within 3 %, and the four where $L$ changed are out by 8 to 91 %. That

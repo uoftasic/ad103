@@ -179,7 +179,7 @@ How XSchem draws a wire end or a symbol pin tells you how many connections it ha
 |---|---|
 | hollow square | connected to nothing |
 | nothing drawn | exactly one connection |
-| solid square | two or more connections |
+| solid dot | two or more connections |
 
 ![Two pairs of XSchem wires side by side: on the left they cross with nothing drawn at the crossing, on the right they meet at a small solid dot](../assets/img/xschem-wire-junction.png)
 

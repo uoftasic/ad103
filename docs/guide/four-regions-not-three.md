@@ -105,7 +105,7 @@ on these curves, and why at high gate voltage the measured knee is 26 % lower th
 
 Now go back to the "$\approx$" we asked you to keep in mind in cutoff.
 
-**Predict before you read on.** The threshold of this device is about 0.59 V. At $V_{GS} = 0.30$ V,
+**Predict before you read on.** The threshold of this device is about 0.6 V. At $V_{GS} = 0.30$ V,
 half the threshold and comfortably "off", how much current flows with 1.8 V on the drain? Write
 down an order of magnitude. Zero is an acceptable answer, as long as you commit to it.
 

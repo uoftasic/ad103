@@ -69,7 +69,9 @@ The direction of the error points to the cause. As
 [Where saturation starts](../guide/where-saturation-starts.md#velocity-saturation) explained, a
 longer channel with the same voltage across it has a **lower field**, so its carriers are further
 from their speed limit. Expecting the current to halve when you double $L$ assumes that carrier
-velocity doesn't depend on the field, but it does.
+velocity is proportional to the field without limit, so that half the field gives half the speed.
+Carriers near their speed limit don't slow down in proportion when the field drops, so doubling
+$L$ costs less than half the current.
 
 The model's own numbers agree. `vdsat` is **0.912 V** for the L = 2 µm device and **0.779 V** for
 L = 1 µm, which means the longer device needs more drain voltage before its carriers stop
