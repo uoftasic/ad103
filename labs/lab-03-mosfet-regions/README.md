@@ -4,8 +4,8 @@ Writeup: [uoftasic.com/ad103 → Lab 03](https://uoftasic.com/ad103/labs/lab-03-
 The writeup has the steps, the expected output and the explanations; this file is a quick
 reference.
 
-Five ngspice sweeps of a SKY130 `nfet_01v8`, a plotting script, and extractions that turn those
-sweeps into $V_{TH}$, $g_m$, a subthreshold slope and a knee voltage. Lab 04 also runs three of the
+Four ngspice sweeps and an operating-point dump of a SKY130 `nfet_01v8`, a plotting script, and
+extractions that turn those sweeps into $V_{TH}$, $g_m$, a subthreshold slope and a knee voltage. Lab 04 also runs three of the
 targets here (`vth-body`, `vth-l`, `gm-ro`).
 
 ## Run it
