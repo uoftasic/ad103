@@ -27,9 +27,11 @@ MOSFET works.
 the surface to form a conducting layer, so the only path between source and drain is two
 back-to-back diodes, and one of them is reverse-biased.
 
-**On the plot:** cutoff is the flat line along the bottom. At $V_{GS} = 0.6$ V the current never
-gets above 2.005 µA over the whole sweep from 0 to 1.8 V, and on a plot scaled for 700 µA that is
-indistinguishable from the axis.
+**On the plot:** none of the five curves is in cutoff. The lowest one, $V_{GS} = 0.6$ V, sits
+right at threshold (the next page measures $V_{TH}$ = 0.6016 V for this device), and even there
+the current never gets above 2.005 µA over the whole sweep from 0 to 1.8 V. On a plot scaled for
+700 µA that is indistinguishable from the axis, and any gate voltage below threshold gives less
+current still, so a curve in cutoff would be a flat line along the bottom.
 
 $$I_D \approx 0$$
 
