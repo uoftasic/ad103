@@ -2,57 +2,61 @@
 
 Your textbook gives you cutoff, triode and saturation. This page draws the boundaries between
 them on measured curves, shows how to tell which region a device is in, and then adds a fourth
-region that most textbooks leave out. The regions are the channel pictures from
-[How a MOSFET works](../guide/a-mosfet-is-a-valve.md), seen on a graph.
+region that most textbooks leave out. Each region is one of the channel pictures from
+[How a MOSFET works](../guide/a-mosfet-is-a-valve.md), seen this time on a graph.
 
 ## The output curves
 
 ![I_D vs V_DS for five gate voltages, with the triode and saturation regions shaded](../assets/img/ad103-id-vds-family.png)
 
 *SKY130 `nfet_01v8`, W = 5 µm, L = 1 µm. Five sweeps of $V_{DS}$, one per gate voltage, from
-`spice/id_vds.spice` in the Lab 03 package; drawn by `src/plot_curves.py`. The dashed locus and its
-dots are `vdsat` reported by the model itself at each bias, from `spice/op_params.spice`. It isn't
-a fit or a guess; it is the simulator's own estimate of where the channel pinched off.*
+`spice/id_vds.spice` in the Lab 03 package, and drawn by `src/plot_curves.py`. The dashed locus and
+its dots are the `vdsat` that the model itself reports at each bias, from `spice/op_params.spice`,
+so they show the simulator's own estimate of where the channel pinched off rather than a fit or a
+guess of ours.*
 
-Almost everything worth knowing about a MOSFET is somewhere in that picture. Take it region by
-region, and match each one to a panel of the cross-section figure.
+Almost everything worth knowing about a MOSFET is somewhere in that picture, so we'll go through
+it one region at a time and match each region to a panel of the cross-section figure on that page.
 
 ## 1. Cutoff
 
 **Condition:** $V_{GS} < V_{TH}$, where $V_{TH}$ is the **threshold voltage**.
 
-**What the channel is doing:** nothing. The gate hasn't pulled enough electrons to the surface to
-form a conducting layer, so the only path between source and drain is two back-to-back diodes, and
-one of them is reverse-biased.
+**What the channel is doing:** there is no channel yet. The gate hasn't pulled enough electrons to
+the surface to form a conducting layer, so the only path between source and drain is two
+back-to-back diodes, and one of them is reverse-biased.
 
-**On the plot:** the flat line along the bottom. At $V_{GS} = 0.6$ V the whole sweep from 0 to
-1.8 V never gets above **2.005 µA**, which on a plot scaled for 700 µA is indistinguishable from the
-axis.
+**On the plot:** cutoff is the flat line along the bottom. At $V_{GS} = 0.6$ V the current never
+gets above 2.005 µA over the whole sweep from 0 to 1.8 V, and on a plot scaled for 700 µA that is
+indistinguishable from the axis.
 
 $$I_D \approx 0$$
 
-Keep the "$\approx$". Section 4 comes back to it.
+Keep the "$\approx$" in mind, because Section 4 comes back to it.
 
 ## 2. Triode: a resistor the gate sets
 
 **Condition:** $V_{GS} > V_{TH}$ **and** $V_{DS} < V_{GS} - V_{TH}$.
 
-**What the channel is doing:** it runs end to end (panel 2 of the cross-section). It is thinner at
-the drain, because the drain's own voltage partly cancels the gate's pull there, but it is
-continuous. Push harder on the drain and more current flows, almost as it would through a wire.
+**What the channel is doing:** the channel runs all the way from source to drain (panel 2 of the
+cross-section). It is thinner at the drain end, because the drain's own voltage partly cancels the
+gate's pull there, but it is still continuous, so if you push harder on the drain, more current
+flows, almost as it would through a wire.
 
-**On the plot:** the rising left-hand part of every curve, shaded blue. Near the origin the curves
-are nearly straight lines through zero, which is the signature of a resistor.
+**On the plot:** triode is the rising left-hand part of every curve, shaded blue. Near the origin
+the curves are nearly straight lines through zero, which is the signature of a resistor.
 
 $$I_D = \mu_n C_{ox}\frac{W}{L}\left[(V_{GS}-V_{TH})V_{DS} - \frac{V_{DS}^2}{2}\right]$$
 
-Don't memorise that; read it. There is a term proportional to $V_{DS}$ (the resistor), minus a
-term that grows as $V_{DS}^2$ (the channel thinning at the drain end). At small $V_{DS}$ the second
-term vanishes and you are left with Ohm's law, with a conductance the gate controls:
+You don't need to memorise that equation, but it's worth reading. It has a term proportional to
+$V_{DS}$ (the resistor), minus a term that grows as $V_{DS}^2$ (the channel thinning at the drain
+end). At small $V_{DS}$ the second term vanishes, and what's left is Ohm's law, with a conductance
+that the gate controls:
 
 $$R_{ch} \approx \frac{1}{\mu_n C_{ox}\frac{W}{L}(V_{GS}-V_{TH})}$$
 
-Lab 03 measures exactly that, by putting 10 mV across the device and dividing:
+Lab 03 measures exactly that resistance, by putting 10 mV across the device and dividing by the
+current that flows:
 
 | $V_{GS}$ | channel resistance |
 |---|---|
@@ -62,45 +66,47 @@ Lab 03 measures exactly that, by putting 10 mV across the device and dividing:
 | 1.50 V | 907.7 Ω |
 | 1.80 V | 736.9 Ω |
 
-> **How to recognise triode:** near the origin, is the curve a straight line through zero? If so,
-> the device is in triode and you may treat it as a resistor. That check takes one glance and is
-> right far more often than plugging numbers into the quadratic.
+> **How to recognise triode:** look at the curve near the origin. If it's a straight line through
+> zero, the device is in triode and you can treat it as a resistor. The check takes one glance, and
+> it's right far more often than plugging numbers into the quadratic.
 
 ## 3. Saturation: a current source the gate sets
 
 **Condition:** $V_{GS} > V_{TH}$ **and** $V_{DS} > V_{GS} - V_{TH}$.
 
-**What the channel is doing:** the drain end has run out of charge (panel 3) and the pinch-off
-point has moved back up the channel (panel 4). The extra drain volts fall across the pinched-off
-stretch, not across the channel, so the channel keeps carrying what it was already carrying.
+**What the channel is doing:** the channel has run out of charge at the drain end (panel 3), and
+the pinch-off point has moved back up the channel (panel 4). Any extra drain voltage falls across
+the pinched-off stretch rather than across the channel, so the channel keeps carrying the current
+it was already carrying.
 
-**On the plot:** the flat right-hand part of every curve, shaded amber. The levels of the flat
-parts are set by $V_{GS}$ alone: 2.005, 63.876, 217.505, 436.080 and 696.275 µA. The drain has
-stopped mattering; the gate still does.
+**On the plot:** saturation is the flat right-hand part of every curve, shaded amber. The height of
+each flat part is set by $V_{GS}$ alone, at 2.005, 63.876, 217.505, 436.080 and 696.275 µA for the
+five gate voltages. Once the device is in saturation the drain voltage has stopped mattering, but
+the gate voltage still does.
 
 $$I_D = \frac{1}{2}\mu_n C_{ox}\frac{W}{L}(V_{GS}-V_{TH})^2$$
 
 > **How to recognise saturation:** nudge $V_{DS}$. If $I_D$ barely moves, the device is in
-> saturation. That is the definition, and it is also how bias checks are done in real designs:
-> perturb the drain and see whether the current cares.
+> saturation. That is the definition of saturation, and it's also how bias checks are done in real
+> designs: you perturb the drain and see whether the current changes.
 
 ## The boundary between triode and saturation
 
 The two conditions above meet where $V_{DS} = V_{GS} - V_{TH}$. That quantity is called the
-**overdrive voltage**, $V_{ov} = V_{GS} - V_{TH}$, and it is the number analog designers think in.
-It is the drain voltage at which the device changes character, and so it is the headroom the
-device needs before it will behave as a current source.
+**overdrive voltage**, $V_{ov} = V_{GS} - V_{TH}$, and it's the number analog designers think in.
+It's the drain voltage at which the device stops behaving like a resistor and starts behaving like
+a current source, so it's also the headroom the device needs before it will act as one.
 
 [Where saturation starts](../guide/where-saturation-starts.md) shows where the boundary really sits
 on these curves, and why at high gate voltage the measured knee is 26 % lower than $V_{ov}$.
 
 ## 4. Subthreshold: the region most textbooks skip
 
-Go back to the "$\approx$" in cutoff.
+Now go back to the "$\approx$" we asked you to keep in mind in cutoff.
 
 **Predict before you read on.** The threshold of this device is about 0.59 V. At $V_{GS} = 0.30$ V,
 half the threshold and comfortably "off", how much current flows with 1.8 V on the drain? Write
-down an order of magnitude. Zero is an acceptable answer, but commit to it.
+down an order of magnitude. Zero is an acceptable answer, as long as you commit to it.
 
 Now put the same device on a log axis:
 
@@ -117,21 +123,22 @@ Now put the same device on a log axis:
    subthreshold slope          : 85.6 mV/decade
 ```
 
-**1.36 nanoamps.** Not zero, and not noise: a smooth, repeatable, exponential function of gate
-voltage. On the linear plot this whole region is a flat line on the axis. On the log plot it is a
-**straight line six decades tall**, which is what an exponential looks like.
+At 0.30 V the device carries 1.36 nanoamps. That isn't zero, and it isn't noise either: it's a
+smooth, repeatable, exponential function of gate voltage. On the linear plot this whole region is a
+flat line on the axis, but on the log plot it's a straight line six decades tall, which is what an
+exponential looks like on a log axis.
 
 This is **subthreshold conduction**, also called **weak inversion**. The gate hasn't formed a
 proper channel, but it has lowered the barrier enough that some electrons get across by thermal
 energy, and the number that do is exponential in the barrier height, exactly as in the diode from
-[Lab 02](../labs/lab-02-diode-iv-overview.md). It is the same physics: below threshold, a MOSFET
+[Lab 02](../labs/lab-02-diode-iv-overview.md). The physics is the same, so below threshold a MOSFET
 behaves like a diode.
 
-The slope of that line is the parameter everyone quotes, the **subthreshold slope**: **85.6 mV per
-decade** on this device. It takes 85.6 mV of gate voltage to change the drain current by a factor
-of ten. At room temperature no conventional MOSFET can do better than about 60 mV/decade, the same
-$kT/q \ln 10 = 59.6$ mV you met on [the diode page](../guide/the-diode-is-an-exponential.md), and real
-devices land above it.
+The slope of that line is the parameter everyone quotes, the **subthreshold slope**, and on this
+device it is 85.6 mV per decade: it takes 85.6 mV of gate voltage to change the drain current by a
+factor of ten. At room temperature no conventional MOSFET can do better than about 60 mV/decade,
+which is the same $kT/q \ln 10 = 59.6$ mV you met on
+[the diode page](../guide/the-diode-is-an-exponential.md), and real devices land above that limit.
 
 ### Why leakage matters
 
@@ -143,12 +150,12 @@ $$10^7 \times 2.1853\ \mathrm{pA} = 21.9\ \mu\mathrm{A}$$
 That's tolerable. Now suppose your threshold came out 0.3 V lower than you designed for, which is
 well within the spread of a real process. In subthreshold the current depends on $V_{GS} - V_{TH}$
 and not on either one alone, so a device with $V_{TH}$ 0.3 V lower and its gate at ground carries
-what this device carries with its gate at 0.3 V, the number two rows up:
+what this device carries with its gate at 0.3 V, which is the 0.30 V row of the output above:
 
 $$10^7 \times 1.3645\ \mathrm{nA} = 13.6\ \mathrm{mA}$$
 
-That is **six hundred times more**, from a 0.3 V shift in one parameter, on a chip that is doing
-nothing. This is why threshold voltage is controlled so tightly, why "low power" and "high speed"
+That's six hundred times as much current, from a 0.3 V shift in one parameter, on a chip that isn't
+doing anything. This is why threshold voltage is controlled so tightly, why "low power" and "high speed"
 pull in opposite directions (a low $V_{TH}$ gives you speed and leakage together), and why
 subthreshold slope has its own line in every process datasheet.
 
@@ -166,8 +173,8 @@ subthreshold slope has its own line in every process datasheet.
 | **Saturation** | $V_{GS} > V_{TH}$, $V_{DS} > V_{ov}$ | pinched off at the drain end | a current source $I(V_{GS})$ |
 
 Cutoff and subthreshold are the same region seen on two different axes, which is why textbooks
-merge them. Keep them apart in your head: cutoff is what you assume when you do digital logic, and
-subthreshold is what you count when you do a power budget.
+merge them. It's still worth keeping them apart in your head, because cutoff is what you assume
+when you do digital logic, and subthreshold is what you count when you do a power budget.
 
 You'll draw these plots and read these numbers yourself in Lab 03, Parts 1, 3 and 4.
 
