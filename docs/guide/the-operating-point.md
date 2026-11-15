@@ -130,7 +130,16 @@ the diode as a 30.3 kΩ resistor, which means superposition works again, at leas
 That is the idea behind every analog circuit you have used: the circuit is nonlinear enough to
 set a bias point, and everything small that happens near that point is treated as linear. If you
 move the operating point, the resistance moves with it. At the 100 kΩ point the same measurement
-gives 4.12 kΩ, about seven times smaller, because the current there is roughly ten times larger.
+gives 4.12 kΩ, about seven times smaller, while the current there is 9.27 times larger.
+
+For a pure junction those two ratios would be the same. Differentiating the diode equation gives
+a resistance of $nV_T/I$, and $nV_T$ for this diode is the 77.04 mV per decade divided by
+$\ln 10$, or 33.5 mV, so the resistance would fall exactly as fast as the current rises. It falls
+more slowly because the diode also has 979.1 Ω of
+[series resistance](../guide/the-diode-is-an-exponential.md#the-top-of-the-curve-series-resistance)
+in the measurement, and that part doesn't change with current:
+$33.5\ \text{mV}/I + 0.98\ \text{k}\Omega$ gives 30.2 kΩ and 4.13 kΩ, close to both measured
+values.
 
 > **A small-signal resistance needs an operating point.** If someone quotes you the resistance of
 > a diode without telling you the current through it, they haven't told you anything, because
