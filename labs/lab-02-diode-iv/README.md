@@ -1,8 +1,8 @@
 # AD103 Lab 02: The diode I–V curve
 
 Writeup: [`docs/labs/lab-02-diode-iv-overview.md`](../../docs/labs/lab-02-diode-iv-overview.md),
-published at <https://uoftasic.com/ad103/labs/lab-02-diode-iv-overview.html>. The steps and expected
-output are there; this file is a quick reference.
+published at <https://uoftasic.com/ad103/labs/lab-02-diode-iv-overview.html>. The writeup has the
+steps and the expected output, so this file is only a quick reference to the package.
 
 ## Run it
 
@@ -13,10 +13,11 @@ cd labs/lab-02-diode-iv
 make
 ```
 
-It takes about 25 seconds and ends in `PASS` or `FAIL`. No environment setup is required: no
-`.designinit`, no `mod`, no `PDK`. The decks find the models through `PDK_ROOT`, which the image
-already sets to `/foss/pdks`, and the `Makefile` sets it anyway. The XSchem bench in `xschem/`
-resolves its symbols through `PDK`, so `xschem/xschemrc` sets that to `sky130A` itself.
+It takes about 25 seconds and ends in `PASS` or `FAIL`. You don't need to set anything up first
+(no `.designinit`, no `mod` and no `PDK`), because the decks find the models through `PDK_ROOT`,
+which the image already sets to `/foss/pdks`. The `Makefile` sets it as well, in case it's
+missing. The XSchem bench in `xschem/` is different: it resolves its symbols through `PDK`, so
+`xschem/xschemrc` sets `PDK` to `sky130A` itself.
 
 ## Targets
 
@@ -50,5 +51,5 @@ xschem/xschemrc             project-local XSchem config; sets PDK=sky130A for th
 
 Every deck loads the typical corner with `.lib $PDK_ROOT/sky130A/libs.tech/ngspice/sky130.lib.spice tt`.
 
-`area` is in square microns and `perim` in microns, and neither takes a unit suffix:
-`area=1 perim=4` is a 1 µm × 1 µm junction.
+On the diode, `area` is in square microns and `perim` is in microns, and neither takes a unit
+suffix, so `area=1 perim=4` is a 1 µm × 1 µm junction.
