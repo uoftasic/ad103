@@ -122,9 +122,10 @@ rather than discovering where the circuit ended up afterwards.
 
 If you zoom in far enough on any smooth curve, it looks like a straight line. Near the 1 MΩ
 operating point, the diode's own sweep gives $\Delta V = 2$ mV between the rows at 0.655 V and
-0.657 V, and $\Delta I = 65.98$ nA across the same two rows, which is a slope of **30.3 kΩ**. A
-small wiggle riding on that operating point sees the diode as a 30.3 kΩ resistor, which means
-superposition works again, at least for the wiggle.
+0.657 V, and $\Delta I = 65.98$ nA across the same two rows, so $\Delta V/\Delta I$ is
+**30.3 kΩ**. That's the slope of $V$ against $I$, the reciprocal of the slope you see on the plot
+above, where current is drawn against voltage. A small wiggle riding on that operating point sees
+the diode as a 30.3 kΩ resistor, which means superposition works again, at least for the wiggle.
 
 That is the idea behind every analog circuit you have used: the circuit is nonlinear enough to
 set a bias point, and everything small that happens near that point is treated as linear. If you
@@ -143,6 +144,6 @@ gives 4.12 kΩ, about seven times smaller, because the current there is roughly 
    expect the operating-point voltage to be higher or lower than with 100 kΩ? Check your answer
    against the table.
 3. The small-signal resistance is 30.3 kΩ at the 1 MΩ point and 4.12 kΩ at the 100 kΩ point. What
-   does that tell you about how the slope of the curve changes with current?
+   does that tell you about how steep the diode's I–V curve gets as the current rises?
 
 Next: [The diode equation](../guide/the-diode-is-an-exponential.md).
