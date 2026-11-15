@@ -41,7 +41,7 @@ For the resistor, 3.500000 µA + 3.500000 µA = 7.000000 µA, and the measured a
 to seven digits, which is what you'd expect from a theorem whose hypothesis holds.
 
 For the diode, superposition predicts **250.8180 pA**, but the circuit actually delivers
-**3.917437 µA**, which is out by a factor of **15,618**.
+**3.917437 µA**, which is out by a factor of **15,618.6**.
 
 Nothing about the wrong answer looks broken. It's a clean, plausible-looking number with seven
 significant figures and no noise on it, and nothing in the output says
@@ -87,7 +87,7 @@ to write.
 |---|---|
 | KCL, KVL | **Yes.** They are conservation laws, not linearity results. |
 | Ohm's law on the *resistors* | **Yes.** The resistors are still resistors. |
-| Superposition | **No.** It was off by 15,618× in the test above. |
+| Superposition | **No.** It was off by 15,618.6× in the test above. |
 | Thévenin / Norton equivalent | **No** for the part of the circuit containing the diode. It still works for the linear part around the diode, and that turns out to be useful. |
 | Series/parallel combination | **No** for the diode, because it has no $R$ to combine. |
 | Solving the system by algebra | **Usually no.** You get an equation with $v$ both inside and outside an exponential, and no rearrangement gets $v$ on its own. |

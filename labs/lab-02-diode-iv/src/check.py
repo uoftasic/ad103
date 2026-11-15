@@ -141,7 +141,7 @@ if log.exists():
                             "should be impossible; check straight_line.log")
         if ratio < 1000:
             problems.append(f"the diode is only {ratio:.1f}x off superposition; "
-                            f"the reference run says about 15,618x")
+                            f"the reference run says 15,618.6x")
 else:
     notes.append("(no results/straight_line.log yet - run 'make line')")
 
