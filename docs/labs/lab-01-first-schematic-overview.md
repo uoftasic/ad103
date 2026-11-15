@@ -18,7 +18,7 @@ target takes about ten seconds, almost all of it ngspice loading the SKY130 mode
 ## Part 1: Load the course
 
 If you haven't set up the workbench yet, do
-[IC101 Lab 03](https://uoftasic.com/ic101/#/labs/lab-03-launch-the-workbench-overview) first.
+[IC101 Lab 03](https://uoftasic.com/ic101/labs/lab-03-launch-the-workbench-overview.html) first.
 
 1. Start the desktop from your `workspace` clone (`./scripts/start_vnc.sh`, or
    `scripts\start_vnc.bat` on Windows), open **http://localhost/**, and open a terminal on that
@@ -71,7 +71,7 @@ If you haven't set up the workbench yet, do
 `ngspice-47` at the top of the two version outputs. The course is pinned to these versions.
 XSchem's keys and menus have changed between releases, so with a different version the screenshots
 may not match your window. For problems with the desktop or the container, see IC101's
-[Troubleshooting](https://uoftasic.com/ic101/#/reference/troubleshooting) page.
+[Troubleshooting](https://uoftasic.com/ic101/reference/troubleshooting.html) page.
 
 ## Part 2: Prove the toolchain works
 

@@ -314,4 +314,4 @@ that second word.
 
 Next: [W and L are a choice](../guide/w-and-l-are-a-choice.md), which is what to do with the two
 numbers now that you know what happens to them. For the passive side of the same PDK, AD102's
-[SKY130 passive quick-reference](https://uoftasic.com/ad102/#/reference/sky130-passive-catalogue).
+[SKY130 passive quick-reference](https://uoftasic.com/ad102/reference/sky130-passive-catalogue.html).

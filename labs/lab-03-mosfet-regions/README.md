@@ -1,6 +1,6 @@
 # Lab 03: MOSFET regions
 
-Writeup: [uoftasic.com/ad103 → Lab 03](https://uoftasic.com/ad103/#/labs/lab-03-mosfet-regions-overview).
+Writeup: [uoftasic.com/ad103 → Lab 03](https://uoftasic.com/ad103/labs/lab-03-mosfet-regions-overview.html).
 The steps, expected output and explanations are there; this file is a quick reference.
 
 Five ngspice sweeps of a SKY130 `nfet_01v8`, a plotting script, and extractions that turn those

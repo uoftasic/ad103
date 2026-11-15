@@ -41,7 +41,7 @@ it does for a width with a `u` on it, which is also outside every bin.
 
 Notice that **the message never mentions `W`, units or bins.** It is the same message for two
 different mistakes. That is why the habit from
-[Getting started](https://uoftasic.com/ad103/#/guide/getting-started) is "look at `W` and `L`
+[Getting started](https://uoftasic.com/ad103/guide/getting-started.html) is "look at `W` and `L`
 first" rather than "read the error".
 
 **If you want a device wider than 100 µm, build it out of several.** That isn't a workaround; it is
@@ -73,7 +73,7 @@ process, same bias, different device. So "current is proportional to $W$" isn't 
 set of exceptions; it is an approximation whose error depends on which device you picked.
 
 **At $L$ = 1 µm the NMOS carries 6.685× the PMOS** at the same width (696.2755 / 104.1549). Keep
-that number in mind, because [the capstone](https://uoftasic.com/ad103/#/labs/capstone-inverter-overview)
+that number in mind, because [the capstone](https://uoftasic.com/ad103/labs/capstone-inverter-overview.html)
 measures the same ratio at $L$ = 0.15 µm and gets **2.496**. The ratio between the two device types
 isn't a property of the process alone; it depends on the length you chose too. The reason is
 velocity saturation: electrons are faster than holes, so shortening the channel costs the electrons

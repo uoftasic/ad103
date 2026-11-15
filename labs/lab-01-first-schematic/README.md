@@ -1,6 +1,6 @@
 # Lab 01: Your first schematic
 
-Writeup: [uoftasic.com/ad103 → Lab 01](https://uoftasic.com/ad103/#/labs/lab-01-first-schematic-overview).
+Writeup: [uoftasic.com/ad103 → Lab 01](https://uoftasic.com/ad103/labs/lab-01-first-schematic-overview.html).
 The steps, expected output and explanations are there; this file is a quick reference.
 
 ## Run it

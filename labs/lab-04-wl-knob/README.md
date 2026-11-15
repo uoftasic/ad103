@@ -1,6 +1,6 @@
 # Lab 04: Testing the W/L rule
 
-Writeup: [uoftasic.com/ad103 → Lab 04](https://uoftasic.com/ad103/#/labs/lab-04-wl-knob-overview).
+Writeup: [uoftasic.com/ad103 → Lab 04](https://uoftasic.com/ad103/labs/lab-04-wl-knob-overview.html).
 The steps, expected output and explanations are there; this file is a quick reference.
 
 Four ngspice runs, seventeen transistors, one bias point. Every device sits at

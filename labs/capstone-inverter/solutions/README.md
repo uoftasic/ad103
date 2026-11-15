@@ -106,7 +106,7 @@ Take `spice/vtc_long.spice` and keep going.
 | 2 µm | 0.659120 V | **−247.3836** |
 
 Nearly **250** from two transistors and a wire. That is a real amplifier, and it is why
-[The CMOS inverter](https://uoftasic.com/ad103/#/guide/the-inverter-is-an-amplifier) treats the
+[The CMOS inverter](https://uoftasic.com/ad103/guide/the-inverter-is-an-amplifier.html) treats the
 inverter as one.
 
 Two things to notice before you get excited.
