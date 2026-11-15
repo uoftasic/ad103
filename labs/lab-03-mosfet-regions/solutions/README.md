@@ -66,7 +66,7 @@ held constant is.
 
 *The current is 6.685× lower.* The usual teaching is "a PMOS is two or three times weaker because
 holes are slower than electrons", and that isn't enough to explain 6.685. Close the gap the way
-[Sizing with W and L](https://uoftasic.com/ad103/#/guide/w-and-l-are-a-choice) does: the PMOS
+[Sizing with W and L](https://uoftasic.com/ad103/guide/w-and-l-are-a-choice.html) does: the PMOS
 threshold is 432 mV higher, so at the same 1.8 V of gate drive it has far less overdrive. Remove
 that with the square law,
 

@@ -1,7 +1,7 @@
 # AD103 Lab 02: The diode I–V curve
 
 Writeup: [`docs/labs/lab-02-diode-iv-overview.md`](../../docs/labs/lab-02-diode-iv-overview.md),
-published at <https://uoftasic.com/ad103/#/labs/lab-02-diode-iv-overview>. The steps and expected
+published at <https://uoftasic.com/ad103/labs/lab-02-diode-iv-overview.html>. The steps and expected
 output are there; this file is a quick reference.
 
 ## Run it

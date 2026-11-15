@@ -143,7 +143,7 @@ linear estimate is loose, and knowing which of those two statements you've shown
 
 ## The fix: unit devices
 
-[Matching beats accuracy](https://uoftasic.com/ad102/#/guide/matching-beats-accuracy) gave you a
+[Matching beats accuracy](https://uoftasic.com/ad102/guide/matching-beats-accuracy.html) gave you a
 rule for resistors:
 
 > *if you need a ratio, build both sides out of the same unit device*
