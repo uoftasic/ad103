@@ -5,7 +5,7 @@
 # anyway, so nothing here depends on PDK, .designinit, or which directory you
 # started in.
 #
-#   make            sweep, additivity test, plots, verdict   (about 6 s)
+#   make            sweep, additivity test, plots, verdict   (about 25 s)
 #   make sweep      just the DC sweep
 #   make plots      just the plots (needs results/diode_iv.txt)
 #   make area       what junction area buys you, and three silent unit traps
@@ -35,7 +35,7 @@ all: check
 $(R)/diode_iv.txt: spice/diode_iv.spice
 	@mkdir -p $(R)
 	@echo "== DC sweep: 1901 points, -1.000 V to +0.900 V"
-	@echo "   (about 2 s, model library included)"
+	@echo "   (about 10 s, nearly all of it loading the model library)"
 	@$(NGSPICE) -b spice/diode_iv.spice </dev/null > $(R)/diode_iv.log 2>&1 || true
 	@echo "   wrote $(R)/diode_iv.txt"
 

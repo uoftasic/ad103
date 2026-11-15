@@ -4,7 +4,7 @@
 # setup: it pins PDK itself, because the image ships with PDK=ihp-sg13g2 and
 # every sky130 model silently disappears if you leave it that way.
 #
-#   make            run the five decks and print a verdict   (about 13 s)
+#   make            run the five decks and print a verdict   (about 55 s)
 #   make sweeps     just the ngspice runs
 #   make extract    every number this capstone teaches, with its working
 #   make figures    redraw the three PNGs
