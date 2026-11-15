@@ -10,8 +10,8 @@ cd labs/lab-01-first-schematic
 make
 ```
 
-No environment setup is needed. The `Makefile` sets `PDK=sky130A` itself, so this runs in a bare
-container even if `.designinit` failed. It takes about ten seconds and ends with:
+No environment setup is needed, because the `Makefile` sets `PDK=sky130A` itself, so this runs in
+a bare container even if `.designinit` failed. It takes about ten seconds and ends with:
 
 ```
 PASS  netlist and operating point match the reference run
@@ -28,7 +28,7 @@ problem is in a drawing.
 | `make edit` | open `xschem/my_probe.sch` in XSchem |
 | `make mine` | netlist and check **your** schematic, then simulate it |
 | `make wrong-units` | the same circuit with `W` and `L` written in metres; **fails on purpose** |
-| `make unconnected` | one wire one grid step short; does **not** fail, and gives a wrong answer |
+| `make unconnected` | one wire one grid step short; does **not** fail, but gives a wrong answer |
 | `make bins` | which model bin `L=0.15 W=1` landed in, and what `leff` really is |
 | `make clean` | delete `results/` and `xschem/simulation/` |
 
