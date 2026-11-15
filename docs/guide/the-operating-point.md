@@ -9,11 +9,7 @@ SPICE simulation you launch is doing underneath.
 
 The circuit has one supply, one resistor and one diode:
 
-```
-   1.8 V ───[ 100 kΩ ]───┬───▶|───┐
-                         │        │
-                       v_node     ⏚
-```
+![The node between the resistor and the diode is the one unknown, $v_\text{node}$.](../assets/img/ad103-operating-point-circuit.svg){width=320 fig-alt="A 1.8 V source drives a 100 kΩ resistor, which feeds a diode to ground. The node between the resistor and the diode is labelled v_node."}
 
 There is only one unknown, `v_node`, and KCL at that node gives you one equation for it: the
 current flowing down through the resistor has to equal the current through the diode.
