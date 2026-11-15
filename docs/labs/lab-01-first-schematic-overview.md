@@ -290,9 +290,9 @@ Can you draw the reference circuit yourself, with a transistor twice as wide? Yo
    - **A wire end can miss a pin by one grid step.** If you're not sure a wire will land on a
      pin, use `Shift-W` instead of `w`, and hold `Shift` down for the closing click as well.
      `Shift-W` snaps the end you *start* from onto the nearest pin or net endpoint, however far
-     away it is. The click that finishes the wire is an ordinary click, which lands on the snap
-     grid and only pulls onto a pin that's already within about one snap step of it, which is
-     why the mistake comes and goes. We measured it on a pin 28 units away: a plain closing click
+     away it is. Unless you hold `Shift`, the click that finishes the wire is an ordinary click:
+     it lands on the snap grid, and it only pulls onto a pin that's already within about one snap
+     step of it, which is why the mistake comes and goes. We measured it on a pin 28 units away: a plain closing click
      landed on the grid 28 units short of the pin, and with `Shift` held it landed exactly on it.
 
    Zoom in on every junction and check for the dot.
@@ -466,8 +466,8 @@ What does ngspice do with a gate wire that stops short of the pin?
    <summary>Answer</summary>
 
    Because the wire stops short, the gate is floating, so its voltage settles wherever the solver
-   happened to leave it. `Vgs` is still there, but it's no longer connected to anything that
-   matters.
+   happened to leave it. `Vgs` is still there and still drives the net `g`, but `g` no longer
+   reaches the gate.
 
    </details>
 

@@ -223,18 +223,18 @@ no simulations run!
 
 The exit status is `1`.
 
-**What makes this trap hard to spot:** the error prints `l = 1.500000000000000e-07`, which is
-150 nm, the number you wanted. Because it looks correct, students stare at that line and
-conclude that the problem must be somewhere else.
+This trap is hard to spot because the error prints `l = 1.500000000000000e-07`, which is
+150 nm, the number you wanted. It looks correct, so students stare at that line and conclude
+that the problem must be somewhere else.
 
 That isn't the value ngspice ends up using, though, because it is printed *before* `binunit`
 scaling, and ngspice is about to multiply it by $10^{-6}$ again: `0.15u` = $1.5\times10^{-7}$ → $1.5\times10^{-13}$ m = 0.00000015 µm, which is
 below `lmin` in all 180 bins. What the error message shows you is the value halfway through the
 conversion.
 
-**What to do:** if you get `could not find a valid modelname` on a line that looks fine, look
-for a `u`. Then compare the two `l=` values: the good deck's `.op` shows `l 1.5e-07` *after*
-scaling, while the failing deck's error shows `l= 1.5e-07` *before* it.
+So if you get `could not find a valid modelname` on a line that looks fine, look for a `u`.
+Then compare the two `l=` values: the good deck's `.op` shows `l 1.5e-07` *after* scaling, while
+the failing deck's error shows `l= 1.5e-07` *before* it.
 
 ## The same error, a different cause
 
@@ -324,6 +324,6 @@ that second word.
 
 ---
 
-Next: [W and L are a choice](../guide/w-and-l-are-a-choice.md), which is about what to do with the
+Next: [Sizing with W and L](../guide/w-and-l-are-a-choice.md), which is about what to do with the
 two numbers now that you know what happens to them. For the passive side of the same PDK, see AD102's
 [SKY130 passive quick-reference](https://uoftasic.com/ad102/reference/sky130-passive-catalogue.html).

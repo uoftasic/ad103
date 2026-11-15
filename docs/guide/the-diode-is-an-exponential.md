@@ -201,7 +201,8 @@ GMIN and again with GMIN set a thousand times smaller:
 Look at the default column. At −1.000 V the current is 1.00356 pA and at −0.500 V it is
 0.503558 pA. The **difference is 0.500002 pA across 0.5 V**, a conductance of
 $1.000\times10^{-12}$ S to six digits. A diode doesn't have a constant resistance, so this
-conductance isn't the diode's. It is GMIN, and it makes up nearly all of the floor.
+conductance has to come from something other than the diode. It comes from GMIN, which makes up
+nearly all of the floor.
 
 Subtract GMIN × $V$ from each reverse reading and what's left is constant, which is what a
 saturation current should be:
@@ -240,9 +241,9 @@ Above about 0.7 V the measured curve falls **below** the straight line and keeps
 behind. Lab 02 reports the point where it leaves the line: **at 0.699 V it carries 3.8136 µA,
 against 4.2487 µA on the line.**
 
-This bend doesn't mean the junction is failing. It comes from the **series resistance** of
-everything the current has to pass through *besides* the junction: the neutral silicon on either
-side, the contacts and the metal. You can extract it the same way you extracted $n$:
+This bend comes from outside the junction, so it doesn't mean the junction is failing. Its cause
+is the **series resistance** of everything the current has to pass through *besides* the
+junction: the neutral silicon on either side, the contacts and the metal. You can extract it the same way you extracted $n$:
 
 ```
   series resistance, from the top of the curve:
@@ -275,12 +276,12 @@ Everything above says that a diode's *voltage* is set by its current, rather tha
 round. Thinking of it that way is the hardest habit to build, because for two years you've treated
 a component as something you put a voltage across.
 
-If you ask what voltage a diode sits at, the answer is another question: at what current? If you
+So you can't say what voltage a diode sits at until you've said what current it carries. If you
 ask what happens when you put 0.900 V across it, the sweep says it carries **98.0354 µA**, which is
 **25 times** the current at 0.700 V for only 200 mV more. There is no such thing as slightly too
 much voltage on a diode, and that is why every diode in a real circuit has something in series
-with it to limit the current. Drive it with a current and it settles at a sensible voltage; drive
-it with a voltage and you had better be right.
+with it to limit the current. If you drive it with a current, it settles at a sensible voltage,
+but if you drive it with a voltage, you had better have the voltage right.
 
 ## Check yourself
 

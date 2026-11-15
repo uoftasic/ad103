@@ -49,8 +49,8 @@ other models with it.
 | 100 kΩ | 18.000 µA | 11.000 µA | **10.60153 µA** | +69.8 % | +3.8 % |
 | 1 MΩ | 1.8000 µA | 1.1000 µA | **1.143884 µA** | +57.4 % | −3.8 % |
 
-Three things in this table are worth noticing, and "Model 2 is good" isn't one of them, even
-though two of its errors are under 4 %.
+Two of Model 2's errors are under 4 %, but "Model 2 is good" is the wrong conclusion to draw from
+that. Three other things in this table are worth noticing.
 
 **Model 2's error changes sign.** It's 3.8 % high at 10 µA and 3.8 % low at 1 µA, because 0.7 V
 is just where this particular junction happens to sit at a few microamps. Above that current the

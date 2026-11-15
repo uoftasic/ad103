@@ -451,8 +451,8 @@ What does the biggest device buy for its 711× area?
 
 It doesn't buy much current: 2.19× for 711× the area. Area costs money, and gate capacitance
 costs time, because whatever drives the gate has to charge it. What the area does buy is 5.23×
-the output resistance. An amplifier's gain is $g_m r_o$, so that factor is the whole reason an analog designer pays for a long channel, and the
-reason a digital designer doesn't.
+the output resistance. An amplifier's gain is $g_m r_o$, so that factor is the reason an analog
+designer pays for a long channel, and the reason a digital designer doesn't.
 
 </details>
 

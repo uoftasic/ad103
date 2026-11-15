@@ -76,7 +76,7 @@ gives you gain, and when you switch with it, the bend gives you on and off. If y
 far either way, the same bend becomes distortion.
 
 The algebra from AD102 can't solve these circuits, so in this course you learn to ask a
-simulator instead, and to know enough to tell a plausible answer from a wrong one.
+simulator instead, and to know enough to spot a wrong answer when it gives you one.
 
 ## What you'll learn
 

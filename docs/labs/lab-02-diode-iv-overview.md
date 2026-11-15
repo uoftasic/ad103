@@ -329,11 +329,11 @@ a resistor and a diode together. Why do the two agree so closely?
 <details>
 <summary>Answer</summary>
 
-The two calculations share nothing but the device model. `op` solves the resistor and diode once,
-by iterating, and the sweep is 1901 separate solves of a lone diode with no resistor. When two
-independent routes to a number agree that well, you can trust that the number comes from the
-model and not from the way either route computed it. That crossing is the bias point, and
-finding it is the first step in designing any analog circuit.
+`op` solves the resistor and diode once, by iterating, and the sweep is 1901 separate solves of a
+lone diode with no resistor, so the only thing the two calculations have in common is the device
+model. Agreement that close means the number comes from the model and not from the way either
+calculation reached it. That crossing is the bias point, and finding it is the first step in
+designing any analog circuit.
 
 </details>
 

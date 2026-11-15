@@ -16,7 +16,8 @@ so they show the simulator's own estimate of where the channel pinched off rathe
 guess of ours.*
 
 Almost everything worth knowing about a MOSFET is somewhere in that picture, so we'll go through
-it one region at a time and match each region to a panel of the cross-section figure on that page.
+it one region at a time and match each region to a panel of the cross-section figure on How a
+MOSFET works.
 
 ## 1. Cutoff
 
@@ -123,8 +124,9 @@ Now put the same device on a log axis:
    subthreshold slope          : 85.6 mV/decade
 ```
 
-At 0.30 V the device carries 1.36 nanoamps. That isn't zero, and it isn't noise either: it's a
-smooth, repeatable, exponential function of gate voltage. On the linear plot this whole region is a
+At 0.30 V the device carries 1.36 nanoamps. That's small, but it's a smooth, repeatable,
+exponential function of gate voltage, so you can't write it off as zero or as noise. On the linear
+plot this whole region is a
 flat line on the axis, but on the log plot it's a straight line six decades tall, which is what an
 exponential looks like on a log axis.
 

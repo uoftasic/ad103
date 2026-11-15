@@ -60,8 +60,8 @@ $$V_{TH}(V_{SB}) = V_{TH0} + \gamma\left(\sqrt{2\phi_F + V_{SB}} - \sqrt{2\phi_F
 
 Here $\gamma$ is the **body-effect coefficient**, in $\sqrt{\text{V}}$, and $2\phi_F$ is roughly
 twice the Fermi potential of the substrate. Both are set by how heavily the silicon is doped, and
-neither is printed anywhere easy to read, so we fit them to the five measured points instead, which
-also tells us whether the formula is any good.
+neither is printed anywhere easy to read, so instead you can fit them to the five measured points,
+which also tells you whether the formula is any good.
 
 Take $V_{TH0} = 0.5894596$ V from the $V_{SB} = 0$ row, then do a least-squares fit of the other
 four points for $\gamma$ and $2\phi_F$:
@@ -82,10 +82,10 @@ hundred parameters.
 
 Compare that with the last two pages, where the square law missed the saturation knee by 34 % and
 the $\sqrt{I_D}$ extraction missed the threshold by 12 %. Here a formula from the same era lands
-within a quarter of a millivolt. Simple models are wrong about the things short channels broke
-and right about the things short channels didn't touch. The depletion charge under the channel
-doesn't depend on how long the channel is, so the square-root law survived where the square law
-didn't.
+within a quarter of a millivolt. The difference is that the square law relies on physics that
+short channels changed, while the body-effect formula rests on the depletion charge under the
+channel, which doesn't depend on how long the channel is. That's why the square-root law survived
+where the square law didn't.
 
 > **When a hand formula disagrees with a simulator,** ask which assumption of the formula the
 > device violates. If you can't name one, suspect your arithmetic.

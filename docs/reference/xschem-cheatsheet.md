@@ -237,9 +237,9 @@ Vds d 0 1.8
 
 Notice the parameters the symbol added that you never typed: `ad`, `as`, `pd`, `ps`, `nrd` and
 `nrs`. They describe the source and drain diffusion geometry, which the symbol computes from `W`
-and `nf`. The junction capacitances that come from that geometry are part of the delay, which is
-why the circuit in a deck you write by hand (without them) comes out faster than the real one,
-and its delays are optimistic.
+and `nf`. The junction capacitances that come from that geometry are part of the delay, so a deck
+you write by hand without them simulates faster than the real circuit, and its delays are
+optimistic.
 
 **`-o OUTDIR` is ignored** when `xschemrc` contains `set local_netlist_dir 1`, and every AD103
 lab's `xschemrc` does, as this run shows:
