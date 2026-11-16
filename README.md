@@ -1,6 +1,6 @@
 # AD103 — Nonlinear Circuits
 
-The diode and the MOSFET in XSchem: regions of operation, and what the parameters mean.
+Simulate diodes and MOSFETs with the SKY130 device models, and finish with a CMOS inverter that you draw in XSchem and size yourself.
 
 AD103 is the third course in the UofT ASIC Team's **analog track**. The site students read is built from `docs/` with Quarto and published on GitHub Pages, and the XSchem/ngspice packages they run are in `labs/`. Students start at the Course path on the course home page.
 

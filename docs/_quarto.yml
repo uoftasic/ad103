@@ -20,7 +20,7 @@ project:
 
 website:
   title: "AD103 — Nonlinear Circuits"
-  description: "The diode and the MOSFET in XSchem: regions of operation, and what the parameters mean."
+  description: "Simulate diodes and MOSFETs with the SKY130 device models, and finish with a CMOS inverter that you draw in XSchem and size yourself."
   site-url: https://uoftasic.com/ad103/
   repo-url: https://github.com/uoftasic/ad103
   repo-subdir: docs

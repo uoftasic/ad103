@@ -8,7 +8,7 @@ project:
 
 book:
   title: "AD103 — Nonlinear Circuits"
-  subtitle: "The diode and the MOSFET in XSchem"
+  subtitle: "Simulate diodes and MOSFETs with the SKY130 device models, and finish with a CMOS inverter that you draw in XSchem and size yourself."
   author: "UofT ASIC Team"
   output-file: ad103-course
   chapters:

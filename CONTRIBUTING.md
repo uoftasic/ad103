@@ -18,7 +18,7 @@ These three tokens are the only placeholders, and `scripts/init-template.py` fil
 |-------|---------|
 | `ad103` | `dd103` |
 | `AD103 — Nonlinear Circuits` | `DD103 — RTL on FPGAs & ASICs` |
-| `The diode and the MOSFET in XSchem: regions of operation, and what the parameters mean.` | `RTL synthesis intro with Yosys` |
+| `Simulate diodes and MOSFETs with the SKY130 device models, and finish with a CMOS inverter that you draw in XSchem and size yourself.` | `RTL synthesis intro with Yosys` |
 
 ## Conventions
 
