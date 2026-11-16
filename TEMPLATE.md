@@ -13,7 +13,7 @@ To start a course or lab-notes repo from this template, create it under **`uofta
 |-------|---------|---------|
 | `ad103` | Repo slug / course id | `dd103`, `ic101`, `serdes-lab` |
 | `AD103 — Nonlinear Circuits` | Display name | `DD103 — RTL on FPGAs & ASICs` |
-| `The diode and the MOSFET in XSchem: regions of operation, and what the parameters mean.` | One-line blurb | `RTL synthesis intro with Yosys` |
+| `Simulate diodes and MOSFETs with the SKY130 device models, and finish with a CMOS inverter that you draw in XSchem and size yourself.` | One-line blurb | `RTL synthesis intro with Yosys` |
 
 ## Init script
 

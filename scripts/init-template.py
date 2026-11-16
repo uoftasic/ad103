@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Replace course placeholders after creating a repo from the UofT ASIC template.
 
-Fills ad103, AD103 — Nonlinear Circuits, and The diode and the MOSFET in XSchem: regions of operation, and what the parameters mean. only.
+Fills ad103, AD103 — Nonlinear Circuits, and Simulate diodes and MOSFETs with the SKY130 device models, and finish with a CMOS inverter that you draw in XSchem and size yourself. only.
 Does not scaffold or remove docs pages — keep the published site barebones.
 """
 
