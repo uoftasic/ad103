@@ -1,12 +1,14 @@
 # AD103 — Nonlinear Circuits
 
-In this course you draw transistors in XSchem, simulate them with real SKY130 models, and
-learn to tell a believable answer from a wrong one. It is the third course in the analog
-track, and the first one where the circuits stop being linear.
+In Lab 01 you draw your first transistor in XSchem, simulate it, and break the circuit twice on
+purpose: once so that ngspice refuses to run, and once so that it gives you a wrong answer with
+no error. In Labs 02 and 03 you sweep a SKY130 diode and NMOS transistors in ngspice and extract
+model parameters, such as the threshold voltage, from your own curves, and in Lab 04 you test how
+the current scales with $W/L$. In the capstone you draw a CMOS inverter, size it and time it.
 
-AD103 is part of the **UofT ASIC Team** education materials, and it's published at
-**https://uoftasic.com/ad103/**. The labs run inside the shared **workspace** you set up in
-[IC101](https://uoftasic.com/ic101/).
+AD103 is the third course in the analog track of the **UofT ASIC Team** education materials,
+and it's published at **https://uoftasic.com/ad103/**. The labs run inside the shared
+**workspace** you set up in [IC101](https://uoftasic.com/ic101/).
 
 ## At a glance
 
@@ -17,7 +19,7 @@ AD103 is part of the **UofT ASIC Team** education materials, and it's published 
 | **Prerequisites** | [IC101](https://uoftasic.com/ic101/) → [AD101](https://uoftasic.com/ad101/) → [AD102](https://uoftasic.com/ad102/), in that order |
 | **Main tool** | **XSchem**, the schematic editor. Lab 01 assumes you have never used it before. |
 | **Also** | ngspice 47 and the SKY130 device models, both already in the workbench |
-| **Math level** | Algebra, exponentials, logarithms, and one square root. You won't need calculus. |
+| **Math level** | Algebra, exponentials, logarithms and square roots. You won't need calculus. |
 | **Time** | About 16.5 hours, self-paced |
 
 ## Course path
