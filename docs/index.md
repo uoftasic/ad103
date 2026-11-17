@@ -1,10 +1,12 @@
 # AD103 — Nonlinear Circuits
 
-In Lab 01 you draw your first transistor in XSchem, simulate it, and break the circuit twice on
-purpose: once so that ngspice refuses to run, and once so that it gives you a wrong answer with
-no error. In Labs 02 and 03 you sweep a SKY130 diode and NMOS transistors in ngspice and extract
-model parameters, such as the threshold voltage, from your own curves, and in Lab 04 you test how
-the current scales with $W/L$. In the capstone you draw a CMOS inverter, size it and time it.
+In this course you simulate SKY130 diodes and transistors in ngspice. In Lab 01 you draw your
+first NMOS in XSchem and break the circuit twice on purpose: once so that ngspice refuses to run,
+and once so that it gives you a wrong answer with no error. In Lab 02 you sweep a diode and
+extract two of its model parameters from your own curve. In Lab 03 you sweep an NMOS transistor
+and extract its threshold voltage. In Lab 04 you test how the drain current scales with $W/L$, the
+ratio of the transistor's width to its length. In the capstone you draw a CMOS inverter, size it
+and time it.
 
 AD103 is the third course in the analog track of the **UofT ASIC Team** education materials,
 and it's published at **https://uoftasic.com/ad103/**. The labs run inside the shared
