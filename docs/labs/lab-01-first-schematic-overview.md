@@ -24,7 +24,7 @@ If you haven't set up the workbench yet, do
    `scripts\start_vnc.bat` on Windows), open **http://localhost/**, and open a terminal on that
    desktop. Every command from here on goes in that terminal, not on your laptop.
 
-2. Load the course environment. Do this in every new terminal:
+2. Load the course environment:
 
    ```bash
    . /foss/designs/common/.designinit
@@ -37,7 +37,8 @@ If you haven't set up the workbench yet, do
 
    Check that the banner says `PDK=sky130A` (`echo $PDK` prints the same thing). The image's own
    default is `ihp-sg13g2`, which is the wrong process for this course, so this is the line that
-   tells you the script worked.
+   tells you the script worked. A new terminal on the desktop loads this script by itself, and
+   running it again does no harm.
 
 3. Get the course files:
 
@@ -57,7 +58,7 @@ If you haven't set up the workbench yet, do
 
    | What you see | What it means |
    |---|---|
-   | `bash: mod: command not found` | You did not run step 2 in this terminal. |
+   | `bash: mod: command not found` | This terminal hasn't loaded the course environment. Run step 2 in it. |
    | `mod: no such module: ad103` | You ran `mod ad103` before `mod add ad103`. |
    | `fatal: could not read Username for 'https://github.com'` | git couldn't read the repository without logging in. Check the spelling of the module name, and if it's right, ask in [Discord](https://discord.gg/hrJnP5UsGz). Don't type your password. |
 

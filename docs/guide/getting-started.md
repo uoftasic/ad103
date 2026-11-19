@@ -35,8 +35,8 @@ report that it finished successfully.
 The fix is a setup script from the workspace repo, `/foss/designs/common/.designinit`, which sets
 `PDK=sky130A`. You load it with a leading `.`, which is the shell's `source` command. That runs
 the file in your current shell rather than in a new one, and it's the only way a script can
-change your shell's environment. The catch is that the change lasts only as long as that shell,
-so you have to load the script again in every new terminal you open.
+change your shell's environment. The change lasts only as long as that shell, but each new
+terminal on the workbench desktop loads the script by itself, and running it again does no harm.
 
 Checking takes a couple of seconds: `echo $PDK` should print `sky130A`, and XSchem's menu bar
 should say **SKY130**. You'll make the first check in Lab 01, Part 1, and the second in Part 3,
