@@ -8,7 +8,7 @@ Utilities for **AD103 — Nonlinear Circuits** under the UofT ASIC org (`uoftasi
 |--------|---------|
 | `hello.py` | Smoke-check that Python runs in this clone |
 | `init-template.py` | Fill `ad103` / title / description after using the template |
-| `check_site.py` | After `quarto render docs`, check that every local link, image and `#anchor` in `docs/_site` resolves: `python3 scripts/check_site.py docs/_site` |
+| `check_site.py` | After `quarto render docs`, check that every local link, image and `#anchor` in `docs/_site` resolves, and that every page has the navbar's link to https://edu.uoftasic.com/: `python3 scripts/check_site.py docs/_site` |
 | `figures/` | The scripts that draw the circuit figures in `docs/assets/img/` with schemdraw. `pip install -r scripts/figures/requirements.txt`, then `python3 scripts/figures/<name>.py` rewrites that figure's SVG |
 
 ## Usage
