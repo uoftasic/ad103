@@ -101,5 +101,5 @@ and work out which of the two was wrong.
 
 ## Next courses
 
-- **[AD104](https://uoftasic.com/ad104/)** — Layout: you draw those transistors as geometry in Magic, and make them pass DRC and LVS
+- **[AD104-M](https://uoftasic.com/ad104-m/)** — Layout: you draw those transistors as geometry in Magic, and make them pass DRC and LVS
 - **AD201** — Analog Signal Processing · **AD202** — Mixed Signal
